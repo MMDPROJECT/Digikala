@@ -33,4 +33,16 @@ public abstract class Books extends Product{
     public String getLanguage() {
         return language;
     }
+
+    //Override
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "ISBN=" + ISBN +
+                ", pageNumbers=" + pageNumbers +
+                ", author='" + author + '\'' +
+                ", language='" + language + '\'' +
+                "} " + super.toString();
+    }
 }

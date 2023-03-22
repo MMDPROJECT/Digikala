@@ -24,6 +24,9 @@ public class Children_Book extends Books{
 
     @Override
     public String toString() {
-        return "Children_Book{" + "readingLevel='" + readingLevel + '\'' + ", theme='" + theme + '\'' + + "title=" + getName() + ", price=" + this.getPrice() + ", color=" + this.getColor() + ", quantity available=" + this.getQuantity() + ", page numbers=" + this.getPageNumbers() + ", author=" + this.getAuthor() + ", language=" + this.getLanguage() + ", reading-level=" + this.getReadingLevel() + ", theme=" + this.getTheme() +'}';
+        return "Children_Book{" +
+                "readingLevel='" + readingLevel + '\'' +
+                ", theme='" + theme + '\'' +
+                "} " + super.toString();
     }
 }

@@ -55,4 +55,17 @@ public abstract class Product {
     public void addProduct(int quantity){
         this.quantity += quantity;
     }
+
+    //Override
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "name='" + name + '\'' +
+                ", color='" + color + '\'' +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", comments=" + comments +
+                '}';
+    }
 }

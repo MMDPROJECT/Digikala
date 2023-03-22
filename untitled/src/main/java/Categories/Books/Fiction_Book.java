@@ -40,8 +40,12 @@ public class Fiction_Book extends Books{
     }
 
     //Overrides
+
     @Override
     public String toString() {
-        return "Fiction_Book{" + "title=" + getName() + ", price=" + this.getPrice() + ", color=" + this.getColor() + ", quantity available=" + this.getQuantity() + ", page numbers=" + this.getPageNumbers() + ", author=" + this.getAuthor() + ", language=" + this.getLanguage() + ", tone=" + this.getTone() + '}';
+        return "Fiction_Book{" +
+                "characters=" + characters +
+                ", tone='" + tone + '\'' +
+                "} " + super.toString();
     }
 }
