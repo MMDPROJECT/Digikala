@@ -25,8 +25,8 @@ public class Children_Book extends Books{
     @Override
     public String toString() {
         return "Children_Book{" +
-                "readingLevel='" + readingLevel + '\'' +
-                ", theme='" + theme + '\'' +
+                "readingLevel=" + readingLevel +
+                ", theme=" + theme +
                 "} " + super.toString();
     }
 }

@@ -25,7 +25,7 @@ public class Poetry_Book extends Books{
     @Override
     public String toString() {
         return "Poetry_Book{" +
-                "poeticForm='" + poeticForm + '\'' +
+                "poeticForm=" + poeticForm +
                 ", verseNumber=" + verseNumber +
                 "} " + super.toString();
     }

@@ -45,7 +45,7 @@ public class Fiction_Book extends Books{
     public String toString() {
         return "Fiction_Book{" +
                 "characters=" + characters +
-                ", tone='" + tone + '\'' +
+                ", tone=" + tone +
                 "} " + super.toString();
     }
 }

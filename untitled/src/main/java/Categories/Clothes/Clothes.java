@@ -46,14 +46,13 @@ public abstract class Clothes extends Product {
 
     //Overrides
 
-
     @Override
     public String toString() {
         return "Clothes{" +
                 "size=" + size +
                 ", gender=" + gender +
                 ", material=" + material +
-                ", brand='" + brand + '\'' +
+                ", brand=" + brand +
                 ", durability=" + durability +
                 "} " + super.toString();
     }

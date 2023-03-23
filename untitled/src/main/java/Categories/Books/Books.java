@@ -41,8 +41,8 @@ public abstract class Books extends Product{
         return "Book{" +
                 "ISBN=" + ISBN +
                 ", pageNumbers=" + pageNumbers +
-                ", author='" + author + '\'' +
-                ", language='" + language + '\'' +
+                ", author=" + author +
+                ", language=" + language +
                 "} " + super.toString();
     }
 }
