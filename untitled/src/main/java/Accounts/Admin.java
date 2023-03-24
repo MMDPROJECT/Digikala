@@ -1,7 +1,5 @@
 package Accounts;
 
-import java.util.UUID;
-
 public class Admin extends Account {
     private String username;
     private String password;
@@ -38,5 +36,24 @@ public class Admin extends Account {
                 ", password='" + password + '\'' +
                 ", address='" + address + '\'' +
                 "} " + super.toString();
+    }
+
+    //Polymorphism
+
+
+    @Override
+    public boolean accountLogin(String username, String password) {
+        if (this.username.equals(username) && this.password.equals(password)){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean doesAccountExist(String username) {
+        if (this.username.equals(username)){
+            return true;
+        }
+        return false;
     }
 }

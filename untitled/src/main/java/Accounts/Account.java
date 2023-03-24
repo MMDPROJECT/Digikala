@@ -25,4 +25,9 @@ public abstract class Account {
                 "id=" + id +
                 '}';
     }
+
+    //Abstract methods
+
+    public abstract boolean accountLogin(String username, String password);
+    public abstract boolean doesAccountExist(String username);
 }

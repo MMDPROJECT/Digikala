@@ -57,6 +57,15 @@ public class Seller extends Account {
                 "} " + super.toString();
     }
 
+    @Override
+    public boolean accountLogin(String username, String password) {
+        return false;
+    }
+
+    @Override
+    public boolean doesAccountExist(String username) {
+        return false;
+    }
 
     //Seller - Related Methods
 
@@ -91,7 +100,7 @@ public class Seller extends Account {
         }
     }
 
-    public void sellerAuthorization(){
-        //TODO
+    public void authorizeSeller(){
+        this.isAuthorized = true;
     }
 }

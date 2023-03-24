@@ -53,6 +53,9 @@ public class Order extends ShoppingCart {
         return id;
     }
 
+    public boolean isConfirmed() {
+        return isConfirmed;
+    }
     //Override
 
     @Override
@@ -77,12 +80,6 @@ public class Order extends ShoppingCart {
     }
 
     public void orderConfirm(){
-        if (this.isConfirmed){
-            System.out.println("This order has been confirmed!\n");
-        }
-        else {
-            this.isConfirmed = true;
-            System.out.println("Order has been successfully confirmed!\n");
-        }
+        this.isConfirmed = true;
     }
 }

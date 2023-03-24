@@ -8,7 +8,6 @@ public class WalletReq {
     private double value;
     private boolean isConfirmed;
     private User user;
-
     private UUID id;
 
     //Constructor
@@ -52,9 +51,10 @@ public class WalletReq {
                 '}';
     }
 
-    // Wallet - Related Methods
+    //Wallet - Related Methods
 
     public void walletConfirm(){
-        //TODO
+        this.isConfirmed = true;
+        this.user.addWallet(this.value);
     }
 }

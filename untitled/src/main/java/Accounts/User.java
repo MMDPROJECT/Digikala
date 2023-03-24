@@ -16,6 +16,7 @@ public class User extends Account {
     private double wallet;
     private HashMap<UUID, ShoppingCart> carts;
     private HashMap<UUID, Order> orders;
+    private HashMap<UUID, WalletReq> walletRequests;
 
     //Constructor
 
@@ -28,6 +29,7 @@ public class User extends Account {
         this.wallet = 0;
         this.carts = new HashMap<>();
         this.orders = new HashMap<>();
+        this.walletRequests = new HashMap<>();
     }
 
     //Getters and Setters
@@ -64,7 +66,11 @@ public class User extends Account {
         return orders;
     }
 
+    public HashMap<UUID, WalletReq> getWalletRequests() {
+        return walletRequests;
+    }
     //Override
+
 
     @Override
     public String toString() {
@@ -77,7 +83,18 @@ public class User extends Account {
                 ", wallet=" + wallet +
                 ", carts=" + carts +
                 ", orders=" + orders +
+                ", walletRequests=" + walletRequests +
                 "} " + super.toString();
+    }
+
+    @Override
+    public boolean accountLogin(String username, String password) {
+        return this.username.equals(username) && this.password.equals(password);
+    }
+
+    @Override
+    public boolean doesAccountExist(String username) {
+        return this.username.equals(username);
     }
 
     //User - Related Methods
@@ -101,40 +118,50 @@ public class User extends Account {
             }
         }
     }
+    public void showWalletRequests(){
+        if (walletRequests.size() == 0){
+            System.out.println("No wallet request has been submitted!\n");
+        }
+        else {
+            for (WalletReq walletRequest : walletRequests.values()){
+                System.out.println(walletRequest);
+            }
+        }
+    }
 
-    public void addCart(ShoppingCart cart){
+    public void addCart(ShoppingCart cart) {
         carts.put(cart.getId(), cart);
     }
 
-    public void addOrder(Order order){
+    public void addOrder(Order order) {
         orders.put(order.getId(), order);
     }
 
-    public ShoppingCart getCart(UUID id){
+    public ShoppingCart getCart(UUID id) {
         return carts.get(id);
     }
 
-    public void chargeWallet(WalletReq wallet){
-        this.wallet += wallet.getValue();
-    }
-
-    public void updatePassword(String newPassword){
+    public void updatePassword(String newPassword) {
         this.password = newPassword;
         System.out.println("Password has been successfully edited!\n");
     }
 
-    public void updateEmail(String newEmail){
+    public void updateEmail(String newEmail) {
         this.email = newEmail;
         System.out.println("Email has been successfully edited!\n");
     }
 
-    public void updatePhoneNumber(int newPhoneNumber){
+    public void updatePhoneNumber(int newPhoneNumber) {
         this.phoneNumber = newPhoneNumber;
         System.out.println("Phone Number has been successfully edited!\n");
     }
 
-    public void updateAddress(String newAddress){
+    public void updateAddress(String newAddress) {
         this.address = newAddress;
         System.out.println("Address has been successfully edited!\n");
+    }
+
+    public void addWallet(double wallet){
+        this.wallet += wallet;
     }
 }

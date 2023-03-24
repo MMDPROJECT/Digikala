@@ -44,6 +44,7 @@ public class ShoppingCart {
     public UUID getId() {
         return id;
     }
+
     //Cart - Related Methods
 
     public boolean doesProductExist(Product product) {
