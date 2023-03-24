@@ -1,5 +1,10 @@
 package Categories.Home;
 
+import Accounts.Seller;
+
+import java.util.ArrayList;
+import java.util.UUID;
+
 public class TV extends Home{
     private int refreshRate;
     private boolean mountableOnWall;
@@ -8,8 +13,8 @@ public class TV extends Home{
 
     //Constructor
 
-    public TV(String name, double price, String color, int quantity, boolean hasController, double height, double width, double weight, int refreshRate, boolean mountableOnWall, boolean has3D, boolean hasStand) {
-        super(name, price, color, quantity, hasController, height, width, weight);
+    public TV(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, boolean hasController, double height, double width, double weight, int refreshRate, boolean mountableOnWall, boolean has3D, boolean hasStand) {
+        super(name, color, quantity, price, seller, comments, hasController, height, width, weight);
         this.refreshRate = refreshRate;
         this.mountableOnWall = mountableOnWall;
         this.has3D = has3D;

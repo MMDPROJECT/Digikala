@@ -1,6 +1,12 @@
 package Categories.Electronics;
 
-public abstract class Electronics {
+import Accounts.Seller;
+import Categories.Product;
+
+import java.util.ArrayList;
+import java.util.UUID;
+
+public abstract class Electronics extends Product {
     private String brand;
     private String model;
     private String OS;
@@ -9,7 +15,8 @@ public abstract class Electronics {
 
     //Constructor
 
-    public Electronics(String brand, String model, String OS, String screenSize, double batteryCapacity) {
+    public Electronics(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, String brand, String model, String OS, String screenSize, double batteryCapacity) {
+        super(name, color, quantity, price, seller, comments);
         this.brand = brand;
         this.model = model;
         this.OS = OS;
@@ -49,6 +56,6 @@ public abstract class Electronics {
                 ", OS='" + OS + '\'' +
                 ", screenSize='" + screenSize + '\'' +
                 ", batteryCapacity=" + batteryCapacity +
-                '}';
+                "} " + super.toString();
     }
 }

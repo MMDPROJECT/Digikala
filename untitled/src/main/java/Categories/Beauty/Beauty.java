@@ -1,7 +1,10 @@
 package Categories.Beauty;
 
+import Accounts.Seller;
 import Categories.Beauty.Enums.MatterState;
 import Categories.Product;
+
+import java.util.ArrayList;
 
 public class Beauty extends Product {
     private MatterState materialState;
@@ -9,8 +12,8 @@ public class Beauty extends Product {
 
     //Constructor
 
-    public Beauty(String name, double price, String color, int quantity, MatterState materialState, boolean hasBox) {
-        super(name, price, color, quantity);
+    public Beauty(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, MatterState materialState, boolean hasBox) {
+        super(name, color, quantity, price, seller, comments);
         this.materialState = materialState;
         this.hasBox = hasBox;
     }

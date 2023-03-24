@@ -1,6 +1,6 @@
-package Categories.Vehicles;
+package Categories.SuperMarket.Vehicles;
 
-import Categories.Vehicles.Enums.NoiseLevel;
+import Categories.SuperMarket.Vehicles.Enums.NoiseLevel;
 
 public class Motorcycle extends Vehicles{
     private int seatNumber;

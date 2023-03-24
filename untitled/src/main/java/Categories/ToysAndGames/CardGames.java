@@ -1,6 +1,9 @@
 package Categories.ToysAndGames;
 
+import Accounts.Seller;
 import Categories.ToysAndGames.Enums.DifficultyLevel;
+
+import java.util.ArrayList;
 
 public class CardGames extends ToysAndGames{
     private int cardNumber;
@@ -9,12 +12,13 @@ public class CardGames extends ToysAndGames{
 
     //Constructor
 
-    public CardGames(String name, double price, String color, int quantity, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer, int cardNumber, int playerNumber, int gangNumber) {
-        super(name, price, color, quantity, hasBox, difficultyLevel, isMultiplayer);
+    public CardGames(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer, int cardNumber, int playerNumber, int gangNumber) {
+        super(name, color, quantity, price, seller, comments, hasBox, difficultyLevel, isMultiplayer);
         this.cardNumber = cardNumber;
         this.playerNumber = playerNumber;
         this.gangNumber = gangNumber;
     }
+
 
     //Getters and Setters
 

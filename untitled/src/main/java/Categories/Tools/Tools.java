@@ -1,6 +1,9 @@
 package Categories.Tools;
 
+import Accounts.Seller;
 import Categories.Product;
+
+import java.util.ArrayList;
 
 public class Tools extends Product {
     private double weight;
@@ -12,8 +15,8 @@ public class Tools extends Product {
 
     //Constructor
 
-    public Tools(String name, double price, String color, int quantity, double weight, boolean hasBox, boolean isSilent, boolean isChargeable, String brand) {
-        super(name, price, color, quantity);
+    public Tools(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, double weight, boolean hasBox, boolean isSilent, boolean isChargeable, String brand) {
+        super(name, color, quantity, price, seller, comments);
         this.weight = weight;
         this.hasBox = hasBox;
         this.isSilent = isSilent;

@@ -1,6 +1,10 @@
 package Categories.Home;
 
+import Accounts.Seller;
 import Categories.Home.Enums.RefrigeratorType;
+
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class Refrigerator extends Home{
     private int floorNumber;
@@ -10,8 +14,8 @@ public class Refrigerator extends Home{
 
     //Constructor
 
-    public Refrigerator(String name, double price, String color, int quantity, boolean hasController, double height, double width, double weight, int floorNumber, boolean hasFridge, RefrigeratorType refrigeratorType, boolean hasDigitalControllingSystem) {
-        super(name, price, color, quantity, hasController, height, width, weight);
+    public Refrigerator(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, boolean hasController, double height, double width, double weight, int floorNumber, boolean hasFridge, RefrigeratorType refrigeratorType, boolean hasDigitalControllingSystem) {
+        super(name, color, quantity, price, seller, comments, hasController, height, width, weight);
         this.floorNumber = floorNumber;
         this.hasFridge = hasFridge;
         this.refrigeratorType = refrigeratorType;

@@ -1,6 +1,9 @@
 package Categories.Tools;
 
+import Accounts.Seller;
 import Categories.Tools.Enums.SpannerMaterial;
+
+import java.util.ArrayList;
 
 public class Spanner extends Tools{
     private int size;
@@ -9,12 +12,13 @@ public class Spanner extends Tools{
 
     //Constructor
 
-    public Spanner(String name, double price, String color, int quantity, double weight, boolean hasBox, boolean isSilent, boolean isChargeable, String brand, int size, String style, SpannerMaterial material) {
-        super(name, price, color, quantity, weight, hasBox, isSilent, isChargeable, brand);
+    public Spanner(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, double weight, boolean hasBox, boolean isSilent, boolean isChargeable, String brand, int size, String style, SpannerMaterial material) {
+        super(name, color, quantity, price, seller, comments, weight, hasBox, isSilent, isChargeable, brand);
         this.size = size;
         this.style = style;
         this.material = material;
     }
+
 
     //Getters and Setters
 

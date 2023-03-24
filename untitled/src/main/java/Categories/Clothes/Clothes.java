@@ -1,10 +1,14 @@
 package Categories.Clothes;
 
+import Accounts.Seller;
 import Categories.Clothes.Enums.ClothDurability;
 import Categories.Clothes.Enums.ClothGender;
 import Categories.Clothes.Enums.ClothMaterial;
 import Categories.Clothes.Enums.ClothSize;
 import Categories.Product;
+
+import java.util.ArrayList;
+import java.util.UUID;
 
 public abstract class Clothes extends Product {
 
@@ -16,8 +20,8 @@ public abstract class Clothes extends Product {
 
     //Constructor
 
-    public Clothes(String name, double price, String color, int quantity, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability) {
-        super(name, price, color, quantity);
+    public Clothes(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability) {
+        super(name, color, quantity, price, seller, comments);
         this.size = size;
         this.gender = gender;
         this.material = material;

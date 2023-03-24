@@ -1,5 +1,10 @@
 package Categories.Home;
 
+import Accounts.Seller;
+
+import java.util.ArrayList;
+import java.util.UUID;
+
 public class AirConditioner extends Home{
     private double coolingCapacity;
     private double energyEfficiency;
@@ -10,8 +15,8 @@ public class AirConditioner extends Home{
 
     //Constructor
 
-    public AirConditioner(String name, double price, String color, int quantity, boolean hasController, double height, double width, double weight, double coolingCapacity, double energyEfficiency, String airFilter, int fanNumber, boolean hasRemoteControl, boolean hasTimer) {
-        super(name, price, color, quantity, hasController, height, width, weight);
+    public AirConditioner(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, boolean hasController, double height, double width, double weight, double coolingCapacity, double energyEfficiency, String airFilter, int fanNumber, boolean hasRemoteControl, boolean hasTimer) {
+        super(name, color, quantity, price, seller, comments, hasController, height, width, weight);
         this.coolingCapacity = coolingCapacity;
         this.energyEfficiency = energyEfficiency;
         this.airFilter = airFilter;
@@ -19,6 +24,7 @@ public class AirConditioner extends Home{
         this.hasRemoteControl = hasRemoteControl;
         this.hasTimer = hasTimer;
     }
+
 
     //Getters and Setters
 

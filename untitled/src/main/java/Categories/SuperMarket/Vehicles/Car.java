@@ -1,4 +1,4 @@
-package Categories.Vehicles;
+package Categories.SuperMarket.Vehicles;
 
 public class Car extends Vehicles{
     private boolean isRightSteering;

@@ -1,6 +1,10 @@
 package Categories.Books;
 
+import Accounts.Seller;
 import Categories.Product;
+
+import java.util.ArrayList;
+import java.util.UUID;
 
 public abstract class Books extends Product{
     private int ISBN;
@@ -9,8 +13,10 @@ public abstract class Books extends Product{
     private String language;
 
     //Constructor
-    public Books(int ISBN, int pageNumbers, String author, String language, String name, String color, double price, int quantity) {
-        super(name, price, color, quantity);
+
+
+    public Books(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, int ISBN, int pageNumbers, String author, String language) {
+        super(name, color, quantity, price, seller, comments);
         this.ISBN = ISBN;
         this.pageNumbers = pageNumbers;
         this.author = author;

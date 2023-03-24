@@ -1,4 +1,4 @@
-package Categories.Vehicles;
+package Categories.SuperMarket.Vehicles;
 
 import Categories.Product;
 import Categories.ToysAndGames.Enums.DifficultyLevel;

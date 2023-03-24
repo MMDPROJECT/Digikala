@@ -1,6 +1,9 @@
 package Categories.Sports;
 
+import Accounts.Seller;
 import Categories.Sports.Enums.RacketDurability;
+
+import java.util.ArrayList;
 
 public class Rackets extends Sports{
     private double length;
@@ -10,13 +13,14 @@ public class Rackets extends Sports{
 
     //Constructor
 
-    public Rackets(String name, double price, String color, int quantity, double weight, String sportType, String brand, double length, double width, RacketDurability durability, String shape) {
-        super(name, price, color, quantity, weight, sportType, brand);
+    public Rackets(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, double weight, String sportType, String brand, double length, double width, RacketDurability durability, String shape) {
+        super(name, color, quantity, price, seller, comments, weight, sportType, brand);
         this.length = length;
         this.width = width;
         this.durability = durability;
         Shape = shape;
     }
+
 
     //Getters and Setters
 

@@ -1,9 +1,13 @@
 package Categories.Clothes;
 
+import Accounts.Seller;
 import Categories.Clothes.Enums.ClothDurability;
 import Categories.Clothes.Enums.ClothGender;
 import Categories.Clothes.Enums.ClothMaterial;
 import Categories.Clothes.Enums.ClothSize;
+
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class Coat extends Clothes{
     private int buttonNumber;
@@ -11,8 +15,8 @@ public class Coat extends Clothes{
 
     //Constructor
 
-    public Coat(String name, double price, String color, int quantity, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability, int buttonNumber, boolean hasCap) {
-        super(name, price, color, quantity, size, gender, material, brand, durability);
+    public Coat(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability, int buttonNumber, boolean hasCap) {
+        super(name, color, quantity, price, seller, comments, size, gender, material, brand, durability);
         this.buttonNumber = buttonNumber;
         this.hasCap = hasCap;
     }

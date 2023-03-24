@@ -1,21 +1,30 @@
 package Categories;
 
+import Accounts.Seller;
+
 import java.util.ArrayList;
+import java.util.UUID;
 
 public abstract class Product {
     private String name;
     private String color;
     private int quantity;
     private double price;
+    private final UUID id;
+    private Seller seller;
     ArrayList<String> comments;
 
     //Constructor
-    public Product (String name, double price, String color, int quantity){
+
+
+    public Product(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments) {
         this.name = name;
-        this.price = price;
         this.color = color;
         this.quantity = quantity;
-        this.comments = new ArrayList<>();
+        this.price = price;
+        this.id = UUID.randomUUID();
+        this.seller = seller;
+        this.comments = comments;
     }
 
     //Getter and Setters
@@ -35,6 +44,18 @@ public abstract class Product {
         return quantity;
     }
 
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public ArrayList<String> getComments() {
+        return comments;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
     //Product - Related Functions
     public void showComments(){
         if (this.comments.size() == 0){
@@ -52,8 +73,11 @@ public abstract class Product {
         this.comments.add(newComment);
     }
 
-    public void addProduct(int quantity){
+    public void increaseProduct(int quantity){
         this.quantity += quantity;
+    }
+    public void decreaseProduct(int quantity){
+        this.quantity -= quantity;
     }
 
     //Override
@@ -61,11 +85,12 @@ public abstract class Product {
     @Override
     public String toString() {
         return "Product{" +
-                "name=" + name  +
-                ", color=" + color +
-                ", quantity=" + quantity +
+                "name='" + name + '\'' +
+                ", color='" + color + '\'' +
+                ", available stock=" + quantity +
                 ", price=" + price +
-                ", comments=" + comments +
+                ", id=" + id +
+                ", seller=" + seller +
                 '}';
     }
 }

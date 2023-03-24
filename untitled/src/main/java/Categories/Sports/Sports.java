@@ -1,6 +1,10 @@
 package Categories.Sports;
 
+import Accounts.Seller;
 import Categories.Product;
+
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class Sports extends Product {
     private double weight;
@@ -9,12 +13,13 @@ public class Sports extends Product {
 
     //Constructor
 
-    public Sports(String name, double price, String color, int quantity, double weight, String sportType, String brand) {
-        super(name, price, color, quantity);
+    public Sports(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, double weight, String sportType, String brand) {
+        super(name, color, quantity, price, seller, comments);
         this.weight = weight;
         this.sportType = sportType;
         this.brand = brand;
     }
+
 
     //Getters and Setters
 

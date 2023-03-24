@@ -1,5 +1,6 @@
 package Categories.SuperMarket;
 
+import Accounts.Seller;
 import Categories.Product;
 
 import java.util.ArrayList;
@@ -16,8 +17,8 @@ public class SuperMarket extends Product {
 
     //Constructor
 
-    public SuperMarket(String name, double price, String color, int quantity, boolean hasBox, double weight, double salt, double calories, double fat, double sugar, ArrayList<String> ingredientItems, String countryOfOrigin) {
-        super(name, price, color, quantity);
+    public SuperMarket(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, boolean hasBox, double weight, double salt, double calories, double fat, double sugar, ArrayList<String> ingredientItems, String countryOfOrigin) {
+        super(name, color, quantity, price, seller, comments);
         this.hasBox = hasBox;
         this.weight = weight;
         this.salt = salt;
@@ -27,6 +28,7 @@ public class SuperMarket extends Product {
         IngredientItems = ingredientItems;
         CountryOfOrigin = countryOfOrigin;
     }
+
 
     //Getters and Setters
 

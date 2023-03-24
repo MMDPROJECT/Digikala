@@ -1,6 +1,6 @@
-package Categories.Vehicles;
+package Categories.SuperMarket.Vehicles;
 
-import Categories.Vehicles.Enums.TruckType;
+import Categories.SuperMarket.Vehicles.Enums.TruckType;
 
 public class Truck extends Vehicles{
     private TruckType truckType;

@@ -1,7 +1,10 @@
 package Categories.ToysAndGames;
 
+import Accounts.Seller;
 import Categories.Product;
 import Categories.ToysAndGames.Enums.DifficultyLevel;
+
+import java.util.ArrayList;
 
 public class ToysAndGames extends Product {
     private boolean hasBox;
@@ -10,8 +13,8 @@ public class ToysAndGames extends Product {
 
     //Constructor
 
-    public ToysAndGames(String name, double price, String color, int quantity, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer) {
-        super(name, price, color, quantity);
+    public ToysAndGames(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer) {
+        super(name, color, quantity, price, seller, comments);
         this.hasBox = hasBox;
         this.difficultyLevel = difficultyLevel;
         this.isMultiplayer = isMultiplayer;

@@ -1,15 +1,20 @@
 package Categories.Books;
 
+import Accounts.Seller;
+
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Fiction_Book extends Books{
     private ArrayList<String> characters;
     private String tone;
 
     //Constructor
-    public Fiction_Book(int ISBN, int pageNumbers, String author, String language, String name, String color, double price, String tone, int quantity) {
-        super(ISBN, pageNumbers, author, language, name, color, price, quantity);
-        this.characters = new ArrayList<>();
+
+
+    public Fiction_Book(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, int ISBN, int pageNumbers, String author, String language, ArrayList<String> characters, String tone) {
+        super(name, color, quantity, price, seller, comments, ISBN, pageNumbers, author, language);
+        this.characters = characters;
         this.tone = tone;
     }
 

@@ -1,12 +1,19 @@
 package Categories.Books;
 
+import Accounts.Seller;
+
+import java.util.ArrayList;
+import java.util.UUID;
+
 public class Children_Book extends Books{
     private String readingLevel;
     private String theme;
 
     //Constructor
-    public Children_Book(int ISBN, int pageNumbers, String author, String language, String name, String color, double price, int quantity, String readingLevel, String theme) {
-        super(ISBN, pageNumbers, author, language, name, color, price, quantity);
+
+
+    public Children_Book(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, int ISBN, int pageNumbers, String author, String language, String readingLevel, String theme) {
+        super(name, color, quantity, price, seller, comments, ISBN, pageNumbers, author, language);
         this.readingLevel = readingLevel;
         this.theme = theme;
     }
