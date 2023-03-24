@@ -3,9 +3,8 @@ package Categories.Books;
 import Accounts.Seller;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-public class Poetry_Book extends Books{
+public class Poetry_Book extends Books {
     private String poeticForm;
     private int verseNumber;
 

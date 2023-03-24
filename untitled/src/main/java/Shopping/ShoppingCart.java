@@ -41,20 +41,22 @@ public class ShoppingCart {
         return totalPrice;
     }
 
-
+    public UUID getId() {
+        return id;
+    }
     //Cart - Related Methods
 
-    public boolean doesProductExist(Product product){
+    public boolean doesProductExist(Product product) {
         return products.contains(product);
     }
 
-    public boolean doesProductExist(UUID id){
+    public boolean doesProductExist(UUID id) {
         return itemNumber.containsKey(id);
     }
 
-    public Product getProduct(UUID id){
-        for (Product product : products){
-            if (product.getId().equals(id)){
+    public Product getProduct(UUID id) {
+        for (Product product : products) {
+            if (product.getId().equals(id)) {
                 return product;
             }
         }
@@ -62,35 +64,32 @@ public class ShoppingCart {
     }
 
     public void addProduct(Product product, int amount) {
-        if (product.getQuantity() >= amount){
+        if (product.getQuantity() >= amount) {
             products.add(product);
             itemNumber.put(product.getId(), amount);
             System.out.println("Product has been successfully added to the cart!\n");
-        }
-        else {
+        } else {
             System.out.println("Remaining stock is not enough\n");
         }
         totalPrice = updateTotalPrice();
     }
 
     public void increaseAmount(UUID id, int amount) {
-        if (getProduct(id).getQuantity() >= amount + itemNumber.get(id)){
+        if (getProduct(id).getQuantity() >= amount + itemNumber.get(id)) {
             itemNumber.replace(id, itemNumber.get(id) + amount);
             System.out.println("Cart has been successfully updated!\n");
-        }
-        else {
+        } else {
             System.out.println("Remaining stock is not enough\n");
         }
         totalPrice = updateTotalPrice();
     }
 
-    public void decreaseAmount(UUID id, int amount){
-        if (itemNumber.get(id) >= amount){
+    public void decreaseAmount(UUID id, int amount) {
+        if (itemNumber.get(id) >= amount) {
             getProduct(id).increaseProduct(amount);
             itemNumber.replace(id, itemNumber.get(id) - amount);
             System.out.println("Cat has been successfully updated!\n");
-        }
-        else {
+        } else {
             System.out.println("Something went wrong! Please try again\n");
         }
         totalPrice = updateTotalPrice();
@@ -104,20 +103,19 @@ public class ShoppingCart {
     }
 
     public void viewCart() {
-        if (products.size() == 0){
+        if (products.size() == 0) {
             System.out.println("Cart is empty!\n");
-        }
-        else {
-            for (Product product : products){
+        } else {
+            for (Product product : products) {
                 System.out.println(product + "Amount has been added to cart=" + itemNumber.get(product.getId()));
             }
             System.out.println("Total Price=" + totalPrice + "\n");
         }
     }
 
-    public double updateTotalPrice(){
+    public double updateTotalPrice() {
         int totalPrice = 0;
-        for (Product product : products){
+        for (Product product : products) {
             totalPrice += product.getPrice() * itemNumber.get(product.getId());
         }
         return totalPrice;

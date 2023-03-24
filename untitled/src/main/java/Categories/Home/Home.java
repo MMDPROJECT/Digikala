@@ -4,9 +4,8 @@ import Accounts.Seller;
 import Categories.Product;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-public class Home extends Product{
+public class Home extends Product {
     private boolean hasController;
     private double height;
     private double width;

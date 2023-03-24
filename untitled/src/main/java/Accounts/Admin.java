@@ -2,11 +2,10 @@ package Accounts;
 
 import java.util.UUID;
 
-public class Admin {
+public class Admin extends Account {
     private String username;
     private String password;
     private String address;
-    private UUID id;
 
     //Constructor
 
@@ -14,7 +13,6 @@ public class Admin {
         this.username = username;
         this.password = password;
         this.address = address;
-        this.id = UUID.randomUUID();
     }
 
     //Getters and Setters
@@ -31,10 +29,6 @@ public class Admin {
         return address;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
     //Override
 
     @Override
@@ -43,7 +37,6 @@ public class Admin {
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", address='" + address + '\'' +
-                ", id=" + id +
-                '}';
+                "} " + super.toString();
     }
 }

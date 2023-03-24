@@ -6,7 +6,7 @@ import Categories.Tools.Enums.UsageLevel;
 
 import java.util.ArrayList;
 
-public class SolderingSystem extends Tools{
+public class SolderingSystem extends Tools {
     private int voltage;
     private PowerSource powerSource;
     private UsageLevel usageLevel;

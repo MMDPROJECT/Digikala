@@ -3,9 +3,8 @@ package Categories.Home;
 import Accounts.Seller;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-public class TV extends Home{
+public class TV extends Home {
     private int refreshRate;
     private boolean mountableOnWall;
     private boolean has3D;

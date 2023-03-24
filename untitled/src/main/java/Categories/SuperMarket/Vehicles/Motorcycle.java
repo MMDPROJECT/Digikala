@@ -2,7 +2,7 @@ package Categories.SuperMarket.Vehicles;
 
 import Categories.SuperMarket.Vehicles.Enums.NoiseLevel;
 
-public class Motorcycle extends Vehicles{
+public class Motorcycle extends Vehicles {
     private int seatNumber;
     private boolean hasWingMirror;
     private NoiseLevel noiseLevel;

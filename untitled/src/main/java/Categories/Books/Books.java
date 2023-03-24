@@ -4,9 +4,8 @@ import Accounts.Seller;
 import Categories.Product;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-public abstract class Books extends Product{
+public abstract class Books extends Product {
     private int ISBN;
     private int pageNumbers;
     private String author;

@@ -5,9 +5,8 @@ import Categories.Beauty.Enums.MatterState;
 import Categories.Beauty.Enums.PenType;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-public class EyeMakeUp extends Beauty{
+public class EyeMakeUp extends Beauty {
     private PenType penType;
     private boolean hasWaterResistance;
     private String brand;

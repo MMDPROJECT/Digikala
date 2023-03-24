@@ -3,9 +3,8 @@ package Categories.Electronics;
 import Accounts.Seller;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-public class Laptop extends Electronics{
+public class Laptop extends Electronics {
     private String webcamModel;
     private String CPU;
     private String GPU;

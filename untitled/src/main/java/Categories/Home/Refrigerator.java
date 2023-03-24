@@ -4,9 +4,8 @@ import Accounts.Seller;
 import Categories.Home.Enums.RefrigeratorType;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-public class Refrigerator extends Home{
+public class Refrigerator extends Home {
     private int floorNumber;
     private boolean hasFridge;
     private RefrigeratorType refrigeratorType;

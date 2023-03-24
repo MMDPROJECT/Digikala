@@ -8,7 +8,6 @@ import Categories.Clothes.Enums.ClothSize;
 import Categories.Product;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public abstract class Clothes extends Product {
 

@@ -5,7 +5,7 @@ import Categories.ToysAndGames.Enums.DifficultyLevel;
 
 import java.util.ArrayList;
 
-public class Puzzles extends ToysAndGames{
+public class Puzzles extends ToysAndGames {
     private int partNumber;
     private String finalPicture;
 

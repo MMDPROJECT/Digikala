@@ -3,9 +3,8 @@ package Categories.Books;
 import Accounts.Seller;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-public class Fiction_Book extends Books{
+public class Fiction_Book extends Books {
     private ArrayList<String> characters;
     private String tone;
 
@@ -28,19 +27,18 @@ public class Fiction_Book extends Books{
     }
 
     //Fiction-Book - Related Functions
-    public void showCharacters(){
-        if (this.characters.size() == 0){
+    public void showCharacters() {
+        if (this.characters.size() == 0) {
             System.out.println("This book doesn't have any special character!\n");
-        }
-        else {
+        } else {
             System.out.println("List of characters:\n");
-            for (String character : this.characters){
+            for (String character : this.characters) {
                 System.out.println("* " + character);
             }
         }
     }
 
-    public void addCharacter(String character){
+    public void addCharacter(String character) {
         this.characters.add(character);
     }
 

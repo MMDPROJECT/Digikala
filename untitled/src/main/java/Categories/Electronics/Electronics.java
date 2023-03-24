@@ -4,7 +4,6 @@ import Accounts.Seller;
 import Categories.Product;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public abstract class Electronics extends Product {
     private String brand;

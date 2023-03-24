@@ -3,9 +3,8 @@ package Categories.Electronics;
 import Accounts.Seller;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-public class SmartWatch extends Electronics{
+public class SmartWatch extends Electronics {
     private String processor;
     private boolean hasHeartRateTracker;
     private boolean hasStepTracker;

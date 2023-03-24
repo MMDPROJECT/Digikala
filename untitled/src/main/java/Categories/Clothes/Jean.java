@@ -7,9 +7,8 @@ import Categories.Clothes.Enums.ClothMaterial;
 import Categories.Clothes.Enums.ClothSize;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-public class Jean extends Clothes{
+public class Jean extends Clothes {
     private double height;
     private int pocketNumber;
     private boolean hasZipper;

@@ -3,9 +3,8 @@ package Categories.Electronics;
 import Accounts.Seller;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-public class SmartPhone extends Electronics{
+public class SmartPhone extends Electronics {
     private double backCameraQuality;       //Quality of the main camera in megapixels
     private double frontCameraQuality;      //Quality of the selfie camera in megapixels
     private int cameraNumber;

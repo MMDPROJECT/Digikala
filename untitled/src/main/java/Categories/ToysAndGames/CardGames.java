@@ -5,7 +5,7 @@ import Categories.ToysAndGames.Enums.DifficultyLevel;
 
 import java.util.ArrayList;
 
-public class CardGames extends ToysAndGames{
+public class CardGames extends ToysAndGames {
     private int cardNumber;
     private int playerNumber;
     private int gangNumber;     //for example a game could have 4 gangs.

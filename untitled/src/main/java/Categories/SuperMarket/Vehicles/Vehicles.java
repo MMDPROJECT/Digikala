@@ -1,8 +1,6 @@
 package Categories.SuperMarket.Vehicles;
 
 import Categories.Product;
-import Categories.ToysAndGames.Enums.DifficultyLevel;
-import Categories.ToysAndGames.ToysAndGames;
 
 public class Vehicles extends Product {
     private double weight;

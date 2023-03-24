@@ -7,9 +7,8 @@ import Categories.Clothes.Enums.ClothMaterial;
 import Categories.Clothes.Enums.ClothSize;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-public class Sweater extends Clothes{
+public class Sweater extends Clothes {
     private int buttonNumber;
 
     //Constructor

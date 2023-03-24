@@ -2,7 +2,7 @@ package Categories.SuperMarket.Vehicles;
 
 import Categories.SuperMarket.Vehicles.Enums.TruckType;
 
-public class Truck extends Vehicles{
+public class Truck extends Vehicles {
     private TruckType truckType;
     private boolean hasBed;
 

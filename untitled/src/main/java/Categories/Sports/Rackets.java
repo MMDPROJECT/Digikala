@@ -5,7 +5,7 @@ import Categories.Sports.Enums.RacketDurability;
 
 import java.util.ArrayList;
 
-public class Rackets extends Sports{
+public class Rackets extends Sports {
     private double length;
     private double width;
     private RacketDurability durability;

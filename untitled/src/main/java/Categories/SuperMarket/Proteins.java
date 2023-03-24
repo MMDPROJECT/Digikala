@@ -5,7 +5,7 @@ import Categories.SuperMarket.Enums.ProteinProductType;
 
 import java.util.ArrayList;
 
-public class Proteins extends SuperMarket{
+public class Proteins extends SuperMarket {
     private String brand;
     private double protein;
     private ProteinProductType productType;

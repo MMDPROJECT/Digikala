@@ -4,7 +4,6 @@ import Accounts.Seller;
 import Categories.Product;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class Sports extends Product {
     private double weight;

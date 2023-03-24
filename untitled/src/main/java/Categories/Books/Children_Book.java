@@ -3,9 +3,8 @@ package Categories.Books;
 import Accounts.Seller;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-public class Children_Book extends Books{
+public class Children_Book extends Books {
     private String readingLevel;
     private String theme;
 

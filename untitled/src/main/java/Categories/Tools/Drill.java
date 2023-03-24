@@ -5,7 +5,7 @@ import Categories.Tools.Enums.PowerSource;
 
 import java.util.ArrayList;
 
-public class Drill extends Tools{
+public class Drill extends Tools {
     private int voltage;
     private PowerSource powerSource;
     private int minSpinSpeed;

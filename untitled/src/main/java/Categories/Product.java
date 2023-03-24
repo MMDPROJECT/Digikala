@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public abstract class Product {
+    private final UUID id;
+    ArrayList<String> comments;
     private String name;
     private String color;
     private int quantity;
     private double price;
-    private final UUID id;
     private Seller seller;
-    ArrayList<String> comments;
 
     //Constructor
 
@@ -57,26 +57,26 @@ public abstract class Product {
     }
 
     //Product - Related Functions
-    public void showComments(){
-        if (this.comments.size() == 0){
+    public void showComments() {
+        if (this.comments.size() == 0) {
             System.out.println("No comment has been submitted for this product yet!\n");
-        }
-        else {
+        } else {
             System.out.println("Comments for this product:\n");
-            for (String comment : this.comments){
+            for (String comment : this.comments) {
                 System.out.println("- " + comment);
             }
         }
     }
 
-    public void submitComment(String newComment){
+    public void submitComment(String newComment) {
         this.comments.add(newComment);
     }
 
-    public void increaseProduct(int quantity){
+    public void increaseProduct(int quantity) {
         this.quantity += quantity;
     }
-    public void decreaseProduct(int quantity){
+
+    public void decreaseProduct(int quantity) {
         this.quantity -= quantity;
     }
 

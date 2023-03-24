@@ -2,18 +2,18 @@ package Accounts;
 
 import Shopping.Order;
 import Shopping.ShoppingCart;
+import Shopping.WalletReq;
 
 import java.util.HashMap;
 import java.util.UUID;
 
-public class User {
+public class User extends Account {
     private String username;
     private String password;
     private String email;
     private int phoneNumber;
     private String address;
     private double wallet;
-    private UUID id;
     private HashMap<UUID, ShoppingCart> carts;
     private HashMap<UUID, Order> orders;
 
@@ -26,7 +26,6 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.wallet = 0;
-        this.id = UUID.randomUUID();
         this.carts = new HashMap<>();
         this.orders = new HashMap<>();
     }
@@ -57,10 +56,6 @@ public class User {
         return wallet;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
     public HashMap<UUID, ShoppingCart> getCarts() {
         return carts;
     }
@@ -72,7 +67,7 @@ public class User {
     //Override
 
     @Override
-    public String toString() {                  //Profile screen
+    public String toString() {
         return "User{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
@@ -80,33 +75,66 @@ public class User {
                 ", phoneNumber=" + phoneNumber +
                 ", address='" + address + '\'' +
                 ", wallet=" + wallet +
-                ", id=" + id +
                 ", carts=" + carts +
                 ", orders=" + orders +
-                '}';
+                "} " + super.toString();
     }
 
     //User - Related Methods
 
-    public void viewCarts(){
-        if (carts.size() == 0){
+    public void viewCarts() {
+        if (carts.size() == 0) {
             System.out.println("No cart has been created yet!\n");
-        }
-        else {
-            for (UUID id : carts.keySet()){
+        } else {
+            for (UUID id : carts.keySet()) {
                 System.out.println(carts.get(id));
             }
         }
     }
 
-    public void viewOrders(){
-        if (orders.size() == 0){
+    public void viewOrders() {
+        if (orders.size() == 0) {
             System.out.println("No order has been submitted yet!\n");
-        }
-        else {
-            for (UUID id : orders.keySet()){
+        } else {
+            for (UUID id : orders.keySet()) {
                 System.out.println(orders.get(id));
             }
         }
+    }
+
+    public void addCart(ShoppingCart cart){
+        carts.put(cart.getId(), cart);
+    }
+
+    public void addOrder(Order order){
+        orders.put(order.getId(), order);
+    }
+
+    public ShoppingCart getCart(UUID id){
+        return carts.get(id);
+    }
+
+    public void chargeWallet(WalletReq wallet){
+        this.wallet += wallet.getValue();
+    }
+
+    public void updatePassword(String newPassword){
+        this.password = newPassword;
+        System.out.println("Password has been successfully edited!\n");
+    }
+
+    public void updateEmail(String newEmail){
+        this.email = newEmail;
+        System.out.println("Email has been successfully edited!\n");
+    }
+
+    public void updatePhoneNumber(int newPhoneNumber){
+        this.phoneNumber = newPhoneNumber;
+        System.out.println("Phone Number has been successfully edited!\n");
+    }
+
+    public void updateAddress(String newAddress){
+        this.address = newAddress;
+        System.out.println("Address has been successfully edited!\n");
     }
 }

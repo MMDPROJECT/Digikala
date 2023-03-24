@@ -5,7 +5,7 @@ import Categories.Tools.Enums.SpannerMaterial;
 
 import java.util.ArrayList;
 
-public class Spanner extends Tools{
+public class Spanner extends Tools {
     private int size;
     private String style;   //Example: Combination open end / 12 point / 15° / Offset ring end
     private SpannerMaterial material;

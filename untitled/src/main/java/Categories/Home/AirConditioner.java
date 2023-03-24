@@ -3,9 +3,8 @@ package Categories.Home;
 import Accounts.Seller;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-public class AirConditioner extends Home{
+public class AirConditioner extends Home {
     private double coolingCapacity;
     private double energyEfficiency;
     private String airFilter;
