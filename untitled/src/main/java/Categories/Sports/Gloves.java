@@ -9,10 +9,10 @@ import Categories.Sports.Enums.GloveUser;
 import java.util.ArrayList;
 
 public class Gloves extends Sports {
-    private GloveMaterial material;
-    private GloveSize size;
-    private GloveUser suggestedUser;
-    private GloveStyle style;
+    private final GloveMaterial material;
+    private final GloveSize size;
+    private final GloveUser suggestedUser;
+    private final GloveStyle style;
 
     //Constructor
 

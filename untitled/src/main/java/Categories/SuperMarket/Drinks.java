@@ -6,10 +6,10 @@ import Categories.SuperMarket.Enums.DrinkSize;
 import java.util.ArrayList;
 
 public class Drinks extends SuperMarket {
-    private String taste;
-    private boolean isSoftDrink;
-    private double litters;
-    private DrinkSize size;
+    private final String taste;
+    private final boolean isSoftDrink;
+    private final double litters;
+    private final DrinkSize size;
 
     //Constructor
 

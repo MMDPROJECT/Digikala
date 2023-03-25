@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class ShoppingCart {
-    private ArrayList<Product> products;
-    private HashMap<UUID, Integer> itemNumber;  //A hashmap to store amount of each product that we have in the cart
+    private final ArrayList<Product> products;
+    private final HashMap<UUID, Integer> itemNumber;  //A hashmap to store amount of each product that we have in the cart
     private double totalPrice;
-    private UUID id;
+    private final UUID id;
 
     //Constructor
 

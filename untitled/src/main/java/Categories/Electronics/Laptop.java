@@ -5,14 +5,14 @@ import Accounts.Seller;
 import java.util.ArrayList;
 
 public class Laptop extends Electronics {
-    private String webcamModel;
-    private String CPU;
-    private String GPU;
-    private String fanNumber;
-    private boolean hasKeyboardLight;
-    private boolean hasFingerPrint;
-    private String keyboardLanguage;
-    private int portNumber;
+    private final String webcamModel;
+    private final String CPU;
+    private final String GPU;
+    private final String fanNumber;
+    private final boolean hasKeyboardLight;
+    private final boolean hasFingerPrint;
+    private final String keyboardLanguage;
+    private final int portNumber;
 
     //Constructor
 

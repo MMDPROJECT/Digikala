@@ -3,9 +3,9 @@ package Categories.SuperMarket.Vehicles;
 import Categories.SuperMarket.Vehicles.Enums.NoiseLevel;
 
 public class Motorcycle extends Vehicles {
-    private int seatNumber;
-    private boolean hasWingMirror;
-    private NoiseLevel noiseLevel;
+    private final int seatNumber;
+    private final boolean hasWingMirror;
+    private final NoiseLevel noiseLevel;
 
     //Constructor
 

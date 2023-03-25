@@ -9,9 +9,9 @@ import Categories.Clothes.Enums.ClothSize;
 import java.util.ArrayList;
 
 public class Jean extends Clothes {
-    private double height;
-    private int pocketNumber;
-    private boolean hasZipper;
+    private final double height;
+    private final int pocketNumber;
+    private final boolean hasZipper;
 
     //Constructor
 

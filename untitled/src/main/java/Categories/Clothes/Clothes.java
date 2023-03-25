@@ -11,11 +11,11 @@ import java.util.ArrayList;
 
 public abstract class Clothes extends Product {
 
-    private ClothSize size;
-    private ClothGender gender;
-    private ClothMaterial material;
-    private String brand;
-    private ClothDurability durability;
+    private final ClothSize size;
+    private final ClothGender gender;
+    private final ClothMaterial material;
+    private final String brand;
+    private final ClothDurability durability;
 
     //Constructor
 

@@ -7,8 +7,8 @@ import Categories.Product;
 import java.util.ArrayList;
 
 public class Beauty extends Product {
-    private MatterState materialState;
-    private boolean hasBox;
+    private final MatterState materialState;
+    private final boolean hasBox;
 
     //Constructor
 

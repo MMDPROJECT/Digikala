@@ -7,9 +7,9 @@ import Categories.Tools.Enums.UsageLevel;
 import java.util.ArrayList;
 
 public class SolderingSystem extends Tools {
-    private int voltage;
-    private PowerSource powerSource;
-    private UsageLevel usageLevel;
+    private final int voltage;
+    private final PowerSource powerSource;
+    private final UsageLevel usageLevel;
 
     //Constructor
 

@@ -5,10 +5,10 @@ import Accounts.Seller;
 import java.util.ArrayList;
 
 public class SmartWatch extends Electronics {
-    private String processor;
-    private boolean hasHeartRateTracker;
-    private boolean hasStepTracker;
-    private boolean hasCaloricTracker;
+    private final String processor;
+    private final boolean hasHeartRateTracker;
+    private final boolean hasStepTracker;
+    private final boolean hasCaloricTracker;
 
     //Constructor
 

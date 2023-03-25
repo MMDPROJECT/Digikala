@@ -5,8 +5,8 @@ import Accounts.Seller;
 import java.util.ArrayList;
 
 public class Fiction_Book extends Books {
-    private ArrayList<String> characters;
-    private String tone;
+    private final ArrayList<String> characters;
+    private final String tone;
 
     //Constructor
 

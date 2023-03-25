@@ -5,10 +5,10 @@ import Accounts.User;
 import java.util.UUID;
 
 public class WalletReq {
-    private double value;
+    private final double value;
     private boolean isConfirmed;
-    private User user;
-    private UUID id;
+    private final User user;
+    private final UUID id;
 
     //Constructor
 
@@ -53,7 +53,7 @@ public class WalletReq {
 
     //Wallet - Related Methods
 
-    public void walletConfirm(){
+    public void walletConfirm() {
         this.isConfirmed = true;
         this.user.addWallet(this.value);
     }

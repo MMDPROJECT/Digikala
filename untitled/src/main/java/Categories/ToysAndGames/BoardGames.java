@@ -6,9 +6,9 @@ import Categories.ToysAndGames.Enums.DifficultyLevel;
 import java.util.ArrayList;
 
 public class BoardGames extends ToysAndGames {
-    private String size;    //Example: 2 * 2, 9 * 9
-    private String playerNumber;
-    private int timeToFinish;   //Example 60 (minutes)
+    private final String size;    //Example: 2 * 2, 9 * 9
+    private final String playerNumber;
+    private final int timeToFinish;   //Example 60 (minutes)
 
     //Constructor
 

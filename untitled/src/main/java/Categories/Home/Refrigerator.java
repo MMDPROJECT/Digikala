@@ -6,10 +6,10 @@ import Categories.Home.Enums.RefrigeratorType;
 import java.util.ArrayList;
 
 public class Refrigerator extends Home {
-    private int floorNumber;
-    private boolean hasFridge;
-    private RefrigeratorType refrigeratorType;
-    private boolean hasDigitalControllingSystem;
+    private final int floorNumber;
+    private final boolean hasFridge;
+    private final RefrigeratorType refrigeratorType;
+    private final boolean hasDigitalControllingSystem;
 
     //Constructor
 

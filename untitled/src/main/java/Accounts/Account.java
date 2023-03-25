@@ -3,7 +3,7 @@ package Accounts;
 import java.util.UUID;
 
 public abstract class Account {
-    private UUID id;
+    private final UUID id;
 
     //Constructor
 
@@ -29,5 +29,6 @@ public abstract class Account {
     //Abstract methods
 
     public abstract boolean accountLogin(String username, String password);
+
     public abstract boolean doesAccountExist(String username);
 }

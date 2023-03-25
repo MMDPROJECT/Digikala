@@ -12,11 +12,11 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class Order extends ShoppingCart {
-    private LocalDate date;
-    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("E, MMM dd yyyy");
-    private User buyer;
-    private Seller seller;
-    private UUID id;
+    private final LocalDate date;
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("E, MMM dd yyyy");
+    private final User buyer;
+    private final Seller seller;
+    private final UUID id;
     private boolean isConfirmed;
 
     //Constructor
@@ -79,7 +79,7 @@ public class Order extends ShoppingCart {
         System.out.println("Stock has been successfully updated!\n");
     }
 
-    public void orderConfirm(){
+    public void orderConfirm() {
         this.isConfirmed = true;
     }
 }

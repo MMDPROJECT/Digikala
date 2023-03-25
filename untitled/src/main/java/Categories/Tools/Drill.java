@@ -6,10 +6,10 @@ import Categories.Tools.Enums.PowerSource;
 import java.util.ArrayList;
 
 public class Drill extends Tools {
-    private int voltage;
-    private PowerSource powerSource;
-    private int minSpinSpeed;
-    private int maxSpinSpeed;
+    private final int voltage;
+    private final PowerSource powerSource;
+    private final int minSpinSpeed;
+    private final int maxSpinSpeed;
 
     //Constructor
 

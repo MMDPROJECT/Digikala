@@ -1,9 +1,9 @@
 package Categories.SuperMarket.Vehicles;
 
 public class Car extends Vehicles {
-    private boolean isRightSteering;
-    private String speakerModel;
-    private int seatNumber;
+    private final boolean isRightSteering;
+    private final String speakerModel;
+    private final int seatNumber;
 
     //Constructor
 

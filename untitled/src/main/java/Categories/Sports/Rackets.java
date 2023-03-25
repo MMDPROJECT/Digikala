@@ -6,10 +6,10 @@ import Categories.Sports.Enums.RacketDurability;
 import java.util.ArrayList;
 
 public class Rackets extends Sports {
-    private double length;
-    private double width;
-    private RacketDurability durability;
-    private String Shape;
+    private final double length;
+    private final double width;
+    private final RacketDurability durability;
+    private final String Shape;
 
     //Constructor
 

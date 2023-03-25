@@ -6,14 +6,14 @@ import Categories.Product;
 import java.util.ArrayList;
 
 public class SuperMarket extends Product {
-    private boolean hasBox;
-    private double weight;
-    private double salt;
-    private double calories;
-    private double fat;
-    private double sugar;
-    private ArrayList<String> IngredientItems;
-    private String CountryOfOrigin;
+    private final boolean hasBox;
+    private final double weight;
+    private final double salt;
+    private final double calories;
+    private final double fat;
+    private final double sugar;
+    private final ArrayList<String> IngredientItems;
+    private final String CountryOfOrigin;
 
     //Constructor
 

@@ -6,9 +6,9 @@ import Categories.Product;
 import java.util.ArrayList;
 
 public class Sports extends Product {
-    private double weight;
-    private String sportType;
-    private String brand;
+    private final double weight;
+    private final String sportType;
+    private final String brand;
 
     //Constructor
 

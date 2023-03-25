@@ -6,11 +6,11 @@ import Categories.Product;
 import java.util.ArrayList;
 
 public abstract class Electronics extends Product {
-    private String brand;
-    private String model;
-    private String OS;
-    private String screenSize;
-    private double batteryCapacity;
+    private final String brand;
+    private final String model;
+    private final String OS;
+    private final String screenSize;
+    private final double batteryCapacity;
 
     //Constructor
 

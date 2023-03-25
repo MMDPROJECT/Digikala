@@ -5,12 +5,12 @@ import Accounts.Seller;
 import java.util.ArrayList;
 
 public class AirConditioner extends Home {
-    private double coolingCapacity;
-    private double energyEfficiency;
-    private String airFilter;
-    private int fanNumber;
-    private boolean hasRemoteControl;
-    private boolean hasTimer;
+    private final double coolingCapacity;
+    private final double energyEfficiency;
+    private final String airFilter;
+    private final int fanNumber;
+    private final boolean hasRemoteControl;
+    private final boolean hasTimer;
 
     //Constructor
 

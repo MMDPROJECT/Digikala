@@ -6,11 +6,11 @@ import Categories.Product;
 import java.util.ArrayList;
 
 public class Tools extends Product {
-    private double weight;
-    private boolean hasBox;
-    private boolean isSilent;
-    private boolean isChargeable;
-    private String brand;
+    private final double weight;
+    private final boolean hasBox;
+    private final boolean isSilent;
+    private final boolean isChargeable;
+    private final String brand;
 
 
     //Constructor

@@ -5,8 +5,8 @@ import Accounts.Seller;
 import java.util.ArrayList;
 
 public class Poetry_Book extends Books {
-    private String poeticForm;
-    private int verseNumber;
+    private final String poeticForm;
+    private final int verseNumber;
 
     //Constructor
 

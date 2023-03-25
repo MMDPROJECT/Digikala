@@ -1,9 +1,9 @@
 package Accounts;
 
 public class Admin extends Account {
-    private String username;
-    private String password;
-    private String address;
+    private final String username;
+    private final String password;
+    private final String address;
 
     //Constructor
 
@@ -43,17 +43,11 @@ public class Admin extends Account {
 
     @Override
     public boolean accountLogin(String username, String password) {
-        if (this.username.equals(username) && this.password.equals(password)){
-            return true;
-        }
-        return false;
+        return this.username.equals(username) && this.password.equals(password);
     }
 
     @Override
     public boolean doesAccountExist(String username) {
-        if (this.username.equals(username)){
-            return true;
-        }
-        return false;
+        return this.username.equals(username);
     }
 }

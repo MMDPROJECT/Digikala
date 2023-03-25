@@ -5,14 +5,14 @@ import Accounts.Seller;
 import java.util.ArrayList;
 
 public class SmartPhone extends Electronics {
-    private double backCameraQuality;       //Quality of the main camera in megapixels
-    private double frontCameraQuality;      //Quality of the selfie camera in megapixels
-    private int cameraNumber;
-    private int storage;
-    private double OSVersion;
-    private String displayResolution;
-    private String ringTone;
-    private String CPU;
+    private final double backCameraQuality;       //Quality of the main camera in megapixels
+    private final double frontCameraQuality;      //Quality of the selfie camera in megapixels
+    private final int cameraNumber;
+    private final int storage;
+    private final double OSVersion;
+    private final String displayResolution;
+    private final String ringTone;
+    private final String CPU;
 
     //Constructor
 

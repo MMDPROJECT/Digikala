@@ -5,10 +5,10 @@ import Accounts.Seller;
 import java.util.ArrayList;
 
 public class TV extends Home {
-    private int refreshRate;
-    private boolean mountableOnWall;
-    private boolean has3D;
-    private boolean hasStand;
+    private final int refreshRate;
+    private final boolean mountableOnWall;
+    private final boolean has3D;
+    private final boolean hasStand;
 
     //Constructor
 

@@ -6,10 +6,10 @@ import Categories.Product;
 import java.util.ArrayList;
 
 public abstract class Books extends Product {
-    private int ISBN;
-    private int pageNumbers;
-    private String author;
-    private String language;
+    private final int ISBN;
+    private final int pageNumbers;
+    private final String author;
+    private final String language;
 
     //Constructor
 

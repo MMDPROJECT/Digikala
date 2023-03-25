@@ -8,15 +8,15 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class User extends Account {
-    private String username;
+    private final String username;
     private String password;
     private String email;
     private int phoneNumber;
     private String address;
     private double wallet;
-    private HashMap<UUID, ShoppingCart> carts;
-    private HashMap<UUID, Order> orders;
-    private HashMap<UUID, WalletReq> walletRequests;
+    private final HashMap<UUID, ShoppingCart> carts;
+    private final HashMap<UUID, Order> orders;
+    private final HashMap<UUID, WalletReq> walletRequests;
 
     //Constructor
 
@@ -118,12 +118,12 @@ public class User extends Account {
             }
         }
     }
-    public void showWalletRequests(){
-        if (walletRequests.size() == 0){
+
+    public void showWalletRequests() {
+        if (walletRequests.size() == 0) {
             System.out.println("No wallet request has been submitted!\n");
-        }
-        else {
-            for (WalletReq walletRequest : walletRequests.values()){
+        } else {
+            for (WalletReq walletRequest : walletRequests.values()) {
                 System.out.println(walletRequest);
             }
         }
@@ -161,7 +161,7 @@ public class User extends Account {
         System.out.println("Address has been successfully edited!\n");
     }
 
-    public void addWallet(double wallet){
+    public void addWallet(double wallet) {
         this.wallet += wallet;
     }
 }

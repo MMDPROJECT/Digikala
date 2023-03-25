@@ -8,11 +8,11 @@ import java.util.UUID;
 public abstract class Product {
     private final UUID id;
     ArrayList<String> comments;
-    private String name;
-    private String color;
+    private final String name;
+    private final String color;
     private int quantity;
-    private double price;
-    private Seller seller;
+    private final double price;
+    private final Seller seller;
 
     //Constructor
 

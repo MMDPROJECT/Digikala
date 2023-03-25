@@ -3,8 +3,8 @@ package Categories.SuperMarket.Vehicles;
 import Categories.SuperMarket.Vehicles.Enums.TruckType;
 
 public class Truck extends Vehicles {
-    private TruckType truckType;
-    private boolean hasBed;
+    private final TruckType truckType;
+    private final boolean hasBed;
 
     //Constructor
 

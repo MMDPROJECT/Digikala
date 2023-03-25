@@ -7,10 +7,10 @@ import java.util.UUID;
 
 public class Seller extends Account {
     private boolean isAuthorized;
-    private String companyName;
-    private String password;
-    private HashMap<UUID, Product> availableProducts;
-    private double wallet;
+    private final String companyName;
+    private final String password;
+    private final HashMap<UUID, Product> availableProducts;
+    private final double wallet;
 
     //Constructor
 
@@ -100,7 +100,7 @@ public class Seller extends Account {
         }
     }
 
-    public void authorizeSeller(){
+    public void authorizeSeller() {
         this.isAuthorized = true;
     }
 }

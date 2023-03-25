@@ -9,7 +9,7 @@ import Categories.Clothes.Enums.ClothSize;
 import java.util.ArrayList;
 
 public class Sweater extends Clothes {
-    private int buttonNumber;
+    private final int buttonNumber;
 
     //Constructor
 

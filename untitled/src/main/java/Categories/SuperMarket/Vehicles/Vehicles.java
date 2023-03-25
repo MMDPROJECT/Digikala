@@ -3,14 +3,14 @@ package Categories.SuperMarket.Vehicles;
 import Categories.Product;
 
 public class Vehicles extends Product {
-    private double weight;
-    private int horsePower;
-    private String engineModel;
-    private int wheelNumber;
-    private boolean isAutomatic;
-    private int maxSpeed;
-    private String brand;
-    private String model;
+    private final double weight;
+    private final int horsePower;
+    private final String engineModel;
+    private final int wheelNumber;
+    private final boolean isAutomatic;
+    private final int maxSpeed;
+    private final String brand;
+    private final String model;
 
     //Constructor
 

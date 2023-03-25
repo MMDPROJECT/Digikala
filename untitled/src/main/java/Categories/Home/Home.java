@@ -6,10 +6,10 @@ import Categories.Product;
 import java.util.ArrayList;
 
 public class Home extends Product {
-    private boolean hasController;
-    private double height;
-    private double width;
-    private double weight;
+    private final boolean hasController;
+    private final double height;
+    private final double width;
+    private final double weight;
 
     //Constructor
 

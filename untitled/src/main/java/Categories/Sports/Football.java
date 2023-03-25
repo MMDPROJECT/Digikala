@@ -7,9 +7,9 @@ import Categories.Sports.Enums.FootballSize;
 import java.util.ArrayList;
 
 public class Football extends Sports {
-    private FootballSize size;
-    private FootballMaterial material;
-    private boolean isRightHandOriented;
+    private final FootballSize size;
+    private final FootballMaterial material;
+    private final boolean isRightHandOriented;
 
     //Constructor
 

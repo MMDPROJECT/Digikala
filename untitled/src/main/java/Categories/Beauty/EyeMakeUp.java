@@ -7,10 +7,10 @@ import Categories.Beauty.Enums.PenType;
 import java.util.ArrayList;
 
 public class EyeMakeUp extends Beauty {
-    private PenType penType;
-    private boolean hasWaterResistance;
-    private String brand;
-    private int longevity;
+    private final PenType penType;
+    private final boolean hasWaterResistance;
+    private final String brand;
+    private final int longevity;
 
     //Constructor
 

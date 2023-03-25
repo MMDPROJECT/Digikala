@@ -9,8 +9,8 @@ import Categories.Clothes.Enums.ClothSize;
 import java.util.ArrayList;
 
 public class Coat extends Clothes {
-    private int buttonNumber;
-    private boolean hasCap;
+    private final int buttonNumber;
+    private final boolean hasCap;
 
     //Constructor
 

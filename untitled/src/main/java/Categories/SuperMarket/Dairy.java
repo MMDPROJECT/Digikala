@@ -6,8 +6,8 @@ import Categories.SuperMarket.Enums.DairyGroups;
 import java.util.ArrayList;
 
 public class Dairy extends SuperMarket {
-    private boolean isDomestic;
-    private DairyGroups dairyGroup;
+    private final boolean isDomestic;
+    private final DairyGroups dairyGroup;
 
     //Constructor
 

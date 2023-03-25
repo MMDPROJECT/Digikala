@@ -7,9 +7,9 @@ import Categories.ToysAndGames.Enums.DifficultyLevel;
 import java.util.ArrayList;
 
 public class ToysAndGames extends Product {
-    private boolean hasBox;
-    private DifficultyLevel difficultyLevel;
-    private boolean isMultiplayer;
+    private final boolean hasBox;
+    private final DifficultyLevel difficultyLevel;
+    private final boolean isMultiplayer;
 
     //Constructor
 
