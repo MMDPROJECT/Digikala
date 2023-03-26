@@ -3,8 +3,6 @@ package Categories.Tools;
 import Accounts.Seller;
 import Categories.Tools.Enums.SpannerMaterial;
 
-import java.util.ArrayList;
-
 public class Spanner extends Tools {
     private final int size;
     private final String style;   //Example: Combination open end / 12 point / 15° / Offset ring end

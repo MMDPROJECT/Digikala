@@ -2,8 +2,6 @@ package Categories.Home;
 
 import Accounts.Seller;
 
-import java.util.ArrayList;
-
 public class AirConditioner extends Home {
     private final double coolingCapacity;
     private final double energyEfficiency;

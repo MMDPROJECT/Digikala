@@ -3,8 +3,6 @@ package Categories.Vehicles;
 import Accounts.Seller;
 import Categories.Product;
 
-import java.util.ArrayList;
-
 public class Vehicles extends Product {
     private final double weight;
     private final int horsePower;
@@ -28,7 +26,6 @@ public class Vehicles extends Product {
         this.brand = brand;
         this.model = model;
     }
-
 
     //Getters and Setters
 

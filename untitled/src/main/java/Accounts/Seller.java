@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class Seller extends Account {
-    private String companyName;
-    private String password;
-    private HashMap<UUID, Product> availableProducts;
-    private double wallet;
+    private final String companyName;
+    private final String password;
+    private final HashMap<UUID, Product> availableProducts;
+    private final double wallet;
     private boolean isAuthorized;
 
     //Constructor
@@ -83,18 +83,6 @@ public class Seller extends Account {
         return false;
     }
 
-    public void addProduct(Product product) {
-        availableProducts.put(product.getId(), product);
-    }
-
-    public void removeProduct(Product product) {
-        availableProducts.remove(product.getId());
-    }
-
-    public void removeProduct(UUID id) {
-        availableProducts.remove(id);
-    }
-
     public void viewAvailableProducts() {
         if (availableProducts.size() == 0) {
             System.out.println("No product has been added yet!\n");
@@ -107,5 +95,9 @@ public class Seller extends Account {
 
     public void authorizeSeller() {
         this.isAuthorized = true;
+    }
+
+    public void viewWallet(){
+        System.out.println("Current Wallet : " + this.wallet);
     }
 }

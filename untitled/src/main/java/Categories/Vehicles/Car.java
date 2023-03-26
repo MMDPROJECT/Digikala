@@ -2,8 +2,6 @@ package Categories.Vehicles;
 
 import Accounts.Seller;
 
-import java.util.ArrayList;
-
 public class Car extends Vehicles {
     private final boolean isRightSteering;
     private final String speakerModel;

@@ -2,8 +2,6 @@ package Categories.Home;
 
 import Accounts.Seller;
 
-import java.util.ArrayList;
-
 public class TV extends Home {
     private final int refreshRate;
     private final boolean mountableOnWall;

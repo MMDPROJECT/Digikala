@@ -7,8 +7,6 @@ import Categories.Clothes.Enums.ClothMaterial;
 import Categories.Clothes.Enums.ClothSize;
 import Categories.Product;
 
-import java.util.ArrayList;
-
 public abstract class Clothes extends Product {
 
     private final ClothSize size;
@@ -18,7 +16,6 @@ public abstract class Clothes extends Product {
     private final ClothDurability durability;
 
     //Constructor
-
 
     public Clothes(String name, String color, int quantity, double price, Seller seller, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability) {
         super(name, color, quantity, price, seller);

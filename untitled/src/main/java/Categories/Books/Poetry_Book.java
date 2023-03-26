@@ -2,8 +2,6 @@ package Categories.Books;
 
 import Accounts.Seller;
 
-import java.util.ArrayList;
-
 public class Poetry_Book extends Books {
     private final String poeticForm;
     private final int verseNumber;

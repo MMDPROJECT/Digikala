@@ -1,6 +1,5 @@
 package Shopping;
 
-import Accounts.Seller;
 import Accounts.User;
 import Categories.Product;
 

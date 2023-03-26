@@ -3,8 +3,6 @@ package Categories.Vehicles;
 import Accounts.Seller;
 import Categories.Vehicles.Enums.TruckType;
 
-import java.util.ArrayList;
-
 public class Truck extends Vehicles {
     private final TruckType truckType;
     private final boolean hasBed;

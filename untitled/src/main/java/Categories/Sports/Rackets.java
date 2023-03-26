@@ -3,8 +3,6 @@ package Categories.Sports;
 import Accounts.Seller;
 import Categories.Sports.Enums.RacketDurability;
 
-import java.util.ArrayList;
-
 public class Rackets extends Sports {
     private final double length;
     private final double width;

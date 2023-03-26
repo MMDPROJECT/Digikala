@@ -10,7 +10,6 @@ public class Proteins extends SuperMarket {
     private final double protein;
     private final ProteinProductType productType;
 
-
     //Constructor
 
     public Proteins(String name, String color, int quantity, double price, Seller seller, boolean hasBox, double weight, double salt, double calories, double fat, double sugar, ArrayList<String> ingredientItems, String countryOfOrigin, String brand, double protein, ProteinProductType productType) {

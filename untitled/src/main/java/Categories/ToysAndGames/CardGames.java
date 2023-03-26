@@ -3,8 +3,6 @@ package Categories.ToysAndGames;
 import Accounts.Seller;
 import Categories.ToysAndGames.Enums.DifficultyLevel;
 
-import java.util.ArrayList;
-
 public class CardGames extends ToysAndGames {
     private final int cardNumber;
     private final int playerNumber;

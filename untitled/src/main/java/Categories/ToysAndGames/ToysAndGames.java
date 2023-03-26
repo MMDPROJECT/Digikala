@@ -4,8 +4,6 @@ import Accounts.Seller;
 import Categories.Product;
 import Categories.ToysAndGames.Enums.DifficultyLevel;
 
-import java.util.ArrayList;
-
 public class ToysAndGames extends Product {
     private final boolean hasBox;
     private final DifficultyLevel difficultyLevel;

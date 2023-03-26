@@ -1,9 +1,9 @@
 package Accounts;
 
 public class Admin extends Account {
-    private String username;
-    private String password;
-    private String address;
+    private final String username;
+    private final String password;
+    private final String address;
 
     //Constructor
 

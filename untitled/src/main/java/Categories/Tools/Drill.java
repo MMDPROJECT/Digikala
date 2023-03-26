@@ -3,8 +3,6 @@ package Categories.Tools;
 import Accounts.Seller;
 import Categories.Tools.Enums.PowerSource;
 
-import java.util.ArrayList;
-
 public class Drill extends Tools {
     private final int voltage;
     private final PowerSource powerSource;

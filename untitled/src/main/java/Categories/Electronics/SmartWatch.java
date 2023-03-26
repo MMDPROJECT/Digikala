@@ -2,8 +2,6 @@ package Categories.Electronics;
 
 import Accounts.Seller;
 
-import java.util.ArrayList;
-
 public class SmartWatch extends Electronics {
     private final String processor;
     private final boolean hasHeartRateTracker;

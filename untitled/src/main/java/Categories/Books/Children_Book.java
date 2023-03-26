@@ -2,8 +2,6 @@ package Categories.Books;
 
 import Accounts.Seller;
 
-import java.util.ArrayList;
-
 public class Children_Book extends Books {
     private final String readingLevel;
     private final String theme;

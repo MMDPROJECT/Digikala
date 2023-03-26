@@ -3,8 +3,6 @@ package Categories.Sports;
 import Accounts.Seller;
 import Categories.Product;
 
-import java.util.ArrayList;
-
 public class Sports extends Product {
     private final double weight;
     private final String sportType;

@@ -3,8 +3,6 @@ package Categories.Home;
 import Accounts.Seller;
 import Categories.Product;
 
-import java.util.ArrayList;
-
 public class Home extends Product {
     private final boolean hasController;
     private final double height;

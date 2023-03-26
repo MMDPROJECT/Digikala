@@ -1,16 +1,58 @@
 package org.example;
 
 import Accounts.Admin;
-import Categories.*;
 import Accounts.Seller;
 import Accounts.User;
+import Categories.Beauty.Enums.MatterState;
+import Categories.Beauty.Enums.PenType;
+import Categories.Beauty.EyeBrowMakeUp;
+import Categories.Books.Children_Book;
+import Categories.Books.Fiction_Book;
+import Categories.Books.Poetry_Book;
+import Categories.Clothes.Coat;
+import Categories.Clothes.Enums.ClothDurability;
+import Categories.Clothes.Enums.ClothGender;
+import Categories.Clothes.Enums.ClothMaterial;
+import Categories.Clothes.Enums.ClothSize;
+import Categories.Clothes.Jean;
+import Categories.Clothes.Sweater;
+import Categories.Electronics.Laptop;
+import Categories.Electronics.SmartPhone;
+import Categories.Electronics.SmartWatch;
+import Categories.Home.AirConditioner;
+import Categories.Home.Enums.RefrigeratorType;
+import Categories.Home.Refrigerator;
+import Categories.Home.TV;
 import Categories.Product;
-import Categories.Sports.Enums.FootballMaterial;
-import Categories.Sports.Enums.FootballSize;
-import Categories.Sports.Football;
+import Categories.Sports.Ball;
+import Categories.Sports.Enums.*;
+import Categories.Sports.Gloves;
+import Categories.Sports.Rackets;
+import Categories.SuperMarket.Dairy;
+import Categories.SuperMarket.Drinks;
+import Categories.SuperMarket.Enums.DairyGroups;
+import Categories.SuperMarket.Enums.DrinkSize;
+import Categories.SuperMarket.Enums.ProteinProductType;
+import Categories.SuperMarket.Proteins;
+import Categories.Tools.Drill;
+import Categories.Tools.Enums.PowerSource;
+import Categories.Tools.Enums.SpannerMaterial;
+import Categories.Tools.Enums.UsageLevel;
+import Categories.Tools.SolderingSystem;
+import Categories.Tools.Spanner;
+import Categories.ToysAndGames.BoardGames;
+import Categories.ToysAndGames.CardGames;
+import Categories.ToysAndGames.Enums.DifficultyLevel;
+import Categories.ToysAndGames.Puzzles;
+import Categories.Vehicles.Car;
+import Categories.Vehicles.Enums.NoiseLevel;
+import Categories.Vehicles.Enums.TruckType;
+import Categories.Vehicles.Motorcycle;
+import Categories.Vehicles.Truck;
 import Shop.Shop;
 import Shopping.ShoppingCart;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -24,14 +66,12 @@ public class Main {
         Seller seller = new Seller("Jafarestan", "1381");
         User user1 = new User("Hossein", "1381", "hossein.com", "09170861077", "Bushehr");
 
-        Product product = new Football("Nike Premier League Academy Football 2023", "white and red-blue combined", 2, 100.5, seller, 0.5, "Football", "Nike", FootballSize.Adult, FootballMaterial.PU, true);
-        seller.addProduct(product);
+        Product product = new Ball("Nike Premier League Academy Ball 2023", "white and red-blue combined", 2, 100.5, seller, 0.5, "Ball", "Nike", BallSize.ADULT, BallMaterial.PU, true);
         shop.getAccounts().put(seller.getId(), seller);
         shop.getProducts().put(product.getId(), product);
         shop.adminSignUp(admin1);
         shop.userSignUp(user1);
         runMenu(shop);
-
     }
 
     public static void runMenu(Shop shop) {
@@ -105,19 +145,22 @@ public class Main {
             }
             case 7 -> {
                 //Exit
-                return;
             }
         }
     }
 
-    //        System.out.println("\n1- Search and Show Products\n2- Cart Management\n3- Wallets\n4- Submit A Comment\n5- Update Personal Information\n6- Back to Main Menu\n");
     public static void userPage(Shop shop) {
         System.out.println("------------------------------ " + shop.getCurrentAccount().getUsername().toUpperCase() + " ------------------------------");
         System.out.println("""
                 1- Search And Show Products
                                 
                 2- Cart Management
-                                
+                \t- Add a new cart
+                \t- Switch cart
+                \t- Update cart
+                \t- View carts
+                \t- Checkout carts
+                             
                 3- Wallets
                 \t- Show confirmed requests
                 \t- Show unconfirmed requests
@@ -164,7 +207,7 @@ public class Main {
                         \t- Refrigerator
                                                 
                         6- Sports
-                        \t- Football
+                        \t- Ball
                         \t- Gloves
                         \t- Rackets
                                                 
@@ -192,34 +235,163 @@ public class Main {
                 input.nextLine();
                 switch (optionMenu) {
                     case 1 -> {
-                        shop.searchBeauty();
+                        System.out.println("""
+                                1- Search through whole Beauty Products
+                                2- Search through Eye Brow MakeUp
+                                3- Search through Eye MakeUp
+                                """);
+                        optionMenu = input.nextInt();
+                        input.nextLine();
+                        switch (optionMenu) {
+                            case 1 -> shop.searchBeauty();
+                            case 2 -> shop.searchEyeBrowMakeUp();
+                            case 3 -> shop.searchEyeMakeUp();
+                        }
                     }
                     case 2 -> {
-                        shop.searchBooks();
+                        System.out.println("""
+                                1- Search through whole Book Products
+                                2- Search through Children Books
+                                3- Search through Fiction Books
+                                4- Search through Poetry Books
+                                """);
+                        optionMenu = input.nextInt();
+                        input.nextLine();
+                        switch (optionMenu) {
+                            case 1 -> shop.searchBooks();
+                            case 2 -> shop.searchChildrenBook();
+                            case 3 -> shop.searchFictionBook();
+                            case 4 -> shop.searchPoetryBook();
+                        }
                     }
                     case 3 -> {
-                        shop.searchClothes();
+                        System.out.println("""
+                                1- Search through whole Clothes Products
+                                2- Search through Coats
+                                3- Search through Jeans
+                                4- Search through Sweaters
+                                """);
+                        optionMenu = input.nextInt();
+                        input.nextLine();
+                        switch (optionMenu) {
+                            case 1 -> shop.searchClothes();
+                            case 2 -> shop.searchCoat();
+                            case 3 -> shop.searchJean();
+                            case 4 -> shop.searchSweater();
+                        }
                     }
                     case 4 -> {
-                        shop.searchElectronics();
+                        System.out.println("""
+                                1- Search through whole Electronic Products
+                                2- Search through Laptops
+                                3- Search through Smart Phones
+                                4- Search through Smart Watches
+                                """);
+                        optionMenu = input.nextInt();
+                        input.nextLine();
+                        switch (optionMenu) {
+                            case 1 -> shop.searchElectronics();
+                            case 2 -> shop.searchLaptop();
+                            case 3 -> shop.searchSmartPhone();
+                            case 4 -> shop.searchSmartWatch();
+                        }
                     }
                     case 5 -> {
-                        shop.searchHome();
+                        System.out.println("""
+                                1- Search through whole Home Products
+                                2- Search through Air Conditioners
+                                3- Search through Refrigerators
+                                4- Search through TVs
+                                """);
+                        optionMenu = input.nextInt();
+                        input.nextLine();
+                        switch (optionMenu) {
+                            case 1 -> shop.searchHome();
+                            case 2 -> shop.searchAirConditioner();
+                            case 3 -> shop.searchRefrigerator();
+                            case 4 -> shop.searchTV();
+                        }
                     }
                     case 6 -> {
-                        shop.searchSports();
+                        System.out.println("""
+                                1- Search through whole Sport Products
+                                2- Search through Balls
+                                3- Search through Gloves
+                                4- Search through Rackets
+                                """);
+                        optionMenu = input.nextInt();
+                        input.nextLine();
+                        switch (optionMenu) {
+                            case 1 -> shop.searchSports();
+                            case 2 -> shop.searchBall();
+                            case 3 -> shop.searchGlove();
+                            case 4 -> shop.searchRacket();
+                        }
                     }
                     case 7 -> {
-                        shop.searchSuperMarket();
+                        System.out.println("""
+                                1- Search through whole Super Market Products
+                                2- Search through Dairies
+                                3- Search through Drinks
+                                4- Search through Proteins
+                                """);
+                        optionMenu = input.nextInt();
+                        input.nextLine();
+                        switch (optionMenu) {
+                            case 1 -> shop.searchSuperMarket();
+                            case 2 -> shop.searchDairy();
+                            case 3 -> shop.searchDrink();
+                            case 4 -> shop.searchProtein();
+
+                        }
                     }
                     case 8 -> {
-                        shop.searchTools();
+                        System.out.println("""
+                                1- Search through whole Tools Products
+                                2- Search through Drills
+                                3- Search through Soldering Systems
+                                4- Search through Spanners
+                                """);
+                        optionMenu = input.nextInt();
+                        input.nextLine();
+                        switch (optionMenu) {
+                            case 1 -> shop.searchTools();
+                            case 2 -> shop.searchDrill();
+                            case 3 -> shop.searchSolderingSystem();
+                            case 4 -> shop.searchSpanner();
+                        }
                     }
                     case 9 -> {
-                        shop.searchToysAndGames();
+                        System.out.println("""
+                                1- Search through whole Toy and Game Products
+                                2- Search through Board Games
+                                3- Search through Card Games
+                                4- Search through Puzzles
+                                """);
+                        optionMenu = input.nextInt();
+                        input.nextLine();
+                        switch (optionMenu) {
+                            case 1 -> shop.searchToysAndGames();
+                            case 2 -> shop.searchBoardGame();
+                            case 3 -> shop.searchCardGame();
+                            case 4 -> shop.searchPuzzles();
+                        }
                     }
                     case 10 -> {
-                        shop.searchVehicles();
+                        System.out.println("""
+                                1- Search through whole Vehicle Products
+                                2- Search through Cars
+                                3- Search through Motorcycles
+                                4- Search through Trucks
+                                """);
+                        optionMenu = input.nextInt();
+                        input.nextLine();
+                        switch (optionMenu) {
+                            case 1 -> shop.searchVehicles();
+                            case 2 -> shop.searchCar();
+                            case 3 -> shop.searchMotorCycle();
+                            case 4 -> shop.searchTruck();
+                        }
                     }
                 }
                 userPage(shop);
@@ -351,13 +523,12 @@ public class Main {
                             ((User) shop.getCurrentAccount()).checkOutCart(UUID.fromString(id));
                         }
                     }
-
                 }
             }
             case 3 -> {
                 //Wallets
                 System.out.println("""
-                        1- Wallet request
+                        1- Submit a Wallet request
                                                            
                         2- Show wallet requests
                         \t- Show confirmed requests
@@ -374,7 +545,7 @@ public class Main {
                         double value = input.nextDouble();
                         input.nextLine();
                         if (shop.getCurrentAccount() instanceof User) {
-                            ((User) shop.getCurrentAccount()).sendWalletRequest(value);
+                            ((User) shop.getCurrentAccount()).sendAWalletRequest(value);
                         }
                     }
                     case 2 -> {
@@ -421,32 +592,32 @@ public class Main {
                         """);
                 optionMenu = input.nextInt();
                 input.nextLine();
-                switch (optionMenu){
+                switch (optionMenu) {
                     case 1 -> {
                         System.out.println("Enter : - New password\n");
                         String newPassword = input.nextLine();
-                        if (shop.getCurrentAccount() instanceof User){
+                        if (shop.getCurrentAccount() instanceof User) {
                             ((User) shop.getCurrentAccount()).updatePassword(newPassword);
                         }
                     }
                     case 2 -> {
                         System.out.println("Enter : - New email\n");
                         String newEmail = input.nextLine();
-                        if (shop.getCurrentAccount() instanceof User){
+                        if (shop.getCurrentAccount() instanceof User) {
                             ((User) shop.getCurrentAccount()).updateEmail(newEmail);
                         }
                     }
                     case 3 -> {
                         System.out.println("Enter : - New phone number\n");
                         String newPhoneNumber = input.nextLine();
-                        if (shop.getCurrentAccount() instanceof User){
+                        if (shop.getCurrentAccount() instanceof User) {
                             ((User) shop.getCurrentAccount()).updatePhoneNumber(newPhoneNumber);
                         }
                     }
                     case 4 -> {
                         System.out.println("Enter : - New address\n");
                         String newAddress = input.nextLine();
-                        if (shop.getCurrentAccount() instanceof User){
+                        if (shop.getCurrentAccount() instanceof User) {
                             ((User) shop.getCurrentAccount()).updateAddress(newAddress);
                         }
                     }
@@ -463,7 +634,875 @@ public class Main {
     }
 
     public static void sellerPage(Shop shop) {
-        //TODO
+        System.out.println("------------------------------ " + shop.getCurrentAccount().getUsername().toUpperCase() + " ------------------------------");
+        if (shop.getCurrentAccount() instanceof Seller && !((Seller) shop.getCurrentAccount()).isAuthorized()) {
+            System.out.println("Dear " + shop.getCurrentAccount().getUsername() + " You are very welcomed here, but you cannot enter the program until you get authorized by an admin!\n");
+            runMenu(shop);
+        } else {
+            System.out.println("""
+                    1- Product Management
+                    \t- Add a new Product
+                    \t- Remove a Product By ID
+                    \t- Show all Available Products
+                                               
+                    2- View Wallet
+                                               
+                    3- Back to Main Menu
+                    """);
+            int optionMenu = input.nextInt();
+            input.nextLine();
+            switch (optionMenu) {
+                case 1 -> {
+                    //Product Management
+                    System.out.println("""
+                            1- Add a new Product
+                            2- Remove a Product by ID
+                            3- Show all Available Products
+                            """);
+                    optionMenu = input.nextInt();
+                    input.nextLine();
+                    switch (optionMenu) {
+                        case 1 -> {
+                            System.out.println("""
+                                    Select a category from below:
+                                    1- Beauty
+                                    2- Books
+                                    3- Clothes
+                                    4- Electronics
+                                    5- Home
+                                    6- Sports
+                                    7- SuperMarket
+                                    8- Tools
+                                    9- Toys And Games
+                                    10- Vehicles
+                                    """);
+                            optionMenu = input.nextInt();
+                            input.nextLine();
+
+                            System.out.println("""
+                                    (In each part that you enter, you will be asked about some information about the product which you want to add, please answer them completely)
+                                    Enter:
+                                    1- Name
+                                    2- Color
+                                    3- Quantity
+                                    4- Price
+                                    """);
+                            String name = input.nextLine();
+                            String color = input.nextLine();
+                            int quantity = input.nextInt();
+                            input.nextLine();
+                            double price = input.nextDouble();
+                            input.nextLine();
+                            switch (optionMenu) {
+                                case 1 -> {
+                                    System.out.println("""
+                                            Select one subcategory from below:
+                                            1- Eye Brow Makeup
+                                            2- Eye Makeup
+                                            """);
+                                    optionMenu = input.nextInt();
+                                    input.nextLine();
+
+                                    System.out.println("""
+                                            Enter :
+                                            5- Material State
+                                            \t-Solid, Powder, Liquid
+                                            6- Has box?
+                                            \t-true, false
+                                            """);
+                                    String matterState = input.nextLine();
+                                    String hasBox = input.nextLine();
+                                    switch (optionMenu) {
+                                        case 1 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    7- Type of Pen
+                                                    \t- Eyeliner, Mascara, Eyeshadow
+                                                    8- Has Water Resistance?
+                                                    \t- true, false
+                                                    9- Brand
+                                                    10-Longevity(per hour)
+                                                    """);
+                                            String penType = input.nextLine();
+                                            String hasWaterResistance = input.nextLine();
+                                            String brand = input.nextLine();
+                                            int longevity = input.nextInt();
+                                            input.nextLine();
+                                            EyeBrowMakeUp eyeBrowMakeUp = new EyeBrowMakeUp(name, color, quantity, price, (Seller) shop.getCurrentAccount(), MatterState.valueOf(matterState.toUpperCase()), Boolean.parseBoolean(hasBox), PenType.valueOf(penType.toUpperCase()), Boolean.parseBoolean(hasWaterResistance), brand, longevity);
+                                            shop.addProduct(eyeBrowMakeUp);
+                                        }
+                                        case 2 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    7- Type of Pen
+                                                    8- Has Water Resistance
+                                                    \t- true, false
+                                                    9- Brand
+                                                    10- longevity
+                                                    """);
+                                            String penType = input.nextLine();
+                                            String hasWaterResistance = input.nextLine();
+                                            String brand = input.nextLine();
+                                            int longevity = input.nextInt();
+                                            input.nextLine();
+                                            EyeBrowMakeUp eyeMakeUp = new EyeBrowMakeUp(name, color, quantity, price, (Seller) shop.getCurrentAccount(), MatterState.valueOf(matterState.toUpperCase()), Boolean.parseBoolean(hasBox), PenType.valueOf(penType.toUpperCase()), Boolean.parseBoolean(hasWaterResistance), brand, longevity);
+                                            shop.addProduct(eyeMakeUp);
+                                        }
+                                    }
+                                }
+                                case 2 -> {
+                                    System.out.println("""
+                                            Select one subcategory from below:
+                                            1- Fiction book
+                                            2- Children book
+                                            3- Poetry book
+                                            """);
+                                    optionMenu = input.nextInt();
+                                    input.nextLine();
+
+                                    System.out.println("""
+                                            Enter :
+                                            5- ISBN
+                                            6- Page Numbers
+                                            7- Author
+                                            8- Language
+                                            """);
+                                    int ISBN = input.nextInt();
+                                    input.nextLine();
+                                    int pageNumber = input.nextInt();
+                                    input.nextLine();
+                                    String author = input.nextLine();
+                                    String language = input.nextLine();
+                                    switch (optionMenu) {
+                                        case 1 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    9- Tone
+                                                    """);
+                                            String tone = input.nextLine();
+                                            System.out.println("10- Enter characters one after the other and enter -1 when are you finished");
+                                            ArrayList<String> characters = new ArrayList<>();
+                                            while (true) {
+                                                String character = input.nextLine();
+                                                if (!character.equals("-1")) {
+                                                    characters.add(character);
+                                                } else {
+                                                    break;
+                                                }
+                                            }
+                                            Fiction_Book fiction_book = new Fiction_Book(name, color, quantity, price, (Seller) shop.getCurrentAccount(), ISBN, pageNumber, author, language, characters, tone);
+                                            shop.addProduct(fiction_book);
+                                        }
+                                        case 2 -> {
+                                            System.out.println("""
+                                                    9- Reading Level(for example: 8-12 yrs olds)
+                                                    10- Theme
+                                                    """);
+                                            String readingLevel = input.nextLine();
+                                            String theme = input.nextLine();
+                                            Children_Book children_book = new Children_Book(name, color, quantity, price, (Seller) shop.getCurrentAccount(), ISBN, pageNumber, author, language, readingLevel, theme);
+                                            shop.addProduct(children_book);
+                                        }
+                                        case 3 -> {
+                                            System.out.println("""
+                                                    9- Poetic Form
+                                                    10- Count of Verses
+                                                    """);
+                                            String poeticForm = input.nextLine();
+                                            int verseNumber = input.nextInt();
+                                            input.nextLine();
+                                            Poetry_Book poetry_book = new Poetry_Book(name, color, quantity, price, (Seller) shop.getCurrentAccount(), ISBN, pageNumber, author, language, poeticForm, verseNumber);
+                                            shop.addProduct(poetry_book);
+                                        }
+                                    }
+                                }
+                                case 3 -> {
+                                    System.out.println("""
+                                            Select one subcategory from below:
+                                            1- Coat
+                                            2- Jean
+                                            3- Sweater
+                                            """);
+                                    optionMenu = input.nextInt();
+                                    input.nextLine();
+
+                                    System.out.println("""
+                                            Enter :
+                                            5- Size
+                                            \t- Small, Medium, Large, XLarge
+                                            6- Cloth's Gender
+                                            \t- Male, Female, Unisex
+                                            7- Cloth's Material
+                                            \t- Polyester, Cotton, Wool, Other
+                                            8- Brand
+                                            9- Durability
+                                            \t- High, Medium, Low
+                                            """);
+                                    String size = input.nextLine();
+                                    String clothGender = input.nextLine();
+                                    String clothMaterial = input.nextLine();
+                                    String brand = input.nextLine();
+                                    String durability = input.nextLine();
+
+                                    switch (optionMenu) {
+                                        case 1 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    10- Button Number
+                                                    11- Has Cap?
+                                                    \t- true, false
+                                                    """);
+                                            int buttonNumber = input.nextInt();
+                                            input.nextLine();
+                                            String hasCap = input.nextLine();
+                                            Coat coat = new Coat(name, color, quantity, price, (Seller) shop.getCurrentAccount(), ClothSize.valueOf(size.toUpperCase()), ClothGender.valueOf(clothGender.toUpperCase()), ClothMaterial.valueOf(clothMaterial.toUpperCase()), brand, ClothDurability.valueOf(durability.toUpperCase()), buttonNumber, Boolean.parseBoolean(hasCap));
+                                            shop.addProduct(coat);
+                                        }
+                                        case 2 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    10- Height (per meter)
+                                                    11- Pocket Number
+                                                    12- Has Zipper?
+                                                    \t- true, false
+                                                    """);
+                                            double height = input.nextDouble();
+                                            input.nextLine();
+                                            int pocketNumber = input.nextInt();
+                                            input.nextLine();
+                                            String hasZipper = input.nextLine();
+                                            Jean jean = new Jean(name, color, quantity, price, (Seller) shop.getCurrentAccount(), ClothSize.valueOf(size.toUpperCase()), ClothGender.valueOf(clothGender.toUpperCase()), ClothMaterial.valueOf(clothMaterial.toUpperCase()), brand, ClothDurability.valueOf(durability.toUpperCase()), height, pocketNumber, Boolean.parseBoolean(hasZipper));
+                                            shop.addProduct(jean);
+                                        }
+                                        case 3 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    10- Button Number
+                                                    11- Design (for example : dragon on the arms, creepy stuff)
+                                                    """);
+                                            int buttonNumber = input.nextInt();
+                                            input.nextLine();
+                                            String design = input.nextLine();
+                                            Sweater sweater = new Sweater(name, color, quantity, price, (Seller) shop.getCurrentAccount(), ClothSize.valueOf(size.toUpperCase()), ClothGender.valueOf(clothGender.toUpperCase()), ClothMaterial.valueOf(clothMaterial.toUpperCase()), brand, ClothDurability.valueOf(durability.toUpperCase()), buttonNumber, design);
+                                            shop.addProduct(sweater);
+                                        }
+                                    }
+                                }
+                                case 4 -> {
+                                    System.out.println("""
+                                            Select one subcategory from below:
+                                            1- Laptop
+                                            2- Smart Phone
+                                            3- Smart Watch
+                                            """);
+                                    optionMenu = input.nextInt();
+                                    input.nextLine();
+
+                                    System.out.println("""
+                                            Enter :
+                                            5- Brand
+                                            6- Model
+                                            7- OS
+                                            8- Screen Size (for example: 10 inches)
+                                            9- Battery Capacity
+                                            """);
+                                    String brand = input.nextLine();
+                                    String model = input.nextLine();
+                                    String OS = input.nextLine();
+                                    String screenSize = input.nextLine();
+                                    double batteryCapacity = input.nextDouble();
+                                    input.nextLine();
+                                    switch (optionMenu) {
+                                        case 1 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    10- Webcam Model
+                                                    11- CPU
+                                                    12- GPU
+                                                    13- Fan Number
+                                                    14- Has Keyboard Light?
+                                                    \t- true, false
+                                                    15- Has Finger Print Recognition System?
+                                                    \t- true, false
+                                                    16- Keyboard Language
+                                                    17- Port Number
+                                                    """);
+                                            String webcamModel = input.nextLine();
+                                            String CPU = input.nextLine();
+                                            String GPU = input.nextLine();
+                                            int fanNumber = input.nextInt();
+                                            input.nextLine();
+                                            String hasKeyboardLight = input.nextLine();
+                                            String hasFingerPrint = input.nextLine();
+                                            String keyboardLanguage = input.nextLine();
+                                            int portNumber = input.nextInt();
+                                            input.nextLine();
+                                            Laptop laptop = new Laptop(name, color, quantity, price, (Seller) shop.getCurrentAccount(), brand, model, OS, screenSize, batteryCapacity, webcamModel, CPU, GPU, fanNumber, Boolean.parseBoolean(hasKeyboardLight), Boolean.parseBoolean(hasFingerPrint), keyboardLanguage, portNumber);
+                                            shop.addProduct(laptop);
+                                        }
+                                        case 2 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    1- Rear Camera Quality
+                                                    2- Selfie Camera Quality
+                                                    3- Camera Number
+                                                    4- Storage(per Gigabyte)
+                                                    5- OS Version (for example : android 11.1)
+                                                    6- Display Resolution
+                                                    7- Ring Tone
+                                                    8- CPU
+                                                    """);
+                                            int rearCameraQuality = input.nextInt();
+                                            input.nextLine();
+                                            int selfieCameraQuality = input.nextInt();
+                                            input.nextLine();
+                                            int cameraNumber = input.nextInt();
+                                            input.nextLine();
+                                            int storage = input.nextInt();
+                                            input.nextLine();
+                                            double OSVersion = input.nextDouble();
+                                            input.nextLine();
+                                            String displayResolution = input.nextLine();
+                                            String ringTone = input.nextLine();
+                                            String CPU = input.nextLine();
+                                            SmartPhone smartPhone = new SmartPhone(name, color, quantity, price, (Seller) shop.getCurrentAccount(), brand, model, OS, screenSize, batteryCapacity, rearCameraQuality, selfieCameraQuality, cameraNumber, storage, OSVersion, displayResolution, ringTone, CPU);
+                                            shop.addProduct(smartPhone);
+                                        }
+                                        case 3 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    1- Processor
+                                                    2- Has Heart Rate Tracker?
+                                                    \t- true, false
+                                                    3- Has Step Tracker?
+                                                    \t- true, false
+                                                    4- Has Caloric Tracker?
+                                                    \t- true, false
+                                                    """);
+                                            String processor = input.nextLine();
+                                            String hasHeartRateTracker = input.nextLine();
+                                            String hasStepTracker = input.nextLine();
+                                            String hasCaloricTracker = input.nextLine();
+                                            SmartWatch smartWatch = new SmartWatch(name, color, quantity, price, (Seller) shop.getCurrentAccount(), brand, model, OS, screenSize, batteryCapacity, processor, Boolean.parseBoolean(hasHeartRateTracker), Boolean.parseBoolean(hasStepTracker), Boolean.parseBoolean(hasCaloricTracker));
+                                            shop.addProduct(smartWatch);
+                                        }
+                                    }
+                                }
+                                case 5 -> {
+                                    System.out.println("""
+                                            Select one subcategory from below:
+                                            1- Air Conditioner
+                                            2- Refrigerator
+                                            3- TV
+                                            """);
+                                    optionMenu = input.nextInt();
+                                    input.nextLine();
+
+                                    System.out.println("""
+                                            Enter :
+                                            5- Has Controller?
+                                            \t- true, false
+                                            6- Height
+                                            7- Width
+                                            8- Weight
+                                            """);
+                                    String hasController = input.nextLine();
+                                    double height = input.nextDouble();
+                                    input.nextLine();
+                                    double width = input.nextDouble();
+                                    input.nextLine();
+                                    double weight = input.nextDouble();
+                                    input.nextLine();
+                                    switch (optionMenu) {
+                                        case 1 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    9- Cooling Capacity
+                                                    10- Energy Efficiency
+                                                    11- Air Filterer
+                                                    12- Fan Number
+                                                    13- Has Remote Control?
+                                                    \t- true, false
+                                                    14- Has Timer?
+                                                    \t- true, false
+                                                    """);
+                                            double coolingCapacity = input.nextDouble();
+                                            input.nextLine();
+                                            double energyEfficiency = input.nextDouble();
+                                            input.nextLine();
+                                            String airFilter = input.nextLine();
+                                            int fanNumber = input.nextInt();
+                                            input.nextLine();
+                                            String hasRemoteControl = input.nextLine();
+                                            String hasTimer = input.nextLine();
+                                            AirConditioner airConditioner = new AirConditioner(name, color, quantity, price, (Seller) shop.getCurrentAccount(), Boolean.parseBoolean(hasController), height, width, weight, coolingCapacity, energyEfficiency, airFilter, fanNumber, Boolean.parseBoolean(hasRemoteControl), Boolean.parseBoolean(hasTimer));
+                                            shop.addProduct(airConditioner);
+                                        }
+                                        case 2 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    9- Floor Number
+                                                    10- Has Fridge?
+                                                    \t- true, false
+                                                    11- Refrigerator Type
+                                                    \t- Side By Side, French Door, Compact, Wine
+                                                    12- Has Digital Controlling System?
+                                                    \t- true, false
+                                                    """);
+                                            int floorNumber = input.nextInt();
+                                            input.nextLine();
+                                            String hasFridge = input.nextLine();
+                                            String Refrigerator_type = input.nextLine();
+                                            String hasDigitalController = input.nextLine();
+                                            Refrigerator refrigerator = new Refrigerator(name, color, quantity, price, (Seller) shop.getCurrentAccount(), Boolean.parseBoolean(hasController), height, width, height, floorNumber, Boolean.parseBoolean(hasFridge), RefrigeratorType.valueOf(Refrigerator_type.toUpperCase()), Boolean.parseBoolean(hasDigitalController));
+                                            shop.addProduct(refrigerator);
+                                        }
+                                        case 3 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    9- Refresh Rate
+                                                    10- Is Mountable on the Wall?
+                                                    \t- true, false
+                                                    11- Has 3D Feature?
+                                                    \t- true, false
+                                                    12- Has Stand?
+                                                    \t- true, false
+                                                    """);
+                                            int refreshRate = input.nextInt();
+                                            input.nextLine();
+                                            String mountableOnWall = input.nextLine();
+                                            String has3D = input.nextLine();
+                                            String hasStand = input.nextLine();
+                                            TV tv = new TV(name, color, quantity, price, (Seller) shop.getCurrentAccount(), Boolean.parseBoolean(hasController), height, width, weight, refreshRate, Boolean.parseBoolean(mountableOnWall), Boolean.parseBoolean(has3D), Boolean.parseBoolean(hasStand));
+                                            shop.addProduct(tv);
+                                        }
+                                    }
+                                }
+                                case 6 -> {
+                                    System.out.println("""
+                                            Select one subcategory from below:
+                                            1- Balls
+                                            2- Gloves
+                                            3- Rackets
+                                            """);
+                                    optionMenu = input.nextInt();
+                                    input.nextLine();
+
+                                    System.out.println("""
+                                            Enter :
+                                            5- Weight
+                                            6- Sport Type (for example : American Football, Soccer, Baseball...)
+                                            7- Brand
+                                            """);
+                                    double weight = input.nextDouble();
+                                    input.nextLine();
+                                    String sportType = input.nextLine();
+                                    String brand = input.nextLine();
+                                    switch (optionMenu) {
+                                        case 1 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    8- Ball Size
+                                                    \t- For kids, TeenAges, Young, Adult
+                                                    9-  Ball Material
+                                                    \t- Leather, RUBBER, PU, PVC, FOAM
+                                                    10- Is Right Hand Oriented?
+                                                    \t- true, false
+                                                    """);
+                                            String ball_size = input.nextLine();
+                                            String ball_material = input.nextLine();
+                                            String isRightHandOriented = input.nextLine();
+                                            Ball ball = new Ball(name, color, quantity, price, (Seller) shop.getCurrentAccount(), weight, sportType, brand, BallSize.valueOf(ball_size.toUpperCase()), BallMaterial.valueOf(ball_material.toUpperCase()), Boolean.parseBoolean(isRightHandOriented));
+                                            shop.addProduct(ball);
+                                        }
+                                        case 2 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    8- Gloves Material
+                                                    \t- Leather, Neoprene, Mesh, Rubber, Fleece
+                                                    9- Gloves Size
+                                                    \t- Small, Medium, Large
+                                                    10- Gloves Suggested Users
+                                                    \t- Mens, Females, Unisex
+                                                    11- Gloves Style
+                                                    \t- Classic, Fingerless, Mittens, TouchScreen, Fashion
+                                                    """);
+                                            String gloveMaterial = input.nextLine();
+                                            String gloveSize = input.nextLine();
+                                            String gloveUser = input.nextLine();
+                                            String gloveStyle = input.nextLine();
+                                            Gloves glove = new Gloves(name, color, quantity, price, (Seller) shop.getCurrentAccount(), weight, sportType, brand, GloveMaterial.valueOf(gloveMaterial.toUpperCase()), GloveSize.valueOf(gloveSize.toUpperCase()), GloveUser.valueOf(gloveUser.toUpperCase()), GloveStyle.valueOf(gloveStyle.toUpperCase()));
+                                            shop.addProduct(glove);
+                                        }
+                                        case 3 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    8- Length
+                                                    9- Width
+                                                    10- Durability
+                                                    \t- Low, Medium, High
+                                                    11- Shape
+                                                    """);
+                                            double length = input.nextDouble();
+                                            input.nextLine();
+                                            double width = input.nextDouble();
+                                            input.nextLine();
+                                            String racketDurability = input.nextLine();
+                                            String shape = input.nextLine();
+                                            Rackets racket = new Rackets(name, color, quantity, price, (Seller) shop.getCurrentAccount(), weight, sportType, brand, length, width, RacketDurability.valueOf(racketDurability.toUpperCase()), shape);
+                                            shop.addProduct(racket);
+                                        }
+                                    }
+                                }
+                                case 7 -> {
+                                    System.out.println("""
+                                            Select one subcategory from below:
+                                            1- Dairy
+                                            2- Drink
+                                            3- Protein
+                                            """);
+                                    optionMenu = input.nextInt();
+                                    input.nextLine();
+
+                                    System.out.println("""
+                                            Enter :
+                                            5- Has Box?
+                                            \t true, false
+                                            6- Weight
+                                            7- Salt
+                                            8- Calories
+                                            9- Fat
+                                            10- Sugar
+                                            11- Country Of Origin
+                                            """);
+                                    String hasBox = input.nextLine();
+                                    double weight = input.nextDouble();
+                                    input.nextLine();
+                                    double salt = input.nextDouble();
+                                    input.nextLine();
+                                    double calories = input.nextDouble();
+                                    input.nextLine();
+                                    double fat = input.nextDouble();
+                                    input.nextLine();
+                                    double sugar = input.nextDouble();
+                                    input.nextLine();
+                                    String countryOfOrigin = input.nextLine();
+                                    System.out.println("Enter Ingredient items one after the other and enter -1 when you are finished\n");
+                                    ArrayList<String> ingredientItems = new ArrayList<>();
+                                    while (true) {
+                                        String item = input.nextLine();
+                                        if (item.equals("-1")) {
+                                            ingredientItems.add(item);
+                                        } else {
+                                            break;
+                                        }
+                                    }
+                                    switch (optionMenu) {
+                                        case 1 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    12- Is Domestic?
+                                                    \t- true, false
+                                                    13- Dairy Group
+                                                    \t- Yogurt, Curd, Cheese, SourCream, Milk, Butter
+                                                    """);
+                                            String isDomestic = input.nextLine();
+                                            String dairyGroup = input.nextLine();
+                                            Dairy dairyProduct = new Dairy(name, color, quantity, price, (Seller) shop.getCurrentAccount(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, Boolean.parseBoolean(isDomestic), DairyGroups.valueOf(dairyGroup));
+                                            shop.addProduct(dairyProduct);
+                                        }
+                                        case 2 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    12- What does it Taste?(for example : dragon fruit or ...)
+                                                    13- Is Soft Drink?
+                                                    \t- true, false
+                                                    14- Litters
+                                                    15- Drink Size
+                                                    \t- Individual, Family
+                                                    """);
+                                            String taste = input.nextLine();
+                                            String isSoftDrink = input.nextLine();
+                                            double litters = input.nextDouble();
+                                            input.nextLine();
+                                            String size = input.nextLine();
+                                            Drinks drink = new Drinks(name, color, quantity, price, (Seller) shop.getCurrentAccount(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, taste, Boolean.parseBoolean(isSoftDrink), litters, DrinkSize.valueOf(size.toUpperCase()));
+                                            shop.addProduct(drink);
+                                        }
+                                        case 3 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    12- Brand
+                                                    13- Protein Amount
+                                                    14- Product Type
+                                                    \t- Bologna, Sausage, ChickenMeat, Fish, Shrimp, BirdEggs
+                                                    """);
+                                            String brand = input.nextLine();
+                                            double proteinAmount = input.nextDouble();
+                                            input.nextLine();
+                                            String productType = input.nextLine();
+                                            Proteins protein = new Proteins(name, color, quantity, price, (Seller) shop.getCurrentAccount(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, brand, proteinAmount, ProteinProductType.valueOf(productType.toUpperCase()));
+                                            shop.addProduct(protein);
+                                        }
+                                    }
+                                }
+                                case 8 -> {
+                                    System.out.println("""
+                                            Select one subcategory from below:
+                                            1- Drill
+                                            2- Soldering System
+                                            3- Spanner
+                                            """);
+                                    optionMenu = input.nextInt();
+                                    input.nextLine();
+
+                                    System.out.println("""
+                                            Enter :
+                                            5- Weight
+                                            6- Has Box?
+                                            \t- true, false
+                                            7- Is Silent?
+                                            \t- true, false
+                                            8- Is Chargeable?
+                                            \t- true, false
+                                            9- Brand
+                                            """);
+                                    double weight = input.nextDouble();
+                                    input.nextLine();
+                                    String hasBox = input.nextLine();
+                                    String isSilent = input.nextLine();
+                                    String isChargeable = input.nextLine();
+                                    String brand = input.nextLine();
+                                    switch (optionMenu) {
+                                        case 1 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    10- Voltage
+                                                    11- Power Source
+                                                    \t- AC, DC
+                                                    12- Minimum Spin Speed
+                                                    13- Maximum Spin Speed
+                                                    """);
+                                            int voltage = input.nextInt();
+                                            input.nextLine();
+                                            String powerSource = input.nextLine();
+                                            int minSpinSpeed = input.nextInt();
+                                            input.nextLine();
+                                            int maxSpinSpeed = input.nextInt();
+                                            input.nextLine();
+                                            Drill drill = new Drill(name, color, quantity, price, (Seller) shop.getCurrentAccount(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, voltage, PowerSource.valueOf(powerSource.toUpperCase()), minSpinSpeed, maxSpinSpeed);
+                                            shop.addProduct(drill);
+                                        }
+                                        case 2 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    10- Voltage
+                                                    11- Power Source
+                                                    \t- AC, DC
+                                                    12- Usage Level
+                                                    \t- Beginner, Intermediate, Professional
+                                                    """);
+                                            int voltage = input.nextInt();
+                                            input.nextLine();
+                                            String powerSource = input.nextLine();
+                                            String usageLevel = input.nextLine();
+                                            SolderingSystem solderingSystem = new SolderingSystem(name, color, quantity, price, (Seller) shop.getCurrentAccount(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, voltage, PowerSource.valueOf(powerSource.toUpperCase()), UsageLevel.valueOf(usageLevel.toUpperCase()));
+                                            shop.addProduct(solderingSystem);
+                                        }
+                                        case 3 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    10- Size (Thickness in millimeter)
+                                                    11- Style (for example : Combination open end / 12 point / 15° / Offset ring end)
+                                                    12- Material
+                                                    \t- Steel, Aluminium, Titanium, Plastic, Composite
+                                                    """);
+                                            int size = input.nextInt();
+                                            input.nextLine();
+                                            String style = input.nextLine();
+                                            String material = input.nextLine();
+                                            Spanner spanner = new Spanner(name, color, quantity, price, (Seller) shop.getCurrentAccount(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, size, style, SpannerMaterial.valueOf(material.toUpperCase()));
+                                            shop.addProduct(spanner);
+                                        }
+                                    }
+                                }
+                                case 9 -> {
+                                    System.out.println("""
+                                            Select one subcategory from below:
+                                            1- Board Game
+                                            2- Card Game
+                                            3- Puzzle
+                                            """);
+                                    optionMenu = input.nextInt();
+                                    input.nextLine();
+
+                                    System.out.println("""
+                                            Enter :
+                                            5- Has Box?
+                                            \t- true, false
+                                            6- Difficulty Level
+                                            \t- Easy, Normal, Hard
+                                            7- Is Multiplayer?
+                                            \t true, false
+                                            """);
+                                    String hasBox = input.nextLine();
+                                    String difficultyLevel = input.nextLine();
+                                    String isMultiplayer = input.nextLine();
+                                    switch (optionMenu) {
+                                        case 1 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    8- Size (for example : 2 by 2)
+                                                    9- Player Number
+                                                    10- Time To Finish(per minute)
+                                                    """);
+                                            String size = input.nextLine();
+                                            int playerNumber = input.nextInt();
+                                            input.nextLine();
+                                            int timeToFinish = input.nextInt();
+                                            input.nextLine();
+                                            BoardGames boardGame = new BoardGames(name, color, quantity, price, (Seller) shop.getCurrentAccount(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer), size, playerNumber, timeToFinish);
+                                            shop.addProduct(boardGame);
+                                        }
+                                        case 2 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    8- Card Number
+                                                    9- Player Number
+                                                    10- Gang Number
+                                                    """);
+                                            int cardNumber = input.nextInt();
+                                            input.nextLine();
+                                            int playerNumber = input.nextInt();
+                                            input.nextLine();
+                                            int gangNumber = input.nextInt();
+                                            input.nextLine();
+                                            CardGames cardGame = new CardGames(name, color, quantity, price, (Seller) shop.getCurrentAccount(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer), cardNumber, playerNumber, gangNumber);
+                                            shop.addProduct(cardGame);
+                                        }
+                                        case 3 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    1- partNumber
+                                                    2- finalPicture
+                                                    """);
+                                            int partNumber = input.nextInt();
+                                            input.nextLine();
+                                            String finalPicture = input.nextLine();
+                                            Puzzles puzzle = new Puzzles(name, color, quantity, price, (Seller) shop.getCurrentAccount(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer.toUpperCase()), partNumber, finalPicture);
+                                            shop.addProduct(puzzle);
+                                        }
+                                    }
+                                }
+                                case 10 -> {
+                                    System.out.println("""
+                                            Select one subcategory from below:
+                                            1- Car
+                                            2- Motorcycle
+                                            3- Truck
+                                            """);
+                                    optionMenu = input.nextInt();
+                                    input.nextLine();
+
+                                    System.out.println("""
+                                            Enter :
+                                            5- Weight
+                                            6- Horse Power
+                                            7- Engine Model
+                                            8- Wheel Number
+                                            9- Is Automatic?
+                                            \t- true, false
+                                            10- Maximum Speed
+                                            11- Brand
+                                            12- Model
+                                            """);
+                                    double weight = input.nextDouble();
+                                    input.nextLine();
+                                    int horsePower = input.nextInt();
+                                    input.nextLine();
+                                    String engineModel = input.nextLine();
+                                    int wheelNumber = input.nextInt();
+                                    input.nextLine();
+                                    String isAutomatic = input.nextLine();
+                                    int maxSpeed = input.nextInt();
+                                    input.nextLine();
+                                    String brand = input.nextLine();
+                                    String model = input.nextLine();
+                                    switch (optionMenu) {
+                                        case 1 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    13- Is Right Steering?
+                                                    \t true, false
+                                                    14- Speaker Model
+                                                    15- Seat Number
+                                                    """);
+                                            String isRightSteering = input.nextLine();
+                                            String speakerModel = input.nextLine();
+                                            int seatNumber = input.nextInt();
+                                            input.nextLine();
+                                            Car car = new Car(name, color, quantity, price, (Seller) shop.getCurrentAccount(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic.toUpperCase()), maxSpeed, brand, model, Boolean.parseBoolean(isRightSteering), speakerModel, seatNumber);
+                                            shop.addProduct(car);
+                                        }
+                                        case 2 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    13- Seat Number
+                                                    14- Has Wing Mirror ?
+                                                    \t- true, false
+                                                    15- Noise Level
+                                                    \t- Low, Normal, High
+                                                    """);
+                                            int seatNumber = input.nextInt();
+                                            input.nextLine();
+                                            String hasWingMirror = input.nextLine();
+                                            String noiseLevel = input.nextLine();
+                                            Motorcycle motorcycle = new Motorcycle(name, color, quantity, price, (Seller) shop.getCurrentAccount(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic), maxSpeed, brand, model, seatNumber, Boolean.parseBoolean(hasWingMirror), NoiseLevel.valueOf(noiseLevel.toUpperCase()));
+                                            shop.addProduct(motorcycle);
+                                        }
+                                        case 3 -> {
+                                            System.out.println("""
+                                                    Enter :
+                                                    13- Type of the Truck
+                                                    \t- Pickup, Dump, SemiTrailer, Tanker, Box, Fire
+                                                    14- Has Bed?
+                                                    \t- true, false
+                                                    """);
+                                            String truckType = input.nextLine();
+                                            String hasBed = input.nextLine();
+                                            Truck truck = new Truck(name, color, quantity, price, (Seller) shop.getCurrentAccount(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic), maxSpeed, brand, model, TruckType.valueOf(truckType.toUpperCase()), Boolean.parseBoolean(hasBed));
+                                            shop.addProduct(truck);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        case 2 -> {
+                            System.out.println("Enter : - Product ID\n");
+                            String id = input.nextLine();
+                            shop.removeProduct(UUID.fromString(id));
+                        }
+                        case 3 -> {
+                            if (shop.getCurrentAccount() instanceof Seller) {
+                                ((Seller) shop.getCurrentAccount()).viewAvailableProducts();
+                            }
+                        }
+
+                    }
+                }
+                case 2 -> {
+                    //View Wallet
+                    if (shop.getCurrentAccount() instanceof Seller){
+                        ((Seller) shop.getCurrentAccount()).viewWallet();
+                    }
+                }
+                case 3 -> {
+                    //Back to Main Menu
+                    runMenu(shop);
+                }
+            }
+            runMenu(shop);
+        }
     }
 
     public static void adminPage(Shop shop) {

@@ -3,8 +3,6 @@ package Categories.Electronics;
 import Accounts.Seller;
 import Categories.Product;
 
-import java.util.ArrayList;
-
 public abstract class Electronics extends Product {
     private final String brand;
     private final String model;

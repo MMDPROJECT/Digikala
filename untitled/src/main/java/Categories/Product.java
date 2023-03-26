@@ -16,7 +16,6 @@ public abstract class Product {
 
     //Constructor
 
-
     public Product(String name, String color, int quantity, double price, Seller seller) {
         this.name = name;
         this.color = color;

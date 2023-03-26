@@ -2,13 +2,11 @@ package Categories.Electronics;
 
 import Accounts.Seller;
 
-import java.util.ArrayList;
-
 public class Laptop extends Electronics {
     private final String webcamModel;
     private final String CPU;
     private final String GPU;
-    private final String fanNumber;
+    private final int fanNumber;
     private final boolean hasKeyboardLight;
     private final boolean hasFingerPrint;
     private final String keyboardLanguage;
@@ -16,7 +14,7 @@ public class Laptop extends Electronics {
 
     //Constructor
 
-    public Laptop(String name, String color, int quantity, double price, Seller seller, String brand, String model, String OS, String screenSize, double batteryCapacity, String webcamModel, String CPU, String GPU, String fanNumber, boolean hasKeyboardLight, boolean hasFingerPrint, String keyboardLanguage, int portNumber) {
+    public Laptop(String name, String color, int quantity, double price, Seller seller, String brand, String model, String OS, String screenSize, double batteryCapacity, String webcamModel, String CPU, String GPU, int fanNumber, boolean hasKeyboardLight, boolean hasFingerPrint, String keyboardLanguage, int portNumber) {
         super(name, color, quantity, price, seller, brand, model, OS, screenSize, batteryCapacity);
         this.webcamModel = webcamModel;
         this.CPU = CPU;
@@ -27,7 +25,6 @@ public class Laptop extends Electronics {
         this.keyboardLanguage = keyboardLanguage;
         this.portNumber = portNumber;
     }
-
 
     //Getters and Setters
 
@@ -43,7 +40,7 @@ public class Laptop extends Electronics {
         return GPU;
     }
 
-    public String getFanNumber() {
+    public int getFanNumber() {
         return fanNumber;
     }
 

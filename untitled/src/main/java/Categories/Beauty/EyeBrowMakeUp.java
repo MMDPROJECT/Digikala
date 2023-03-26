@@ -4,8 +4,6 @@ import Accounts.Seller;
 import Categories.Beauty.Enums.MatterState;
 import Categories.Beauty.Enums.PenType;
 
-import java.util.ArrayList;
-
 public class EyeBrowMakeUp extends Beauty {
     private final PenType penType;
     private final boolean hasWaterResistance;

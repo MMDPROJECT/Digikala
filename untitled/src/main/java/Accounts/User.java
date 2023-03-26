@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class User extends Account {
-    private String username;
-    private HashMap<UUID, ShoppingCart> carts;
-    private HashMap<UUID, Order> orders;
-    private HashMap<UUID, WalletReq> walletRequests;
-    private HashMap<UUID, Product> purchasedProducts;
+    private final String username;
+    private final HashMap<UUID, ShoppingCart> carts;
+    private final HashMap<UUID, Order> orders;
+    private final HashMap<UUID, WalletReq> walletRequests;
+    private final HashMap<UUID, Product> purchasedProducts;
     private ShoppingCart currentCart;
     private String password;
     private String email;
@@ -84,7 +84,12 @@ public class User extends Account {
     }
 
     public void setCurrentCart(UUID cartID) {
-        this.currentCart = carts.get(cartID);
+        if (this.carts.containsKey(cartID)) {
+            this.currentCart = carts.get(cartID);
+            System.out.println("Cart has been successfully switched to " + cartID + "\n");
+        } else {
+            System.out.println("Cart has not been found!\n");
+        }
     }
 
     public ShoppingCart getCart(UUID id) {
@@ -132,11 +137,10 @@ public class User extends Account {
         }
     }
 
-    public void viewCart(UUID id){
-        if (carts.containsKey(id)){
+    public void viewCart(UUID id) {
+        if (carts.containsKey(id)) {
             System.out.println(carts.get(id));
-        }
-        else {
+        } else {
             System.out.println("Cart has not been found!\n");
         }
     }
@@ -145,8 +149,8 @@ public class User extends Account {
         carts.put(cart.getId(), cart);
     }
 
-    public void checkOutCart(UUID id){
-        if (carts.containsKey(id)){
+    public void checkOutCart(UUID id) {
+        if (carts.containsKey(id)) {
             this.orders.put(id, new Order(carts.get(id).getName(), carts.get(id).getProducts(), carts.get(id).getItemNumber(), carts.get(id).getTotalPrice(), this));
         }
         System.out.println("Order has been successfully requested!\n");
@@ -170,7 +174,7 @@ public class User extends Account {
 
     //Wallet - Related Methods
 
-    public void sendWalletRequest(double value){
+    public void sendAWalletRequest(double value) {
         WalletReq walletRequest = new WalletReq(value, this);
         this.walletRequests.put(walletRequest.getId(), walletRequest);
         System.out.println("Wallet request has been successfully sent!\n");
@@ -186,27 +190,28 @@ public class User extends Account {
         }
     }
 
-    public void showConfirmedWalletRequests(){
+    public void showConfirmedWalletRequests() {
         boolean hasFoundAny = false;
-        for (WalletReq walletReq : walletRequests.values()){
-            if (walletReq.isConfirmed()){
+        for (WalletReq walletReq : walletRequests.values()) {
+            if (walletReq.isConfirmed()) {
                 hasFoundAny = true;
                 System.out.println(walletReq);
             }
         }
-        if (!hasFoundAny){
+        if (!hasFoundAny) {
             System.out.println("No wallet request has been found!\n");
         }
     }
-    public void showUnconfirmedWalletRequests(){
+
+    public void showUnconfirmedWalletRequests() {
         boolean hasFoundAny = false;
-        for (WalletReq walletReq : walletRequests.values()){
-            if (!walletReq.isConfirmed()){
+        for (WalletReq walletReq : walletRequests.values()) {
+            if (!walletReq.isConfirmed()) {
                 hasFoundAny = true;
                 System.out.println(walletReq);
             }
         }
-        if (!hasFoundAny){
+        if (!hasFoundAny) {
             System.out.println("No wallet request has been found!\n");
         }
     }

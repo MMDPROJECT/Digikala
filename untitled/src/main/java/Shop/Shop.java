@@ -5,15 +5,44 @@ import Accounts.Admin;
 import Accounts.Seller;
 import Accounts.User;
 import Categories.Beauty.Beauty;
+import Categories.Beauty.EyeBrowMakeUp;
+import Categories.Beauty.EyeMakeUp;
 import Categories.Books.Books;
+import Categories.Books.Children_Book;
+import Categories.Books.Fiction_Book;
+import Categories.Books.Poetry_Book;
 import Categories.Clothes.Clothes;
+import Categories.Clothes.Coat;
+import Categories.Clothes.Jean;
+import Categories.Clothes.Sweater;
 import Categories.Electronics.Electronics;
+import Categories.Electronics.Laptop;
+import Categories.Electronics.SmartPhone;
+import Categories.Electronics.SmartWatch;
+import Categories.Home.AirConditioner;
 import Categories.Home.Home;
+import Categories.Home.Refrigerator;
+import Categories.Home.TV;
 import Categories.Product;
+import Categories.Sports.Ball;
+import Categories.Sports.Gloves;
+import Categories.Sports.Rackets;
 import Categories.Sports.Sports;
+import Categories.SuperMarket.Dairy;
+import Categories.SuperMarket.Drinks;
+import Categories.SuperMarket.Proteins;
 import Categories.SuperMarket.SuperMarket;
+import Categories.Tools.Drill;
+import Categories.Tools.SolderingSystem;
+import Categories.Tools.Spanner;
 import Categories.Tools.Tools;
+import Categories.ToysAndGames.BoardGames;
+import Categories.ToysAndGames.CardGames;
+import Categories.ToysAndGames.Puzzles;
 import Categories.ToysAndGames.ToysAndGames;
+import Categories.Vehicles.Car;
+import Categories.Vehicles.Motorcycle;
+import Categories.Vehicles.Truck;
 import Categories.Vehicles.Vehicles;
 import Shopping.Order;
 import Shopping.WalletReq;
@@ -22,14 +51,14 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class Shop {
-    private String name;
-    private String webAddress;
-    private String supportPhoneNumber;
-    private HashMap<UUID, Account> accounts;
-    private HashMap<UUID, Product> products;
-    private HashMap<UUID, Order> orders;
-    private HashMap<UUID, WalletReq> walletRequests;
-    private double totalGained;
+    private final String name;
+    private final String webAddress;
+    private final String supportPhoneNumber;
+    private final HashMap<UUID, Account> accounts;
+    private final HashMap<UUID, Product> products;
+    private final HashMap<UUID, Order> orders;
+    private final HashMap<UUID, WalletReq> walletRequests;
+    private final double totalGained;
 
     private Account currentAccount;
 
@@ -282,7 +311,7 @@ public class Shop {
         }
     }
 
-    public void userSignUp(User newUser){
+    public void userSignUp(User newUser) {
         this.accounts.put(newUser.getId(), newUser);
     }
 
@@ -296,11 +325,10 @@ public class Shop {
         user.addPurchasedProduct(products.get(id));
     }
 
-    public void submitComment (UUID id, String comment){
-        if (this.products.containsKey(id)){
+    public void submitComment(UUID id, String comment) {
+        if (this.products.containsKey(id)) {
             this.products.get(id).submitComment(comment);
-        }
-        else {
+        } else {
             System.out.println("Product has not been found!\n");
         }
     }
@@ -317,7 +345,7 @@ public class Shop {
         }
     }
 
-    public void sellerSignUp(Seller seller){
+    public void sellerSignUp(Seller seller) {
         this.accounts.put(seller.getId(), seller);
     }
 
@@ -336,6 +364,22 @@ public class Shop {
         return false;
     }
 
+    public void addProduct(Product product) {
+        this.products.put(product.getId(), product);
+        if (this.accounts.get(product.getId()) instanceof Seller) {
+            ((Seller) this.accounts.get(product.getId())).getAvailableProducts().put(product.getId(), product);
+            System.out.println("Product has been successfully added!\n");
+        }
+    }
+
+    public void removeProduct(UUID id) {
+        this.products.remove(id);
+        if (this.accounts.get(id) instanceof Seller) {
+            ((Seller) this.accounts.get(id)).getAvailableProducts().remove(id);
+            System.out.println("Product has been successfully removed!\n");
+        }
+    }
+
     //Shop - Related Methods
 
     public void logOut() {
@@ -347,10 +391,45 @@ public class Shop {
         }
     }
 
+
+    //Cart - Related Methods
+
+    //Product - Related Methods
+
+    public boolean doesProductExist(UUID id) {
+        return products.containsKey(id);
+    }
+
     public void searchBeauty() {
         boolean hasFoundAny = false;
         for (Product product : products.values()) {
             if (product instanceof Beauty) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchEyeBrowMakeUp() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof EyeBrowMakeUp) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchEyeMakeUp() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof EyeMakeUp) {
                 hasFoundAny = true;
                 System.out.println(product);
             }
@@ -374,10 +453,88 @@ public class Shop {
 
     }
 
+    public void searchChildrenBook() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Children_Book) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchFictionBook() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Fiction_Book) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchPoetryBook() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Poetry_Book) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
     public void searchClothes() {
         boolean hasFoundAny = false;
         for (Product product : products.values()) {
             if (product instanceof Clothes) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchCoat() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Coat) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchJean() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Jean) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchSweater() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Sweater) {
                 hasFoundAny = true;
                 System.out.println(product);
             }
@@ -400,10 +557,88 @@ public class Shop {
         }
     }
 
+    public void searchLaptop() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Laptop) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchSmartPhone() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof SmartPhone) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchSmartWatch() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof SmartWatch) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
     public void searchHome() {
         boolean hasFoundAny = false;
         for (Product product : products.values()) {
             if (product instanceof Home) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchAirConditioner() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof AirConditioner) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchRefrigerator() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Refrigerator) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchTV() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof TV) {
                 hasFoundAny = true;
                 System.out.println(product);
             }
@@ -426,10 +661,88 @@ public class Shop {
         }
     }
 
+    public void searchBall() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Ball) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchGlove() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Gloves) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchRacket() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Rackets) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
     public void searchSuperMarket() {
         boolean hasFoundAny = false;
         for (Product product : products.values()) {
             if (product instanceof SuperMarket) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchDairy() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Dairy) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchDrink() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Drinks) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchProtein() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Proteins) {
                 hasFoundAny = true;
                 System.out.println(product);
             }
@@ -452,10 +765,88 @@ public class Shop {
         }
     }
 
+    public void searchDrill() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Drill) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchSolderingSystem() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof SolderingSystem) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchSpanner() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Spanner) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
     public void searchToysAndGames() {
         boolean hasFoundAny = false;
         for (Product product : products.values()) {
             if (product instanceof ToysAndGames) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchBoardGame() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof BoardGames) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchCardGame() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof CardGames) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
+
+    public void searchPuzzles() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Puzzles) {
                 hasFoundAny = true;
                 System.out.println(product);
             }
@@ -478,11 +869,42 @@ public class Shop {
         }
     }
 
-    //Cart - Related Methods
+    public void searchCar() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Car) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
 
-    //Product - Related Methods
+    public void searchMotorCycle() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Motorcycle) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
+    }
 
-    public boolean doesProductExist(UUID id){
-        return products.containsKey(id);
+    public void searchTruck() {
+        boolean hasFoundAny = false;
+        for (Product product : products.values()) {
+            if (product instanceof Truck) {
+                hasFoundAny = true;
+                System.out.println(product);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Product has been found!\n");
+        }
     }
 }

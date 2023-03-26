@@ -1,5 +1,5 @@
 package Categories.ToysAndGames.Enums;
 
 public enum DifficultyLevel {
-    Easy, Normal, Hard
+    EASY, NORMAL, HARD
 }

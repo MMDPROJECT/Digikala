@@ -4,8 +4,6 @@ import Accounts.Seller;
 import Categories.Tools.Enums.PowerSource;
 import Categories.Tools.Enums.UsageLevel;
 
-import java.util.ArrayList;
-
 public class SolderingSystem extends Tools {
     private final int voltage;
     private final PowerSource powerSource;

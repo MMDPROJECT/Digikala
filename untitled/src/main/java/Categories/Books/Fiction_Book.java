@@ -5,11 +5,10 @@ import Accounts.Seller;
 import java.util.ArrayList;
 
 public class Fiction_Book extends Books {
-    private final ArrayList<String> characters;
     private final String tone;
+    private final ArrayList<String> characters;
 
     //Constructor
-
 
     public Fiction_Book(String name, String color, int quantity, double price, Seller seller, int ISBN, int pageNumbers, String author, String language, ArrayList<String> characters, String tone) {
         super(name, color, quantity, price, seller, ISBN, pageNumbers, author, language);

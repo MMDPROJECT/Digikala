@@ -3,8 +3,6 @@ package Categories.Home;
 import Accounts.Seller;
 import Categories.Home.Enums.RefrigeratorType;
 
-import java.util.ArrayList;
-
 public class Refrigerator extends Home {
     private final int floorNumber;
     private final boolean hasFridge;

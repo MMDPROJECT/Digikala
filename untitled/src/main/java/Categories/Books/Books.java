@@ -3,8 +3,6 @@ package Categories.Books;
 import Accounts.Seller;
 import Categories.Product;
 
-import java.util.ArrayList;
-
 public abstract class Books extends Product {
     private final int ISBN;
     private final int pageNumbers;

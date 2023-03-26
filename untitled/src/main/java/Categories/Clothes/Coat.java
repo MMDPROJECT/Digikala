@@ -6,8 +6,6 @@ import Categories.Clothes.Enums.ClothGender;
 import Categories.Clothes.Enums.ClothMaterial;
 import Categories.Clothes.Enums.ClothSize;
 
-import java.util.ArrayList;
-
 public class Coat extends Clothes {
     private final int buttonNumber;
     private final boolean hasCap;

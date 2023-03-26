@@ -3,8 +3,6 @@ package Categories.Vehicles;
 import Accounts.Seller;
 import Categories.Vehicles.Enums.NoiseLevel;
 
-import java.util.ArrayList;
-
 public class Motorcycle extends Vehicles {
     private final int seatNumber;
     private final boolean hasWingMirror;

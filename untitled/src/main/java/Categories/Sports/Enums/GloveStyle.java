@@ -1,5 +1,5 @@
 package Categories.Sports.Enums;
 
 public enum GloveStyle {
-    Classic, Fingerless, Mittens, Touchscreen, Fashion
+    CLASSIC, FINGERLESS, MITTENS, TOUCHSCREEN, FASHION
 }

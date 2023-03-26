@@ -2,11 +2,9 @@ package Categories.Electronics;
 
 import Accounts.Seller;
 
-import java.util.ArrayList;
-
 public class SmartPhone extends Electronics {
-    private final double backCameraQuality;       //Quality of the main camera in megapixels
-    private final double frontCameraQuality;      //Quality of the selfie camera in megapixels
+    private final int backCameraQuality;       //Quality of the main camera in megapixels
+    private final int frontCameraQuality;      //Quality of the selfie camera in megapixels
     private final int cameraNumber;
     private final int storage;
     private final double OSVersion;
@@ -16,7 +14,7 @@ public class SmartPhone extends Electronics {
 
     //Constructor
 
-    public SmartPhone(String name, String color, int quantity, double price, Seller seller, String brand, String model, String OS, String screenSize, double batteryCapacity, double backCameraQuality, double frontCameraQuality, int cameraNumber, int storage, double OSVersion, String displayResolution, String ringTone, String CPU) {
+    public SmartPhone(String name, String color, int quantity, double price, Seller seller, String brand, String model, String OS, String screenSize, double batteryCapacity, int backCameraQuality, int frontCameraQuality, int cameraNumber, int storage, double OSVersion, String displayResolution, String ringTone, String CPU) {
         super(name, color, quantity, price, seller, brand, model, OS, screenSize, batteryCapacity);
         this.backCameraQuality = backCameraQuality;
         this.frontCameraQuality = frontCameraQuality;
@@ -31,11 +29,11 @@ public class SmartPhone extends Electronics {
 
     //Getters and Setters
 
-    public double getBackCameraQuality() {
+    public int getBackCameraQuality() {
         return backCameraQuality;
     }
 
-    public double getFrontCameraQuality() {
+    public int getFrontCameraQuality() {
         return frontCameraQuality;
     }
 

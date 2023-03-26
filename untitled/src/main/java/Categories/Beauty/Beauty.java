@@ -4,8 +4,6 @@ import Accounts.Seller;
 import Categories.Beauty.Enums.MatterState;
 import Categories.Product;
 
-import java.util.ArrayList;
-
 public class Beauty extends Product {
     private final MatterState materialState;
     private final boolean hasBox;
