@@ -13,8 +13,8 @@ public class Refrigerator extends Home {
 
     //Constructor
 
-    public Refrigerator(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, boolean hasController, double height, double width, double weight, int floorNumber, boolean hasFridge, RefrigeratorType refrigeratorType, boolean hasDigitalControllingSystem) {
-        super(name, color, quantity, price, seller, comments, hasController, height, width, weight);
+    public Refrigerator(String name, String color, int quantity, double price, Seller seller, boolean hasController, double height, double width, double weight, int floorNumber, boolean hasFridge, RefrigeratorType refrigeratorType, boolean hasDigitalControllingSystem) {
+        super(name, color, quantity, price, seller, hasController, height, width, weight);
         this.floorNumber = floorNumber;
         this.hasFridge = hasFridge;
         this.refrigeratorType = refrigeratorType;

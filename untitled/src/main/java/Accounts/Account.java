@@ -31,4 +31,6 @@ public abstract class Account {
     public abstract boolean accountLogin(String username, String password);
 
     public abstract boolean doesAccountExist(String username);
+
+    public abstract String getUsername();
 }

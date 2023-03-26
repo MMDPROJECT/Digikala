@@ -11,8 +11,8 @@ public class Puzzles extends ToysAndGames {
 
     //Constructor
 
-    public Puzzles(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer, int partNumber, String finalPicture) {
-        super(name, color, quantity, price, seller, comments, hasBox, difficultyLevel, isMultiplayer);
+    public Puzzles(String name, String color, int quantity, double price, Seller seller, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer, int partNumber, String finalPicture) {
+        super(name, color, quantity, price, seller, hasBox, difficultyLevel, isMultiplayer);
         this.partNumber = partNumber;
         this.finalPicture = finalPicture;
     }

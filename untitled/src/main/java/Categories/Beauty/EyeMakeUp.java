@@ -14,8 +14,8 @@ public class EyeMakeUp extends Beauty {
 
     //Constructor
 
-    public EyeMakeUp(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, MatterState materialState, boolean hasBox, PenType penType, boolean hasWaterResistance, String brand, int longevity) {
-        super(name, color, quantity, price, seller, comments, materialState, hasBox);
+    public EyeMakeUp(String name, String color, int quantity, double price, Seller seller, MatterState materialState, boolean hasBox, PenType penType, boolean hasWaterResistance, String brand, int longevity) {
+        super(name, color, quantity, price, seller, materialState, hasBox);
         this.penType = penType;
         this.hasWaterResistance = hasWaterResistance;
         this.brand = brand;

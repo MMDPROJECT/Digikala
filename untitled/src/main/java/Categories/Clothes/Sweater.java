@@ -13,13 +13,12 @@ public class Sweater extends Clothes {
 
     //Constructor
 
-    public Sweater(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability, int buttonNumber) {
-        super(name, color, quantity, price, seller, comments, size, gender, material, brand, durability);
+
+    public Sweater(String name, String color, int quantity, double price, Seller seller, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability, int buttonNumber) {
+        super(name, color, quantity, price, seller, size, gender, material, brand, durability);
         this.buttonNumber = buttonNumber;
     }
-
-
-    //Getter and Setters
+//Getter and Setters
 
     public int getButtonNumber() {
         return buttonNumber;

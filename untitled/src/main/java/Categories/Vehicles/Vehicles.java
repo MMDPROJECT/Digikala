@@ -1,6 +1,9 @@
-package Categories.SuperMarket.Vehicles;
+package Categories.Vehicles;
 
+import Accounts.Seller;
 import Categories.Product;
+
+import java.util.ArrayList;
 
 public class Vehicles extends Product {
     private final double weight;
@@ -14,8 +17,8 @@ public class Vehicles extends Product {
 
     //Constructor
 
-    public Vehicles(String name, double price, String color, int quantity, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model) {
-        super(name, price, color, quantity);
+    public Vehicles(String name, String color, int quantity, double price, Seller seller, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model) {
+        super(name, color, quantity, price, seller);
         this.weight = weight;
         this.horsePower = horsePower;
         this.engineModel = engineModel;
@@ -25,6 +28,7 @@ public class Vehicles extends Product {
         this.brand = brand;
         this.model = model;
     }
+
 
     //Getters and Setters
 

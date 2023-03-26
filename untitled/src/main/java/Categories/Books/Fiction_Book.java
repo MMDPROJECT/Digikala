@@ -11,8 +11,8 @@ public class Fiction_Book extends Books {
     //Constructor
 
 
-    public Fiction_Book(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, int ISBN, int pageNumbers, String author, String language, ArrayList<String> characters, String tone) {
-        super(name, color, quantity, price, seller, comments, ISBN, pageNumbers, author, language);
+    public Fiction_Book(String name, String color, int quantity, double price, Seller seller, int ISBN, int pageNumbers, String author, String language, ArrayList<String> characters, String tone) {
+        super(name, color, quantity, price, seller, ISBN, pageNumbers, author, language);
         this.characters = characters;
         this.tone = tone;
     }

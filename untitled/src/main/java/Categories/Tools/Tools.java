@@ -15,8 +15,8 @@ public class Tools extends Product {
 
     //Constructor
 
-    public Tools(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, double weight, boolean hasBox, boolean isSilent, boolean isChargeable, String brand) {
-        super(name, color, quantity, price, seller, comments);
+    public Tools(String name, String color, int quantity, double price, Seller seller, double weight, boolean hasBox, boolean isSilent, boolean isChargeable, String brand) {
+        super(name, color, quantity, price, seller);
         this.weight = weight;
         this.hasBox = hasBox;
         this.isSilent = isSilent;

@@ -16,8 +16,8 @@ public class Laptop extends Electronics {
 
     //Constructor
 
-    public Laptop(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, String brand, String model, String OS, String screenSize, double batteryCapacity, String webcamModel, String CPU, String GPU, String fanNumber, boolean hasKeyboardLight, boolean hasFingerPrint, String keyboardLanguage, int portNumber) {
-        super(name, color, quantity, price, seller, comments, brand, model, OS, screenSize, batteryCapacity);
+    public Laptop(String name, String color, int quantity, double price, Seller seller, String brand, String model, String OS, String screenSize, double batteryCapacity, String webcamModel, String CPU, String GPU, String fanNumber, boolean hasKeyboardLight, boolean hasFingerPrint, String keyboardLanguage, int portNumber) {
+        super(name, color, quantity, price, seller, brand, model, OS, screenSize, batteryCapacity);
         this.webcamModel = webcamModel;
         this.CPU = CPU;
         this.GPU = GPU;

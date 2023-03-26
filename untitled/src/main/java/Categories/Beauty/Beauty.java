@@ -12,8 +12,8 @@ public class Beauty extends Product {
 
     //Constructor
 
-    public Beauty(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, MatterState materialState, boolean hasBox) {
-        super(name, color, quantity, price, seller, comments);
+    public Beauty(String name, String color, int quantity, double price, Seller seller, MatterState materialState, boolean hasBox) {
+        super(name, color, quantity, price, seller);
         this.materialState = materialState;
         this.hasBox = hasBox;
     }

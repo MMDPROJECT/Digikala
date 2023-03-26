@@ -7,21 +7,24 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class ShoppingCart {
+    private String name;
     private final ArrayList<Product> products;
     private final HashMap<UUID, Integer> itemNumber;  //A hashmap to store amount of each product that we have in the cart
-    private double totalPrice;
     private final UUID id;
+    private double totalPrice;
 
     //Constructor
 
-    public ShoppingCart(ArrayList<Product> products, HashMap<UUID, Integer> itemNumber, double totalPrice) {
+    public ShoppingCart(String name, ArrayList<Product> products, HashMap<UUID, Integer> itemNumber, double totalPrice) {
+        this.name = name;
         this.products = products;
         this.itemNumber = itemNumber;
         this.totalPrice = totalPrice;
         this.id = UUID.randomUUID();
     }
 
-    public ShoppingCart() {
+    public ShoppingCart(String name) {
+        this.name = name;
         this.products = new ArrayList<>();
         this.itemNumber = new HashMap<>();
         this.totalPrice = 0;
@@ -45,6 +48,9 @@ public class ShoppingCart {
         return id;
     }
 
+    public String getName() {
+        return name;
+    }
     //Cart - Related Methods
 
     public boolean doesProductExist(Product product) {
@@ -127,10 +133,11 @@ public class ShoppingCart {
     @Override
     public String toString() {
         return "ShoppingCart{" +
-                "products=" + products +
+                "name='" + name + '\'' +
+                ", products=" + products +
                 ", itemNumber=" + itemNumber +
-                ", totalPrice=" + totalPrice +
                 ", id=" + id +
+                ", totalPrice=" + totalPrice +
                 '}';
     }
 }

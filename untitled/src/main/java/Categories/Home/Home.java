@@ -13,8 +13,8 @@ public class Home extends Product {
 
     //Constructor
 
-    public Home(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, boolean hasController, double height, double width, double weight) {
-        super(name, color, quantity, price, seller, comments);
+    public Home(String name, String color, int quantity, double price, Seller seller, boolean hasController, double height, double width, double weight) {
+        super(name, color, quantity, price, seller);
         this.hasController = hasController;
         this.height = height;
         this.width = width;

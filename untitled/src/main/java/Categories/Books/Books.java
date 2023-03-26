@@ -14,8 +14,8 @@ public abstract class Books extends Product {
     //Constructor
 
 
-    public Books(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, int ISBN, int pageNumbers, String author, String language) {
-        super(name, color, quantity, price, seller, comments);
+    public Books(String name, String color, int quantity, double price, Seller seller, int ISBN, int pageNumbers, String author, String language) {
+        super(name, color, quantity, price, seller);
         this.ISBN = ISBN;
         this.pageNumbers = pageNumbers;
         this.author = author;

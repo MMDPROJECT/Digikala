@@ -19,17 +19,16 @@ public abstract class Clothes extends Product {
 
     //Constructor
 
-    public Clothes(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability) {
-        super(name, color, quantity, price, seller, comments);
+
+    public Clothes(String name, String color, int quantity, double price, Seller seller, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability) {
+        super(name, color, quantity, price, seller);
         this.size = size;
         this.gender = gender;
         this.material = material;
         this.brand = brand;
         this.durability = durability;
     }
-
-
-    //Getter and Setters
+//Getter and Setters
 
     public ClothGender getGender() {
         return gender;

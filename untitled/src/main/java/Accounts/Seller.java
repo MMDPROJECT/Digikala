@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class Seller extends Account {
+    private String companyName;
+    private String password;
+    private HashMap<UUID, Product> availableProducts;
+    private double wallet;
     private boolean isAuthorized;
-    private final String companyName;
-    private final String password;
-    private final HashMap<UUID, Product> availableProducts;
-    private final double wallet;
 
     //Constructor
 
@@ -41,6 +41,11 @@ public class Seller extends Account {
         return wallet;
     }
 
+    @Override
+    public String getUsername() {
+        return this.companyName;
+    }
+
     public boolean isAuthorized() {
         return isAuthorized;
     }
@@ -59,12 +64,12 @@ public class Seller extends Account {
 
     @Override
     public boolean accountLogin(String username, String password) {
-        return false;
+        return this.companyName.equalsIgnoreCase(username) && this.password.equals(password);
     }
 
     @Override
     public boolean doesAccountExist(String username) {
-        return false;
+        return this.companyName.equalsIgnoreCase(username);
     }
 
     //Seller - Related Methods

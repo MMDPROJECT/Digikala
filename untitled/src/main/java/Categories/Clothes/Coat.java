@@ -14,8 +14,8 @@ public class Coat extends Clothes {
 
     //Constructor
 
-    public Coat(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability, int buttonNumber, boolean hasCap) {
-        super(name, color, quantity, price, seller, comments, size, gender, material, brand, durability);
+    public Coat(String name, String color, int quantity, double price, Seller seller, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability, int buttonNumber, boolean hasCap) {
+        super(name, color, quantity, price, seller, size, gender, material, brand, durability);
         this.buttonNumber = buttonNumber;
         this.hasCap = hasCap;
     }

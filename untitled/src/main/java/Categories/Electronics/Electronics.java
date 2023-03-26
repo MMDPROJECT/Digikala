@@ -14,8 +14,8 @@ public abstract class Electronics extends Product {
 
     //Constructor
 
-    public Electronics(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, String brand, String model, String OS, String screenSize, double batteryCapacity) {
-        super(name, color, quantity, price, seller, comments);
+    public Electronics(String name, String color, int quantity, double price, Seller seller, String brand, String model, String OS, String screenSize, double batteryCapacity) {
+        super(name, color, quantity, price, seller);
         this.brand = brand;
         this.model = model;
         this.OS = OS;

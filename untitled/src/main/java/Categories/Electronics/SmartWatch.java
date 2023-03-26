@@ -12,8 +12,8 @@ public class SmartWatch extends Electronics {
 
     //Constructor
 
-    public SmartWatch(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, String brand, String model, String OS, String screenSize, double batteryCapacity, String processor, boolean hasHeartRateTracker, boolean hasStepTracker, boolean hasCaloricTracker) {
-        super(name, color, quantity, price, seller, comments, brand, model, OS, screenSize, batteryCapacity);
+    public SmartWatch(String name, String color, int quantity, double price, Seller seller, String brand, String model, String OS, String screenSize, double batteryCapacity, String processor, boolean hasHeartRateTracker, boolean hasStepTracker, boolean hasCaloricTracker) {
+        super(name, color, quantity, price, seller, brand, model, OS, screenSize, batteryCapacity);
         this.processor = processor;
         this.hasHeartRateTracker = hasHeartRateTracker;
         this.hasStepTracker = hasStepTracker;

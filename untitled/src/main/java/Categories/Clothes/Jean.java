@@ -15,8 +15,8 @@ public class Jean extends Clothes {
 
     //Constructor
 
-    public Jean(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability, double height, int pocketNumber, boolean hasZipper) {
-        super(name, color, quantity, price, seller, comments, size, gender, material, brand, durability);
+    public Jean(String name, String color, int quantity, double price, Seller seller, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability, double height, int pocketNumber, boolean hasZipper) {
+        super(name, color, quantity, price, seller, size, gender, material, brand, durability);
         this.height = height;
         this.pocketNumber = pocketNumber;
         this.hasZipper = hasZipper;

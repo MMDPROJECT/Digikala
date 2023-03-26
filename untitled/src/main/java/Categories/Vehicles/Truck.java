@@ -1,6 +1,9 @@
-package Categories.SuperMarket.Vehicles;
+package Categories.Vehicles;
 
-import Categories.SuperMarket.Vehicles.Enums.TruckType;
+import Accounts.Seller;
+import Categories.Vehicles.Enums.TruckType;
+
+import java.util.ArrayList;
 
 public class Truck extends Vehicles {
     private final TruckType truckType;
@@ -8,11 +11,12 @@ public class Truck extends Vehicles {
 
     //Constructor
 
-    public Truck(String name, double price, String color, int quantity, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model, TruckType truckType, boolean hasBed) {
-        super(name, price, color, quantity, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model);
+    public Truck(String name, String color, int quantity, double price, Seller seller, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model, TruckType truckType, boolean hasBed) {
+        super(name, color, quantity, price, seller, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model);
         this.truckType = truckType;
         this.hasBed = hasBed;
     }
+
 
     //Getters and Setters
 

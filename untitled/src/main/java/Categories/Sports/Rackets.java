@@ -13,8 +13,8 @@ public class Rackets extends Sports {
 
     //Constructor
 
-    public Rackets(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, double weight, String sportType, String brand, double length, double width, RacketDurability durability, String shape) {
-        super(name, color, quantity, price, seller, comments, weight, sportType, brand);
+    public Rackets(String name, String color, int quantity, double price, Seller seller, double weight, String sportType, String brand, double length, double width, RacketDurability durability, String shape) {
+        super(name, color, quantity, price, seller, weight, sportType, brand);
         this.length = length;
         this.width = width;
         this.durability = durability;

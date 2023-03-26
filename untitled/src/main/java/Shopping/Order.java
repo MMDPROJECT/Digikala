@@ -15,20 +15,19 @@ public class Order extends ShoppingCart {
     private final LocalDate date;
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("E, MMM dd yyyy");
     private final User buyer;
-    private final Seller seller;
     private final UUID id;
     private boolean isConfirmed;
 
     //Constructor
 
-    public Order(ArrayList<Product> products, HashMap<UUID, Integer> itemNumber, double totalPrice, User buyer, Seller seller) {
-        super(products, itemNumber, totalPrice);
+    public Order(String name, ArrayList<Product> products, HashMap<UUID, Integer> itemNumber, double totalPrice, User buyer) {
+        super(name, products, itemNumber, totalPrice);
         this.buyer = buyer;
-        this.seller = seller;
         this.id = UUID.randomUUID();
         this.date = LocalDate.from(LocalDateTime.now());
         this.isConfirmed = false;
     }
+
 
     //Getters and Setters
 
@@ -45,9 +44,6 @@ public class Order extends ShoppingCart {
         return buyer;
     }
 
-    public Seller getSeller() {
-        return seller;
-    }
 
     public UUID getId() {
         return id;
@@ -64,7 +60,6 @@ public class Order extends ShoppingCart {
                 "date=" + date +
                 ", dateTimeFormatter=" + dateTimeFormatter +
                 ", buyer=" + buyer +
-                ", seller=" + seller +
                 ", id=" + id +
                 ", isConfirmed=" + isConfirmed +
                 "} " + super.toString();

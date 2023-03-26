@@ -12,8 +12,8 @@ public class Sports extends Product {
 
     //Constructor
 
-    public Sports(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, double weight, String sportType, String brand) {
-        super(name, color, quantity, price, seller, comments);
+    public Sports(String name, String color, int quantity, double price, Seller seller, double weight, String sportType, String brand) {
+        super(name, color, quantity, price, seller);
         this.weight = weight;
         this.sportType = sportType;
         this.brand = brand;

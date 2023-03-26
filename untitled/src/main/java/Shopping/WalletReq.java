@@ -6,9 +6,9 @@ import java.util.UUID;
 
 public class WalletReq {
     private final double value;
-    private boolean isConfirmed;
     private final User user;
     private final UUID id;
+    private boolean isConfirmed;
 
     //Constructor
 

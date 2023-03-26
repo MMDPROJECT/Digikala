@@ -13,8 +13,8 @@ public class SolderingSystem extends Tools {
 
     //Constructor
 
-    public SolderingSystem(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, double weight, boolean hasBox, boolean isSilent, boolean isChargeable, String brand, int voltage, PowerSource powerSource, UsageLevel usageLevel) {
-        super(name, color, quantity, price, seller, comments, weight, hasBox, isSilent, isChargeable, brand);
+    public SolderingSystem(String name, String color, int quantity, double price, Seller seller, double weight, boolean hasBox, boolean isSilent, boolean isChargeable, String brand, int voltage, PowerSource powerSource, UsageLevel usageLevel) {
+        super(name, color, quantity, price, seller, weight, hasBox, isSilent, isChargeable, brand);
         this.voltage = voltage;
         this.powerSource = powerSource;
         this.usageLevel = usageLevel;

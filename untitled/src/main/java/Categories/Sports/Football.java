@@ -13,8 +13,8 @@ public class Football extends Sports {
 
     //Constructor
 
-    public Football(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, double weight, String sportType, String brand, FootballSize size, FootballMaterial material, boolean isRightHandOriented) {
-        super(name, color, quantity, price, seller, comments, weight, sportType, brand);
+    public Football(String name, String color, int quantity, double price, Seller seller, double weight, String sportType, String brand, FootballSize size, FootballMaterial material, boolean isRightHandOriented) {
+        super(name, color, quantity, price, seller, weight, sportType, brand);
         this.size = size;
         this.material = material;
         this.isRightHandOriented = isRightHandOriented;

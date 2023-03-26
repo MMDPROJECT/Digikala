@@ -1,6 +1,9 @@
-package Categories.SuperMarket.Vehicles;
+package Categories.Vehicles;
 
-import Categories.SuperMarket.Vehicles.Enums.NoiseLevel;
+import Accounts.Seller;
+import Categories.Vehicles.Enums.NoiseLevel;
+
+import java.util.ArrayList;
 
 public class Motorcycle extends Vehicles {
     private final int seatNumber;
@@ -9,12 +12,13 @@ public class Motorcycle extends Vehicles {
 
     //Constructor
 
-    public Motorcycle(String name, double price, String color, int quantity, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model, int seatNumber, boolean hasWingMirror, NoiseLevel noiseLevel) {
-        super(name, price, color, quantity, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model);
+    public Motorcycle(String name, String color, int quantity, double price, Seller seller, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model, int seatNumber, boolean hasWingMirror, NoiseLevel noiseLevel) {
+        super(name, color, quantity, price, seller, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model);
         this.seatNumber = seatNumber;
         this.hasWingMirror = hasWingMirror;
         this.noiseLevel = noiseLevel;
     }
+
 
     //Getters and Setters
 

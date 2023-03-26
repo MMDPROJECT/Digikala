@@ -7,24 +7,24 @@ import java.util.UUID;
 
 public abstract class Product {
     private final UUID id;
-    ArrayList<String> comments;
     private final String name;
     private final String color;
-    private int quantity;
     private final double price;
     private final Seller seller;
+    ArrayList<String> comments;
+    private int quantity;
 
     //Constructor
 
 
-    public Product(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments) {
+    public Product(String name, String color, int quantity, double price, Seller seller) {
         this.name = name;
         this.color = color;
         this.quantity = quantity;
         this.price = price;
         this.id = UUID.randomUUID();
         this.seller = seller;
-        this.comments = comments;
+        this.comments = new ArrayList<>();
     }
 
     //Getter and Setters

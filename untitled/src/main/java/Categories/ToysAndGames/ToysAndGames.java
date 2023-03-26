@@ -13,8 +13,8 @@ public class ToysAndGames extends Product {
 
     //Constructor
 
-    public ToysAndGames(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer) {
-        super(name, color, quantity, price, seller, comments);
+    public ToysAndGames(String name, String color, int quantity, double price, Seller seller, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer) {
+        super(name, color, quantity, price, seller);
         this.hasBox = hasBox;
         this.difficultyLevel = difficultyLevel;
         this.isMultiplayer = isMultiplayer;

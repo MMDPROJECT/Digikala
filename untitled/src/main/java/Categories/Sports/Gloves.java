@@ -16,8 +16,8 @@ public class Gloves extends Sports {
 
     //Constructor
 
-    public Gloves(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, double weight, String sportType, String brand, GloveMaterial material, GloveSize size, GloveUser suggestedUser, GloveStyle style) {
-        super(name, color, quantity, price, seller, comments, weight, sportType, brand);
+    public Gloves(String name, String color, int quantity, double price, Seller seller, double weight, String sportType, String brand, GloveMaterial material, GloveSize size, GloveUser suggestedUser, GloveStyle style) {
+        super(name, color, quantity, price, seller, weight, sportType, brand);
         this.material = material;
         this.size = size;
         this.suggestedUser = suggestedUser;

@@ -1,4 +1,4 @@
-package Categories.SuperMarket.Vehicles.Enums;
+package Categories.Vehicles.Enums;
 
 public enum NoiseLevel {
     Low, Normal, High

@@ -16,8 +16,8 @@ public class SmartPhone extends Electronics {
 
     //Constructor
 
-    public SmartPhone(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, String brand, String model, String OS, String screenSize, double batteryCapacity, double backCameraQuality, double frontCameraQuality, int cameraNumber, int storage, double OSVersion, String displayResolution, String ringTone, String CPU) {
-        super(name, color, quantity, price, seller, comments, brand, model, OS, screenSize, batteryCapacity);
+    public SmartPhone(String name, String color, int quantity, double price, Seller seller, String brand, String model, String OS, String screenSize, double batteryCapacity, double backCameraQuality, double frontCameraQuality, int cameraNumber, int storage, double OSVersion, String displayResolution, String ringTone, String CPU) {
+        super(name, color, quantity, price, seller, brand, model, OS, screenSize, batteryCapacity);
         this.backCameraQuality = backCameraQuality;
         this.frontCameraQuality = frontCameraQuality;
         this.cameraNumber = cameraNumber;

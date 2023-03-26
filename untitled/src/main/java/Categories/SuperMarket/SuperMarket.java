@@ -17,8 +17,8 @@ public class SuperMarket extends Product {
 
     //Constructor
 
-    public SuperMarket(String name, String color, int quantity, double price, Seller seller, ArrayList<String> comments, boolean hasBox, double weight, double salt, double calories, double fat, double sugar, ArrayList<String> ingredientItems, String countryOfOrigin) {
-        super(name, color, quantity, price, seller, comments);
+    public SuperMarket(String name, String color, int quantity, double price, Seller seller, boolean hasBox, double weight, double salt, double calories, double fat, double sugar, ArrayList<String> ingredientItems, String countryOfOrigin) {
+        super(name, color, quantity, price, seller);
         this.hasBox = hasBox;
         this.weight = weight;
         this.salt = salt;
