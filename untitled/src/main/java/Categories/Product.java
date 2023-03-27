@@ -11,7 +11,7 @@ public abstract class Product {
     private final String color;
     private final double price;
     private final Seller seller;
-    ArrayList<String> comments;
+    final ArrayList<String> comments;
     private int quantity;
 
     //Constructor

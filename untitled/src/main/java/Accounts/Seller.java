@@ -9,7 +9,7 @@ public class Seller extends Account {
     private final String companyName;
     private final String password;
     private final HashMap<UUID, Product> availableProducts;
-    private final double wallet;
+    private double wallet;
     private boolean isAuthorized;
 
     //Constructor
@@ -99,5 +99,9 @@ public class Seller extends Account {
 
     public void viewWallet(){
         System.out.println("Current Wallet : " + this.wallet);
+    }
+
+    public void addSellerCut(double value){
+        this.wallet += value;
     }
 }

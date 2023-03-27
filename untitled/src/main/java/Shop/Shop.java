@@ -58,7 +58,7 @@ public class Shop {
     private final HashMap<UUID, Product> products;
     private final HashMap<UUID, Order> orders;
     private final HashMap<UUID, WalletReq> walletRequests;
-    private final double totalGained;
+    private double totalGained;
     private Account currentAccount;
 
     //Constructor
@@ -110,6 +110,10 @@ public class Shop {
         return this.orders;
     }
 
+    public Order getOrder(UUID id){
+        return this.orders.get(id);
+    }
+
     public double getTotalGained() {
         return this.totalGained;
     }
@@ -129,7 +133,7 @@ public class Shop {
     //Admin - Related Methods
 
     public boolean doesAccountExist(UUID id) {
-        return this.accounts.containsKey(id);
+        return !this.accounts.containsKey(id);
     }
 
     public boolean doesAccountExist(String username) {
@@ -251,21 +255,26 @@ public class Shop {
         }
     }
 
-    public void checkoutConfirm(UUID id) {
-        if (!orders.containsKey(id)) {
+    public void orderConfirm(UUID id){
+        if (!doesOrderExist(id)){
             System.out.println("Order has not been found!\n");
-        } else {
-            if (orders.get(id).isConfirmed()) {
-                System.out.println("This order has been confirmed earlier!\n");
-            } else {
-                orders.get(id).orderConfirm();
-                System.out.println("Order has been successfully confirmed");
+        }
+        else {
+            if (getOrder(id).getBuyer().checkBuyerPocket(getOrder(id).calcBuyerPayOff())){
+                getOrder(id).setConfirmed(true);
+                this.addShopCut(getOrder(id).calcShopCut());
+                getOrder(id).getBuyer().buyerPayOff(getOrder(id).calcBuyerPayOff());
+                getOrder(id).calcSellerCut();
+                getOrder(id).updateStocks();
+            }
+            else {
+                System.out.println("Order can't be done, due to lack of money\n");
             }
         }
     }
 
     public void showAllUserWalletRequests(UUID userId) {
-        if (!doesAccountExist(userId)) {
+        if (doesAccountExist(userId)) {
             System.out.println("User has not been found!\n");
         } else {
             if (this.accounts.get(userId) instanceof User){
@@ -275,7 +284,7 @@ public class Shop {
     }
 
     public void showUserConfirmedWalletRequests(UUID userId){
-        if (!doesAccountExist(userId)) {
+        if (doesAccountExist(userId)) {
             System.out.println("User has not been found!\n");
         } else {
             if (this.accounts.get(userId) instanceof User){
@@ -285,7 +294,7 @@ public class Shop {
     }
 
     public void showUserUnconfirmedWalletRequests(UUID userId){
-        if (!doesAccountExist(userId)) {
+        if (doesAccountExist(userId)) {
             System.out.println("User has not been found!\n");
         } else {
             if (this.accounts.get(userId) instanceof User){
@@ -295,7 +304,7 @@ public class Shop {
     }
 
     public void showUserAllCheckoutRequests(UUID userId) {
-        if (!doesAccountExist(userId)) {
+        if (doesAccountExist(userId)) {
             System.out.println("User has not been found!\n");
         } else {
             if (this.accounts.get(userId) instanceof User){
@@ -305,7 +314,7 @@ public class Shop {
     }
 
     public void showUserConfirmedCheckoutRequests(UUID userId){
-        if (!doesAccountExist(userId)) {
+        if (doesAccountExist(userId)) {
             System.out.println("User has not been found!\n");
         } else {
             if (this.accounts.get(userId) instanceof User){
@@ -315,7 +324,7 @@ public class Shop {
     }
 
     public void showUserUnconfirmedCheckoutRequests(UUID userId){
-        if (!doesAccountExist(userId)) {
+        if (doesAccountExist(userId)) {
             System.out.println("User has not been found!\n");
         } else {
             if (this.accounts.get(userId) instanceof User){
@@ -435,11 +444,10 @@ public class Shop {
                     System.out.println("Seller has been successfully logged in!\n");
                     this.currentAccount = account;
                     return true;
-                } else {
-                    System.out.println("Company name or password is wrong!\n");
                 }
             }
         }
+        System.out.println("Company name or password is wrong!\n");
         return false;
     }
 
@@ -470,6 +478,10 @@ public class Shop {
         }
     }
 
+    public void addShopCut(double value){
+        this.totalGained += value;
+    }
+
 
     //Cart - Related Methods
 
@@ -478,6 +490,12 @@ public class Shop {
 
     public boolean doesWalletRequestExist(UUID id){
         return this.walletRequests.containsKey(id);
+    }
+
+    //Order - Related Methods
+
+    public boolean doesOrderExist(UUID id){
+        return this.orders.containsKey(id);
     }
 
     //Product - Related Methods

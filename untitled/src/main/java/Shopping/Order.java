@@ -51,6 +51,11 @@ public class Order extends ShoppingCart {
     public boolean isConfirmed() {
         return isConfirmed;
     }
+
+    public void setConfirmed(boolean confirmed) {
+        isConfirmed = confirmed;
+    }
+
     //Override
 
     @Override
@@ -70,10 +75,30 @@ public class Order extends ShoppingCart {
         for (Product product : getProducts()) {
             product.decreaseProduct(getItemNumber().get(product.getId()));
         }
-        System.out.println("Stock has been successfully updated!\n");
+        System.out.println("Stocks has been successfully updated!\n");
     }
 
-    public void orderConfirm() {
-        this.isConfirmed = true;
+    public double calcBuyerPayOff(){
+        double total = 0;
+        for (Product product : this.getProducts()){
+            total += product.getPrice() * getItemNumber().get(product.getId());
+        }
+        return total;
+    }
+
+    public double calcShopCut(){
+        double cut = 0;
+        for (Product product : this.getProducts()){
+            cut += 0.1 * (product.getPrice() * this.getItemNumber().get(product.getId()));
+        }
+        System.out.println("Shop's cut has deposited\n");
+        return cut;
+    }
+
+    public void calcSellerCut(){
+        for (Product product : this.getProducts()){
+            product.getSeller().addSellerCut(product.getPrice() * getItemNumber().get(id));
+        }
+        System.out.println("Sellers cut has deposited!\n");
     }
 }

@@ -194,6 +194,15 @@ public class User extends Account {
         }
     }
 
+    public boolean checkBuyerPocket(double value){
+        return this.wallet >= value;
+    }
+
+    public void buyerPayOff(double value){
+        System.out.println("Money has been successfully paid off!\n");
+        this.wallet -= value;
+    }
+
     public void addOrder(Order order) {
         orders.put(order.getId(), order);
     }

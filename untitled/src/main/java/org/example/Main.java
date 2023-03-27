@@ -57,13 +57,13 @@ import java.util.Scanner;
 import java.util.UUID;
 
 public class Main {
-    public static Scanner input = new Scanner(System.in);
+    public static final Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
 
         Shop shop = new Shop("Digikala", "Digikala.com", "09394451013");
         Admin admin1 = new Admin("MMDPROJECT", "1382", "Bushehr, Borazjan");
-        Seller seller = new Seller("Jafarestan", "1381");
+        Seller seller = new Seller("Apple", "1900");
         User user1 = new User("Hossein", "1381", "hossein.com", "09170861077", "Bushehr");
 
         Product product = new Ball("Nike Premier League Academy Ball 2023", "white and red-blue combined", 2, 100.5, seller, 0.5, "Ball", "Nike", BallSize.ADULT, BallMaterial.PU, true);
@@ -145,7 +145,6 @@ public class Main {
             }
             case 7 -> {
                 //Exit
-                return;
             }
         }
     }
@@ -487,7 +486,7 @@ public class Main {
                                 input.nextLine();
                                 if (shop.getCurrentAccount() instanceof User) {
                                     if (((User) shop.getCurrentAccount()).getCurrentCart().doesProductExist(UUID.fromString(id))) {
-                                        ((User) shop.getCurrentAccount()).getCurrentCart().increaseAmount(UUID.fromString(id), quantity);
+                                        ((User) shop.getCurrentAccount()).getCurrentCart().decreaseAmount(UUID.fromString(id), quantity);
                                     } else {
                                         System.out.println("Product has not been found!\n");
                                     }
@@ -1497,10 +1496,8 @@ public class Main {
                         ((Seller) shop.getCurrentAccount()).viewWallet();
                     }
                 }
-                case 3 -> {
-                    //Back to Main Menu
-                    runMenu(shop);
-                }
+                case 3 -> //Back to Main Menu
+                        runMenu(shop);
             }
             sellerPage(shop);
         }
@@ -1553,15 +1550,9 @@ public class Main {
                 optionMenu = input.nextInt();
                 input.nextLine();
                 switch (optionMenu){
-                    case 1 -> {
-                        shop.showAllWalletRequests();
-                    }
-                    case 2 -> {
-                        shop.showAllConfirmedWalletRequests();
-                    }
-                    case 3 -> {
-                        shop.showAllUnconfirmedWalletRequests();
-                    }
+                    case 1 -> shop.showAllWalletRequests();
+                    case 2 -> shop.showAllConfirmedWalletRequests();
+                    case 3 -> shop.showAllUnconfirmedWalletRequests();
                     case 4 -> {
                         System.out.println("Enter : - Wallet ID\n");
                         String id = input.nextLine();
@@ -1579,19 +1570,13 @@ public class Main {
                 optionMenu = input.nextInt();
                 input.nextLine();
                 switch (optionMenu){
-                    case 1 -> {
-                        shop.showAllCheckoutRequests();
-                    }
-                    case 2 -> {
-                        shop.showAllConfirmedCheckoutRequests();
-                    }
-                    case 3 -> {
-                        shop.showAllUnconfirmedCheckoutRequests();
-                    }
+                    case 1 -> shop.showAllCheckoutRequests();
+                    case 2 -> shop.showAllConfirmedCheckoutRequests();
+                    case 3 -> shop.showAllUnconfirmedCheckoutRequests();
                     case 4 -> {
                         System.out.println("Enter : - Checkout Request ID\n");
                         String id = input.nextLine();
-                        shop.checkoutConfirm(UUID.fromString(id));
+                        shop.orderConfirm(UUID.fromString(id));
                     }
                 }
             }
@@ -1646,9 +1631,7 @@ public class Main {
                         String id = input.nextLine();
                         shop.showUserUnconfirmedCheckoutRequests(UUID.fromString(id));
                     }
-                    case 7 -> {
-                        shop.userProfileScreens();
-                    }
+                    case 7 -> shop.userProfileScreens();
                     case 8 -> {
                         System.out.println("Enter : - User ID");
                         String id = input.nextLine();
@@ -1664,9 +1647,7 @@ public class Main {
                 optionMenu = input.nextInt();
                 input.nextLine();
                 switch (optionMenu){
-                    case 1 -> {
-                        shop.showUnauthorizedSellers();
-                    }
+                    case 1 -> shop.showUnauthorizedSellers();
                     case 2 -> {
                         System.out.println("Enter : - Seller ID");
                         String id = input.nextLine();
@@ -1674,9 +1655,7 @@ public class Main {
                     }
                 }
             }
-            case 6 -> {
-                runMenu(shop);
-            }
+            case 6 -> runMenu(shop);
         }
         adminPage(shop);
     }
