@@ -145,6 +145,7 @@ public class Main {
             }
             case 7 -> {
                 //Exit
+                return;
             }
         }
     }
@@ -1501,11 +1502,182 @@ public class Main {
                     runMenu(shop);
                 }
             }
-            runMenu(shop);
+            sellerPage(shop);
         }
     }
 
     public static void adminPage(Shop shop) {
-        //TODO
+        System.out.println("------------------------------ " + shop.getCurrentAccount().getUsername() + " ------------------------------");
+        System.out.println("""
+                1- Wallets Management
+                \t- Show all wallet requests
+                \t- Show all confirmed wallet requests
+                \t- Show all unconfirmed wallet requests
+                \t- Confirm a wallet request by ID
+                
+                2- Checkouts & Orders Management
+                \t- Show all checkout requests
+                \t- Show all confirmed checkout requests
+                \t- Show all unconfirmed checkout requests
+                \t- Confirm a checkout request by ID
+                
+                3- Admins Management
+                \t- Add an admin
+                
+                4- Users Management
+                \t- Show all user wallet requests by userID
+                \t- Show user's confirmed wallet requests by userID
+                \t- Show user's unconfirmed wallet requests by userID
+                \t- Show user's all checkout requests by userID
+                \t- Show user's confirmed checkout requests by userID
+                \t- Show user's unconfirmed checkout requests by userID
+                \t- Watch all profile screens
+                \t- Watch an specific profile screen by userID
+                
+                5- Sellers Management
+                \t- Show all unauthorized sellers
+                \t- Authorize a seller by sellerID
+                
+                6- Back to main menu
+                """);
+        int optionMenu = input.nextInt();
+        input.nextLine();
+        switch (optionMenu){
+            case 1 -> {
+                System.out.println("""
+                        1- Show all wallet requests
+                        2- Show all confirmed wallet requests
+                        3- Show all unconfirmed wallet requests
+                        4- Confirm a wallet request by ID
+                        """);
+                optionMenu = input.nextInt();
+                input.nextLine();
+                switch (optionMenu){
+                    case 1 -> {
+                        shop.showAllWalletRequests();
+                    }
+                    case 2 -> {
+                        shop.showAllConfirmedWalletRequests();
+                    }
+                    case 3 -> {
+                        shop.showAllUnconfirmedWalletRequests();
+                    }
+                    case 4 -> {
+                        System.out.println("Enter : - Wallet ID\n");
+                        String id = input.nextLine();
+                        shop.walletConfirm(UUID.fromString(id));
+                    }
+                }
+            }
+            case 2 -> {
+                System.out.println("""
+                        1- Show all checkout requests
+                        2- Show all confirmed checkout requests
+                        3- Show all unconfirmed checkout requests
+                        4- Confirm a checkout request by ID
+                        """);
+                optionMenu = input.nextInt();
+                input.nextLine();
+                switch (optionMenu){
+                    case 1 -> {
+                        shop.showAllCheckoutRequests();
+                    }
+                    case 2 -> {
+                        shop.showAllConfirmedCheckoutRequests();
+                    }
+                    case 3 -> {
+                        shop.showAllUnconfirmedCheckoutRequests();
+                    }
+                    case 4 -> {
+                        System.out.println("Enter : - Checkout Request ID\n");
+                        String id = input.nextLine();
+                        shop.checkoutConfirm(UUID.fromString(id));
+                    }
+                }
+            }
+            case 3 -> {
+                System.out.println("Enter : 1- Username, 2- Password, 3- Email Address");
+                String username = input.nextLine();
+                String password = input.nextLine();
+                String email = input.nextLine();
+                shop.adminSignUp(username, password, email);
+            }
+            case 4 -> {
+                System.out.println("""
+                        1- Show all user wallet requests by userID
+                        2- Show user's confirmed wallet requests by userID
+                        3- Show user's unconfirmed wallet requests by userID
+                        4- Show user's all checkout requests by userID
+                        5- Show user's confirmed checkout requests by userID
+                        6- Show user's unconfirmed checkout requests by userID
+                        7- Watch all profile screens
+                        8- Watch an specific profile screen by userID
+                        """);
+                optionMenu = input.nextInt();
+                input.nextLine();
+                switch (optionMenu){
+                    case 1 -> {
+                        System.out.println("Enter : - User ID");
+                        String id = input.nextLine();
+                        shop.showAllUserWalletRequests(UUID.fromString(id));
+                    }
+                    case 2 -> {
+                        System.out.println("Enter : - User ID");
+                        String id = input.nextLine();
+                        shop.showUserConfirmedWalletRequests(UUID.fromString(id));
+                    }
+                    case 3 -> {
+                        System.out.println("Enter : - User ID");
+                        String id = input.nextLine();
+                        shop.showUserUnconfirmedWalletRequests(UUID.fromString(id));
+                    }
+                    case 4 -> {
+                        System.out.println("Enter : - User ID");
+                        String id = input.nextLine();
+                        shop.showUserAllCheckoutRequests(UUID.fromString(id));
+                    }
+                    case 5 -> {
+                        System.out.println("Enter : - User ID");
+                        String id = input.nextLine();
+                        shop.showUserConfirmedCheckoutRequests(UUID.fromString(id));
+                    }
+                    case 6 -> {
+                        System.out.println("Enter : - User ID");
+                        String id = input.nextLine();
+                        shop.showUserUnconfirmedCheckoutRequests(UUID.fromString(id));
+                    }
+                    case 7 -> {
+                        shop.userProfileScreens();
+                    }
+                    case 8 -> {
+                        System.out.println("Enter : - User ID");
+                        String id = input.nextLine();
+                        shop.userProfileScreen(UUID.fromString(id));
+                    }
+                }
+            }
+            case 5 -> {
+                System.out.println("""
+                        1- Show all unauthorized sellers
+                        2- Authorize a seller by sellerID
+                        """);
+                optionMenu = input.nextInt();
+                input.nextLine();
+                switch (optionMenu){
+                    case 1 -> {
+                        shop.showUnauthorizedSellers();
+                    }
+                    case 2 -> {
+                        System.out.println("Enter : - Seller ID");
+                        String id = input.nextLine();
+                        shop.sellerAuthorization(UUID.fromString(id));
+                    }
+                }
+            }
+            case 6 -> {
+                runMenu(shop);
+            }
+        }
+        adminPage(shop);
     }
 }

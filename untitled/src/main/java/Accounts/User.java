@@ -158,13 +158,39 @@ public class User extends Account {
 
     //Order - Related Methods
 
-    public void viewOrders() {
+    public void showAllCheckoutRequests() {
         if (orders.size() == 0) {
-            System.out.println("No order has been submitted yet!\n");
+            System.out.println("No Checkout Request has been submitted yet!\n");
         } else {
             for (UUID id : orders.keySet()) {
                 System.out.println(orders.get(id));
             }
+        }
+    }
+
+    public void showConfirmedCheckoutRequests(){
+        boolean hasFoundAny = false;
+        for (Order order : this.orders.values()){
+            if (order.isConfirmed()){
+                hasFoundAny = true;
+                System.out.println(order);
+            }
+        }
+        if (!hasFoundAny){
+            System.out.println("No Checkout request has been found!\n");
+        }
+    }
+
+    public void showUnconfirmedCheckoutRequests(){
+        boolean hasFoundAny = false;
+        for (Order order : this.orders.values()){
+            if (!order.isConfirmed()){
+                hasFoundAny = true;
+                System.out.println(order);
+            }
+        }
+        if (!hasFoundAny){
+            System.out.println("No Checkout request has been found!\n");
         }
     }
 
@@ -180,7 +206,7 @@ public class User extends Account {
         System.out.println("Wallet request has been successfully sent!\n");
     }
 
-    public void showWalletRequests() {
+    public void showAllWalletRequests() {
         if (walletRequests.size() == 0) {
             System.out.println("No wallet request has been submitted!\n");
         } else {
