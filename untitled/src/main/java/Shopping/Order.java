@@ -62,9 +62,8 @@ public class Order extends ShoppingCart {
     public String toString() {
         return "Order{" +
                 "date=" + date +
-                ", dateTimeFormatter=" + dateTimeFormatter +
-                ", buyer=" + buyer +
-                ", id=" + id +
+                ", buyer=" + buyer.getUsername() +
+                ", Order ID=" + id +
                 ", isConfirmed=" + isConfirmed +
                 "} " + super.toString();
     }
@@ -78,27 +77,39 @@ public class Order extends ShoppingCart {
         System.out.println("Stocks has been successfully updated!\n");
     }
 
-    public double calcBuyerPayOff(){
+    public void updateUserPurchasedProducts() {
+        for (Product product : getProducts()) {
+            if (!buyer.isProductPurchased(product.getId())) {
+                buyer.addPurchasedProduct(product);
+            }
+        }
+        System.out.println("User purchased product has been successfully updated!\n");
+    }
+
+    public double calcBuyerPayOff() {
         double total = 0;
-        for (Product product : this.getProducts()){
+        for (Product product : this.getProducts()) {
             total += product.getPrice() * getItemNumber().get(product.getId());
         }
         return total;
     }
 
-    public double calcShopCut(){
+    public double calcShopCut() {
         double cut = 0;
-        for (Product product : this.getProducts()){
+        for (Product product : this.getProducts()) {
             cut += 0.1 * (product.getPrice() * this.getItemNumber().get(product.getId()));
         }
-        System.out.println("Shop's cut has deposited\n");
         return cut;
     }
 
-    public void calcSellerCut(){
-        for (Product product : this.getProducts()){
-            product.getSeller().addSellerCut(product.getPrice() * getItemNumber().get(id));
+    public void calcSellerCut() {
+        for (Product product : this.getProducts()) {
+            product.getSeller().addSellerCut(product.getPrice() * getItemNumber().get(product.getId()));
         }
         System.out.println("Sellers cut has deposited!\n");
+    }
+
+    public void orderConfirm() {
+        this.isConfirmed = true;
     }
 }

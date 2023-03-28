@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public abstract class Product {
+    final ArrayList<String> comments;
     private final UUID id;
     private final String name;
     private final String color;
     private final double price;
     private final Seller seller;
-    final ArrayList<String> comments;
     private int quantity;
 
     //Constructor
@@ -84,12 +84,13 @@ public abstract class Product {
     @Override
     public String toString() {
         return "Product{" +
-                "name='" + name + '\'' +
+                "Product ID=" + id +
+                ", name='" + name + '\'' +
                 ", color='" + color + '\'' +
-                ", available stock=" + quantity +
                 ", price=" + price +
-                ", id=" + id +
                 ", seller=" + seller +
+                ", comments=" + comments +
+                ", quantity=" + quantity +
                 '}';
     }
 }

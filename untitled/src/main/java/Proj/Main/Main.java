@@ -1,4 +1,4 @@
-package org.example;
+package Proj.Main;
 
 import Accounts.Admin;
 import Accounts.Seller;
@@ -65,12 +65,11 @@ public class Main {
         Admin admin1 = new Admin("MMDPROJECT", "1382", "Bushehr, Borazjan");
         Seller seller = new Seller("Apple", "1900");
         User user1 = new User("Hossein", "1381", "hossein.com", "09170861077", "Bushehr");
-
         Product product = new Ball("Nike Premier League Academy Ball 2023", "white and red-blue combined", 2, 100.5, seller, 0.5, "Ball", "Nike", BallSize.ADULT, BallMaterial.PU, true);
-        shop.getAccounts().put(seller.getId(), seller);
-        shop.getProducts().put(product.getId(), product);
+        shop.sellerSignUp(seller);
         shop.adminSignUp(admin1);
         shop.userSignUp(user1);
+        shop.addProduct(product);
         runMenu(shop);
     }
 
@@ -153,6 +152,8 @@ public class Main {
         System.out.println("------------------------------ " + shop.getCurrentAccount().getUsername().toUpperCase() + " ------------------------------");
         System.out.println("""
                 1- Search And Show Products
+                \t- Search through categories
+                \t- Show purchased products
                                 
                 2- Cart Management
                 \t- Add a new cart
@@ -162,8 +163,9 @@ public class Main {
                 \t- Checkout carts
                              
                 3- Wallets
-                \t- Show confirmed requests
-                \t- Show unconfirmed requests
+                \t- Submit a wallet request
+                \t- Show wallet requests
+                \t- Show wallet
                                 
                 4- Submit a Comment
                                 
@@ -181,217 +183,229 @@ public class Main {
             case 1 -> {
                 //Search and Show Products
                 System.out.println("""
-                                                        
-                        1- Beauty
-                        \t- EyeBrowMakeUp
-                        \t- EyeMakeUp
-                                                
-                        2- Books
-                        \t- Children Book
-                        \t- Fiction Book
-                        \t- Poetry Book
-                                                
-                        3- Clothes
-                        \t- Coat
-                        \t- Jean
-                        \t- Sweater
-                                                
-                        4- Electronics
-                        \t- Laptop
-                        \t- Smart Phone
-                        \t- Smart Watch
-                                                
-                        5- Home
-                        \t- TV
-                        \t- Air-conditioner
-                        \t- Refrigerator
-                                                
-                        6- Sports
-                        \t- Ball
-                        \t- Gloves
-                        \t- Rackets
-                                                
-                        7- SuperMarket
-                        \t- Dairy
-                        \t- Drinks
-                        \t- Proteins
-                                                
-                        8- Tools
-                        \t- Drill
-                        \t- Soldering System
-                        \t- Spanner
-                                                
-                        9- Toys And Games
-                        \t- Board Games
-                        \t- Card Games
-                        \t- Puzzles
-                                                
-                        10- Vehicles
-                        \t- Car
-                        \t- Motorcycle
-                        \t- Truck
+                        1- Search through categories
+                        2- Show purchased products
                         """);
                 optionMenu = input.nextInt();
                 input.nextLine();
                 switch (optionMenu) {
                     case 1 -> {
-                        System.out.println("""
-                                1- Search through whole Beauty Products
-                                2- Search through Eye Brow MakeUp
-                                3- Search through Eye MakeUp
+                        System.out.println("""                            
+                                1- Beauty
+                                \t- EyeBrowMakeUp
+                                \t- EyeMakeUp
+                                                        
+                                2- Books
+                                \t- Children Book
+                                \t- Fiction Book
+                                \t- Poetry Book
+                                                        
+                                3- Clothes
+                                \t- Coat
+                                \t- Jean
+                                \t- Sweater
+                                                        
+                                4- Electronics
+                                \t- Laptop
+                                \t- Smart Phone
+                                \t- Smart Watch
+                                                        
+                                5- Home
+                                \t- TV
+                                \t- Air-conditioner
+                                \t- Refrigerator
+                                                        
+                                6- Sports
+                                \t- Ball
+                                \t- Gloves
+                                \t- Rackets
+                                                        
+                                7- SuperMarket
+                                \t- Dairy
+                                \t- Drinks
+                                \t- Proteins
+                                                        
+                                8- Tools
+                                \t- Drill
+                                \t- Soldering System
+                                \t- Spanner
+                                                        
+                                9- Toys And Games
+                                \t- Board Games
+                                \t- Card Games
+                                \t- Puzzles
+                                                        
+                                10- Vehicles
+                                \t- Car
+                                \t- Motorcycle
+                                \t- Truck
                                 """);
                         optionMenu = input.nextInt();
                         input.nextLine();
                         switch (optionMenu) {
-                            case 1 -> shop.searchBeauty();
-                            case 2 -> shop.searchEyeBrowMakeUp();
-                            case 3 -> shop.searchEyeMakeUp();
+                            case 1 -> {
+                                System.out.println("""
+                                        1- Search through whole Beauty Products
+                                        2- Search through Eye Brow MakeUp
+                                        3- Search through Eye MakeUp
+                                        """);
+                                optionMenu = input.nextInt();
+                                input.nextLine();
+                                switch (optionMenu) {
+                                    case 1 -> shop.searchBeauty();
+                                    case 2 -> shop.searchEyeBrowMakeUp();
+                                    case 3 -> shop.searchEyeMakeUp();
+                                }
+                            }
+                            case 2 -> {
+                                System.out.println("""
+                                        1- Search through whole Book Products
+                                        2- Search through Children Books
+                                        3- Search through Fiction Books
+                                        4- Search through Poetry Books
+                                        """);
+                                optionMenu = input.nextInt();
+                                input.nextLine();
+                                switch (optionMenu) {
+                                    case 1 -> shop.searchBooks();
+                                    case 2 -> shop.searchChildrenBook();
+                                    case 3 -> shop.searchFictionBook();
+                                    case 4 -> shop.searchPoetryBook();
+                                }
+                            }
+                            case 3 -> {
+                                System.out.println("""
+                                        1- Search through whole Clothes Products
+                                        2- Search through Coats
+                                        3- Search through Jeans
+                                        4- Search through Sweaters
+                                        """);
+                                optionMenu = input.nextInt();
+                                input.nextLine();
+                                switch (optionMenu) {
+                                    case 1 -> shop.searchClothes();
+                                    case 2 -> shop.searchCoat();
+                                    case 3 -> shop.searchJean();
+                                    case 4 -> shop.searchSweater();
+                                }
+                            }
+                            case 4 -> {
+                                System.out.println("""
+                                        1- Search through whole Electronic Products
+                                        2- Search through Laptops
+                                        3- Search through Smart Phones
+                                        4- Search through Smart Watches
+                                        """);
+                                optionMenu = input.nextInt();
+                                input.nextLine();
+                                switch (optionMenu) {
+                                    case 1 -> shop.searchElectronics();
+                                    case 2 -> shop.searchLaptop();
+                                    case 3 -> shop.searchSmartPhone();
+                                    case 4 -> shop.searchSmartWatch();
+                                }
+                            }
+                            case 5 -> {
+                                System.out.println("""
+                                        1- Search through whole Home Products
+                                        2- Search through Air Conditioners
+                                        3- Search through Refrigerators
+                                        4- Search through TVs
+                                        """);
+                                optionMenu = input.nextInt();
+                                input.nextLine();
+                                switch (optionMenu) {
+                                    case 1 -> shop.searchHome();
+                                    case 2 -> shop.searchAirConditioner();
+                                    case 3 -> shop.searchRefrigerator();
+                                    case 4 -> shop.searchTV();
+                                }
+                            }
+                            case 6 -> {
+                                System.out.println("""
+                                        1- Search through whole Sport Products
+                                        2- Search through Balls
+                                        3- Search through Gloves
+                                        4- Search through Rackets
+                                        """);
+                                optionMenu = input.nextInt();
+                                input.nextLine();
+                                switch (optionMenu) {
+                                    case 1 -> shop.searchSports();
+                                    case 2 -> shop.searchBall();
+                                    case 3 -> shop.searchGlove();
+                                    case 4 -> shop.searchRacket();
+                                }
+                            }
+                            case 7 -> {
+                                System.out.println("""
+                                        1- Search through whole Super Market Products
+                                        2- Search through Dairies
+                                        3- Search through Drinks
+                                        4- Search through Proteins
+                                        """);
+                                optionMenu = input.nextInt();
+                                input.nextLine();
+                                switch (optionMenu) {
+                                    case 1 -> shop.searchSuperMarket();
+                                    case 2 -> shop.searchDairy();
+                                    case 3 -> shop.searchDrink();
+                                    case 4 -> shop.searchProtein();
+
+                                }
+                            }
+                            case 8 -> {
+                                System.out.println("""
+                                        1- Search through whole Tools Products
+                                        2- Search through Drills
+                                        3- Search through Soldering Systems
+                                        4- Search through Spanners
+                                        """);
+                                optionMenu = input.nextInt();
+                                input.nextLine();
+                                switch (optionMenu) {
+                                    case 1 -> shop.searchTools();
+                                    case 2 -> shop.searchDrill();
+                                    case 3 -> shop.searchSolderingSystem();
+                                    case 4 -> shop.searchSpanner();
+                                }
+                            }
+                            case 9 -> {
+                                System.out.println("""
+                                        1- Search through whole Toy and Game Products
+                                        2- Search through Board Games
+                                        3- Search through Card Games
+                                        4- Search through Puzzles
+                                        """);
+                                optionMenu = input.nextInt();
+                                input.nextLine();
+                                switch (optionMenu) {
+                                    case 1 -> shop.searchToysAndGames();
+                                    case 2 -> shop.searchBoardGame();
+                                    case 3 -> shop.searchCardGame();
+                                    case 4 -> shop.searchPuzzles();
+                                }
+                            }
+                            case 10 -> {
+                                System.out.println("""
+                                        1- Search through whole Vehicle Products
+                                        2- Search through Cars
+                                        3- Search through Motorcycles
+                                        4- Search through Trucks
+                                        """);
+                                optionMenu = input.nextInt();
+                                input.nextLine();
+                                switch (optionMenu) {
+                                    case 1 -> shop.searchVehicles();
+                                    case 2 -> shop.searchCar();
+                                    case 3 -> shop.searchMotorCycle();
+                                    case 4 -> shop.searchTruck();
+                                }
+                            }
                         }
                     }
                     case 2 -> {
-                        System.out.println("""
-                                1- Search through whole Book Products
-                                2- Search through Children Books
-                                3- Search through Fiction Books
-                                4- Search through Poetry Books
-                                """);
-                        optionMenu = input.nextInt();
-                        input.nextLine();
-                        switch (optionMenu) {
-                            case 1 -> shop.searchBooks();
-                            case 2 -> shop.searchChildrenBook();
-                            case 3 -> shop.searchFictionBook();
-                            case 4 -> shop.searchPoetryBook();
-                        }
-                    }
-                    case 3 -> {
-                        System.out.println("""
-                                1- Search through whole Clothes Products
-                                2- Search through Coats
-                                3- Search through Jeans
-                                4- Search through Sweaters
-                                """);
-                        optionMenu = input.nextInt();
-                        input.nextLine();
-                        switch (optionMenu) {
-                            case 1 -> shop.searchClothes();
-                            case 2 -> shop.searchCoat();
-                            case 3 -> shop.searchJean();
-                            case 4 -> shop.searchSweater();
-                        }
-                    }
-                    case 4 -> {
-                        System.out.println("""
-                                1- Search through whole Electronic Products
-                                2- Search through Laptops
-                                3- Search through Smart Phones
-                                4- Search through Smart Watches
-                                """);
-                        optionMenu = input.nextInt();
-                        input.nextLine();
-                        switch (optionMenu) {
-                            case 1 -> shop.searchElectronics();
-                            case 2 -> shop.searchLaptop();
-                            case 3 -> shop.searchSmartPhone();
-                            case 4 -> shop.searchSmartWatch();
-                        }
-                    }
-                    case 5 -> {
-                        System.out.println("""
-                                1- Search through whole Home Products
-                                2- Search through Air Conditioners
-                                3- Search through Refrigerators
-                                4- Search through TVs
-                                """);
-                        optionMenu = input.nextInt();
-                        input.nextLine();
-                        switch (optionMenu) {
-                            case 1 -> shop.searchHome();
-                            case 2 -> shop.searchAirConditioner();
-                            case 3 -> shop.searchRefrigerator();
-                            case 4 -> shop.searchTV();
-                        }
-                    }
-                    case 6 -> {
-                        System.out.println("""
-                                1- Search through whole Sport Products
-                                2- Search through Balls
-                                3- Search through Gloves
-                                4- Search through Rackets
-                                """);
-                        optionMenu = input.nextInt();
-                        input.nextLine();
-                        switch (optionMenu) {
-                            case 1 -> shop.searchSports();
-                            case 2 -> shop.searchBall();
-                            case 3 -> shop.searchGlove();
-                            case 4 -> shop.searchRacket();
-                        }
-                    }
-                    case 7 -> {
-                        System.out.println("""
-                                1- Search through whole Super Market Products
-                                2- Search through Dairies
-                                3- Search through Drinks
-                                4- Search through Proteins
-                                """);
-                        optionMenu = input.nextInt();
-                        input.nextLine();
-                        switch (optionMenu) {
-                            case 1 -> shop.searchSuperMarket();
-                            case 2 -> shop.searchDairy();
-                            case 3 -> shop.searchDrink();
-                            case 4 -> shop.searchProtein();
-
-                        }
-                    }
-                    case 8 -> {
-                        System.out.println("""
-                                1- Search through whole Tools Products
-                                2- Search through Drills
-                                3- Search through Soldering Systems
-                                4- Search through Spanners
-                                """);
-                        optionMenu = input.nextInt();
-                        input.nextLine();
-                        switch (optionMenu) {
-                            case 1 -> shop.searchTools();
-                            case 2 -> shop.searchDrill();
-                            case 3 -> shop.searchSolderingSystem();
-                            case 4 -> shop.searchSpanner();
-                        }
-                    }
-                    case 9 -> {
-                        System.out.println("""
-                                1- Search through whole Toy and Game Products
-                                2- Search through Board Games
-                                3- Search through Card Games
-                                4- Search through Puzzles
-                                """);
-                        optionMenu = input.nextInt();
-                        input.nextLine();
-                        switch (optionMenu) {
-                            case 1 -> shop.searchToysAndGames();
-                            case 2 -> shop.searchBoardGame();
-                            case 3 -> shop.searchCardGame();
-                            case 4 -> shop.searchPuzzles();
-                        }
-                    }
-                    case 10 -> {
-                        System.out.println("""
-                                1- Search through whole Vehicle Products
-                                2- Search through Cars
-                                3- Search through Motorcycles
-                                4- Search through Trucks
-                                """);
-                        optionMenu = input.nextInt();
-                        input.nextLine();
-                        switch (optionMenu) {
-                            case 1 -> shop.searchVehicles();
-                            case 2 -> shop.searchCar();
-                            case 3 -> shop.searchMotorCycle();
-                            case 4 -> shop.searchTruck();
-                        }
+                        ((User) shop.getCurrentAccount()).showPurchasedProducts();
                     }
                 }
                 userPage(shop);
@@ -413,6 +427,9 @@ public class Main {
                         4- View carts
                         \t- Show carts
                         \t- View cart by ID
+                        \t- Show all orders
+                        \t- Show confirmed orders
+                        \t- Show unconfirmed orders
                                                         
                         5- Checkout carts
                         \t- Checkout a cart by ID
@@ -437,60 +454,74 @@ public class Main {
                         }
                     }
                     case 3 -> {
-                        System.out.println("""
-                                1- Add product to cart by ID
-                                2- Remove product from cart by ID
-                                3- Increase count of product in cart by ID
-                                4- Decrease count of product in cart by ID
-                                """);
-                        optionMenu = input.nextInt();
-                        input.nextLine();
-                        switch (optionMenu) {
-                            case 1 -> {
-                                System.out.println("Enter : 1- Product ID, 2- Quantity you want to buy\n");
-                                String id = input.nextLine();
-                                int quantity = input.nextInt();
+                        if (shop.getCurrentAccount() instanceof User) {
+                            if (((User) shop.getCurrentAccount()).getCarts().size() != 0) {
+                                System.out.println("""
+                                        1- Add product to cart by ID
+                                        2- Remove product from cart by ID
+                                        3- Increase count of product in cart by ID
+                                        4- Decrease count of product in cart by ID
+                                        """);
+                                optionMenu = input.nextInt();
                                 input.nextLine();
-                                if (shop.getCurrentAccount() instanceof User) {
-                                    ((User) shop.getCurrentAccount()).getCurrentCart().addProduct(shop.getProduct(UUID.fromString(id)), quantity);
-                                }
-                            }
-                            case 2 -> {
-                                System.out.println("Enter : - Product ID\n");
-                                String id = input.nextLine();
-                                if (shop.getCurrentAccount() instanceof User) {
-                                    if (((User) shop.getCurrentAccount()).getCurrentCart().doesProductExist(UUID.fromString(id))) {
-                                        ((User) shop.getCurrentAccount()).getCurrentCart().removeProduct(UUID.fromString(id));
-                                    } else {
-                                        System.out.println("Product has not been found!\n");
+                                switch (optionMenu) {
+                                    case 1 -> {
+                                        System.out.println("Enter : 1- Product ID, 2- Quantity you want to buy\n");
+                                        String id = input.nextLine();
+                                        int quantity = input.nextInt();
+                                        input.nextLine();
+                                        if (shop.getCurrentAccount() instanceof User) {
+                                            if (((User) shop.getCurrentAccount()).getCurrentCart() != null) {
+                                                if (shop.doesProductExist(UUID.fromString(id))) {
+                                                    ((User) shop.getCurrentAccount()).getCurrentCart().addProduct(shop.getProduct(UUID.fromString(id)), quantity);
+                                                } else {
+                                                    System.out.println("Product has not been found\n");
+                                                }
+                                            } else {
+                                                System.out.println("No cart has been selected yet!\n");
+                                            }
+                                        }
+                                    }
+                                    case 2 -> {
+                                        System.out.println("Enter : - Product ID\n");
+                                        String id = input.nextLine();
+                                        if (shop.getCurrentAccount() instanceof User) {
+                                            if (((User) shop.getCurrentAccount()).getCurrentCart().doesProductExist(UUID.fromString(id))) {
+                                                ((User) shop.getCurrentAccount()).getCurrentCart().removeProduct(UUID.fromString(id));
+                                            } else {
+                                                System.out.println("Product has not been found!\n");
+                                            }
+                                        }
+                                    }
+                                    case 3 -> {
+                                        System.out.println("Enter : 1- Product ID, 2- Quantity to add\n");
+                                        String id = input.nextLine();
+                                        int quantity = input.nextInt();
+                                        input.nextLine();
+                                        if (shop.getCurrentAccount() instanceof User) {
+                                            if (((User) shop.getCurrentAccount()).getCurrentCart().doesProductExist(UUID.fromString(id))) {
+                                                ((User) shop.getCurrentAccount()).getCurrentCart().increaseAmount(UUID.fromString(id), quantity);
+                                            } else {
+                                                System.out.println("Product has not been found!\n");
+                                            }
+                                        }
+                                    }
+                                    case 4 -> {
+                                        System.out.println("Enter : 1- Product ID, 2- Quantity to decrease\n");
+                                        String id = input.nextLine();
+                                        int quantity = input.nextInt();
+                                        input.nextLine();
+                                        if (shop.getCurrentAccount() instanceof User) {
+                                            if (((User) shop.getCurrentAccount()).getCurrentCart().doesProductExist(UUID.fromString(id))) {
+                                                ((User) shop.getCurrentAccount()).getCurrentCart().decreaseAmount(UUID.fromString(id), quantity);
+                                            } else {
+                                                System.out.println("Product has not been found!\n");
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                            case 3 -> {
-                                System.out.println("Enter : 1- Product ID, 2- Quantity to add\n");
-                                String id = input.nextLine();
-                                int quantity = input.nextInt();
-                                input.nextLine();
-                                if (shop.getCurrentAccount() instanceof User) {
-                                    if (((User) shop.getCurrentAccount()).getCurrentCart().doesProductExist(UUID.fromString(id))) {
-                                        ((User) shop.getCurrentAccount()).getCurrentCart().increaseAmount(UUID.fromString(id), quantity);
-                                    } else {
-                                        System.out.println("Product has not been found!\n");
-                                    }
-                                }
-                            }
-                            case 4 -> {
-                                System.out.println("Enter : 1- Product ID, 2- Quantity to decrease\n");
-                                String id = input.nextLine();
-                                int quantity = input.nextInt();
-                                input.nextLine();
-                                if (shop.getCurrentAccount() instanceof User) {
-                                    if (((User) shop.getCurrentAccount()).getCurrentCart().doesProductExist(UUID.fromString(id))) {
-                                        ((User) shop.getCurrentAccount()).getCurrentCart().decreaseAmount(UUID.fromString(id), quantity);
-                                    } else {
-                                        System.out.println("Product has not been found!\n");
-                                    }
-                                }
+                            } else {
+                                System.out.println("You don't have any carts yet, please add one\n");
                             }
                         }
                     }
@@ -498,6 +529,9 @@ public class Main {
                         System.out.println("""
                                 1- Show all carts
                                 2- View cart by ID
+                                3- Show all orders
+                                4- Show confirmed orders
+                                5- Show unconfirmed orders
                                 """);
                         optionMenu = input.nextInt();
                         input.nextLine();
@@ -514,14 +548,15 @@ public class Main {
                                     System.out.println(((User) shop.getCurrentAccount()).getCart(UUID.fromString(id)));
                                 }
                             }
+                            case 3 -> ((User) shop.getCurrentAccount()).showAllOrders();
+                            case 4 -> ((User) shop.getCurrentAccount()).showConfirmedOrders();
+                            case 5 -> ((User) shop.getCurrentAccount()).showUnconfirmedOrders();
                         }
                     }
                     case 5 -> {
                         System.out.println("Enter : - Cart ID\n");
                         String id = input.nextLine();
-                        if (shop.getCurrentAccount() instanceof User) {
-                            ((User) shop.getCurrentAccount()).checkOutCart(UUID.fromString(id));
-                        }
+                        shop.checkoutCart(UUID.fromString(id));
                     }
                 }
             }
@@ -545,7 +580,7 @@ public class Main {
                         double value = input.nextDouble();
                         input.nextLine();
                         if (shop.getCurrentAccount() instanceof User) {
-                            ((User) shop.getCurrentAccount()).sendAWalletRequest(value);
+                            shop.submitAWalletRequest(value);
                         }
                     }
                     case 2 -> {
@@ -767,8 +802,7 @@ public class Main {
                                             7- Author
                                             8- Language
                                             """);
-                                    int ISBN = input.nextInt();
-                                    input.nextLine();
+                                    String ISBN = input.nextLine();
                                     int pageNumber = input.nextInt();
                                     input.nextLine();
                                     String author = input.nextLine();
@@ -1487,12 +1521,11 @@ public class Main {
                                 ((Seller) shop.getCurrentAccount()).viewAvailableProducts();
                             }
                         }
-
                     }
                 }
                 case 2 -> {
                     //View Wallet
-                    if (shop.getCurrentAccount() instanceof Seller){
+                    if (shop.getCurrentAccount() instanceof Seller) {
                         ((Seller) shop.getCurrentAccount()).viewWallet();
                     }
                 }
@@ -1511,35 +1544,35 @@ public class Main {
                 \t- Show all confirmed wallet requests
                 \t- Show all unconfirmed wallet requests
                 \t- Confirm a wallet request by ID
-                
+                                
                 2- Checkouts & Orders Management
-                \t- Show all checkout requests
-                \t- Show all confirmed checkout requests
-                \t- Show all unconfirmed checkout requests
-                \t- Confirm a checkout request by ID
-                
+                \t- Show all orders
+                \t- Show all confirmed orders
+                \t- Show all unconfirmed orders
+                \t- Confirm an order by ID
+                                
                 3- Admins Management
                 \t- Add an admin
-                
+                                
                 4- Users Management
                 \t- Show all user wallet requests by userID
                 \t- Show user's confirmed wallet requests by userID
                 \t- Show user's unconfirmed wallet requests by userID
-                \t- Show user's all checkout requests by userID
-                \t- Show user's confirmed checkout requests by userID
-                \t- Show user's unconfirmed checkout requests by userID
+                \t- Show user's all orders by userID
+                \t- Show user's confirmed orders by userID
+                \t- Show user's unconfirmed orders by userID
                 \t- Watch all profile screens
                 \t- Watch an specific profile screen by userID
-                
+                                
                 5- Sellers Management
                 \t- Show all unauthorized sellers
                 \t- Authorize a seller by sellerID
-                
+                                
                 6- Back to main menu
                 """);
         int optionMenu = input.nextInt();
         input.nextLine();
-        switch (optionMenu){
+        switch (optionMenu) {
             case 1 -> {
                 System.out.println("""
                         1- Show all wallet requests
@@ -1549,7 +1582,7 @@ public class Main {
                         """);
                 optionMenu = input.nextInt();
                 input.nextLine();
-                switch (optionMenu){
+                switch (optionMenu) {
                     case 1 -> shop.showAllWalletRequests();
                     case 2 -> shop.showAllConfirmedWalletRequests();
                     case 3 -> shop.showAllUnconfirmedWalletRequests();
@@ -1562,19 +1595,19 @@ public class Main {
             }
             case 2 -> {
                 System.out.println("""
-                        1- Show all checkout requests
-                        2- Show all confirmed checkout requests
-                        3- Show all unconfirmed checkout requests
-                        4- Confirm a checkout request by ID
+                        1- Show all orders
+                        2- Show all confirmed orders
+                        3- Show all unconfirmed orders
+                        4- Confirm an order by ID
                         """);
                 optionMenu = input.nextInt();
                 input.nextLine();
-                switch (optionMenu){
-                    case 1 -> shop.showAllCheckoutRequests();
-                    case 2 -> shop.showAllConfirmedCheckoutRequests();
-                    case 3 -> shop.showAllUnconfirmedCheckoutRequests();
+                switch (optionMenu) {
+                    case 1 -> shop.showAllOrders();
+                    case 2 -> shop.showAllConfirmedOrders();
+                    case 3 -> shop.showAllUnconfirmedOrders();
                     case 4 -> {
-                        System.out.println("Enter : - Checkout Request ID\n");
+                        System.out.println("Enter : - Order ID\n");
                         String id = input.nextLine();
                         shop.orderConfirm(UUID.fromString(id));
                     }
@@ -1592,15 +1625,15 @@ public class Main {
                         1- Show all user wallet requests by userID
                         2- Show user's confirmed wallet requests by userID
                         3- Show user's unconfirmed wallet requests by userID
-                        4- Show user's all checkout requests by userID
-                        5- Show user's confirmed checkout requests by userID
-                        6- Show user's unconfirmed checkout requests by userID
+                        4- Show user's all orders by userID
+                        5- Show user's confirmed orders by userID
+                        6- Show user's unconfirmed orders by userID
                         7- Watch all profile screens
                         8- Watch an specific profile screen by userID
                         """);
                 optionMenu = input.nextInt();
                 input.nextLine();
-                switch (optionMenu){
+                switch (optionMenu) {
                     case 1 -> {
                         System.out.println("Enter : - User ID");
                         String id = input.nextLine();
@@ -1619,17 +1652,17 @@ public class Main {
                     case 4 -> {
                         System.out.println("Enter : - User ID");
                         String id = input.nextLine();
-                        shop.showUserAllCheckoutRequests(UUID.fromString(id));
+                        shop.showUserAllOrders(UUID.fromString(id));
                     }
                     case 5 -> {
                         System.out.println("Enter : - User ID");
                         String id = input.nextLine();
-                        shop.showUserConfirmedCheckoutRequests(UUID.fromString(id));
+                        shop.showUserConfirmedOrders(UUID.fromString(id));
                     }
                     case 6 -> {
                         System.out.println("Enter : - User ID");
                         String id = input.nextLine();
-                        shop.showUserUnconfirmedCheckoutRequests(UUID.fromString(id));
+                        shop.showUserUnconfirmedOrders(UUID.fromString(id));
                     }
                     case 7 -> shop.userProfileScreens();
                     case 8 -> {
@@ -1646,7 +1679,7 @@ public class Main {
                         """);
                 optionMenu = input.nextInt();
                 input.nextLine();
-                switch (optionMenu){
+                switch (optionMenu) {
                     case 1 -> shop.showUnauthorizedSellers();
                     case 2 -> {
                         System.out.println("Enter : - Seller ID");

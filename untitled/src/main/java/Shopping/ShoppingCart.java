@@ -12,6 +12,7 @@ public class ShoppingCart {
     private final UUID id;
     private final String name;
     private double totalPrice;
+    private boolean isCheckout;
 
     //Constructor
 
@@ -21,6 +22,7 @@ public class ShoppingCart {
         this.itemNumber = itemNumber;
         this.totalPrice = totalPrice;
         this.id = UUID.randomUUID();
+        this.isCheckout = false;
     }
 
     public ShoppingCart(String name) {
@@ -50,6 +52,10 @@ public class ShoppingCart {
 
     public String getName() {
         return this.name;
+    }
+
+    public boolean isCheckout() {
+        return isCheckout;
     }
 
     //Cart - Related Methods
@@ -104,13 +110,12 @@ public class ShoppingCart {
     }
 
     public void removeProduct(UUID id) {
-        if (doesProductExist(id)){
+        if (doesProductExist(id)) {
             products.remove(getProduct(id));
             itemNumber.remove(id);
             System.out.println("Product has been successfully removed!\n");
             totalPrice = updateTotalPrice();
-        }
-        else {
+        } else {
             System.out.println("Product has not been found!\n");
         }
     }
@@ -134,16 +139,22 @@ public class ShoppingCart {
         return totalPrice;
     }
 
-    //Override
-
     @Override
     public String toString() {
         return "ShoppingCart{" +
-                "name='" + name + '\'' +
-                ", products=" + products +
+                "products=" + products +
                 ", itemNumber=" + itemNumber +
-                ", id=" + id +
+                ", Cart ID=" + id +
+                ", name='" + name + '\'' +
                 ", totalPrice=" + totalPrice +
+                ", isCheckout=" + isCheckout +
                 '}';
     }
+
+    public void checkoutCart() {
+        this.isCheckout = true;
+    }
+
+    //Override
+
 }

@@ -110,7 +110,7 @@ public class Shop {
         return this.orders;
     }
 
-    public Order getOrder(UUID id){
+    public Order getOrder(UUID id) {
         return this.orders.get(id);
     }
 
@@ -182,28 +182,28 @@ public class Shop {
         }
     }
 
-    public void showAllConfirmedWalletRequests(){
+    public void showAllConfirmedWalletRequests() {
         boolean hasFoundAny = false;
-        for (WalletReq walletReq : this.walletRequests.values()){
-            if (walletReq.isConfirmed()){
+        for (WalletReq walletReq : this.walletRequests.values()) {
+            if (walletReq.isConfirmed()) {
                 hasFoundAny = true;
                 System.out.println(walletReq);
             }
         }
-        if (!hasFoundAny){
+        if (!hasFoundAny) {
             System.out.println("No wallet request has been found!\n");
         }
     }
 
-    public void showAllUnconfirmedWalletRequests(){
+    public void showAllUnconfirmedWalletRequests() {
         boolean hasFoundAny = false;
-        for (WalletReq walletReq : this.walletRequests.values()){
-            if (!walletReq.isConfirmed()){
+        for (WalletReq walletReq : this.walletRequests.values()) {
+            if (!walletReq.isConfirmed()) {
                 hasFoundAny = true;
                 System.out.println(walletReq);
             }
         }
-        if (!hasFoundAny){
+        if (!hasFoundAny) {
             System.out.println("No wallet request has been found!\n");
         }
     }
@@ -221,9 +221,9 @@ public class Shop {
         }
     }
 
-    public void showAllCheckoutRequests() {
+    public void showAllOrders() {
         if (this.orders.size() == 0) {
-            System.out.println("No checkout request has been submitted yet!\n");
+            System.out.println("No order has been submitted yet!\n");
         } else {
             for (Order order : this.orders.values()) {
                 System.out.println(order);
@@ -231,43 +231,44 @@ public class Shop {
         }
     }
 
-    public void showAllConfirmedCheckoutRequests(){
+    public void showAllConfirmedOrders() {
         boolean hasFoundAny = false;
-        for (Order order : this.orders.values()){
-            if (order.isConfirmed()){
+        for (Order order : this.orders.values()) {
+            if (order.isConfirmed()) {
+                hasFoundAny = true;
                 System.out.println(order);
             }
         }
-        if (!hasFoundAny){
+        if (!hasFoundAny) {
             System.out.println("No order has been found!\n");
         }
     }
 
-    public void showAllUnconfirmedCheckoutRequests(){
+    public void showAllUnconfirmedOrders() {
         boolean hasFoundAny = false;
-        for (Order order : this.orders.values()){
-            if (!order.isConfirmed()){
+        for (Order order : this.orders.values()) {
+            hasFoundAny = true;
+            if (!order.isConfirmed()) {
                 System.out.println(order);
             }
         }
-        if (!hasFoundAny){
-            System.out.println("No checkout request has been found!\n");
+        if (!hasFoundAny) {
+            System.out.println("No order has been found!\n");
         }
     }
 
-    public void orderConfirm(UUID id){
-        if (!doesOrderExist(id)){
+    public void orderConfirm(UUID id) {
+        if (!doesOrderExist(id)) {
             System.out.println("Order has not been found!\n");
-        }
-        else {
-            if (getOrder(id).getBuyer().checkBuyerPocket(getOrder(id).calcBuyerPayOff())){
-                getOrder(id).setConfirmed(true);
-                this.addShopCut(getOrder(id).calcShopCut());
+        } else {
+            if (getOrder(id).getBuyer().checkBuyerPocket(getOrder(id).calcBuyerPayOff())) {
+                getOrder(id).orderConfirm();
                 getOrder(id).getBuyer().buyerPayOff(getOrder(id).calcBuyerPayOff());
+                addShopCut(getOrder(id).calcShopCut());
                 getOrder(id).calcSellerCut();
                 getOrder(id).updateStocks();
-            }
-            else {
+                getOrder(id).updateUserPurchasedProducts();
+            } else {
                 System.out.println("Order can't be done, due to lack of money\n");
             }
         }
@@ -277,58 +278,58 @@ public class Shop {
         if (doesAccountExist(userId)) {
             System.out.println("User has not been found!\n");
         } else {
-            if (this.accounts.get(userId) instanceof User){
+            if (this.accounts.get(userId) instanceof User) {
                 ((User) this.accounts.get(userId)).showAllWalletRequests();
             }
         }
     }
 
-    public void showUserConfirmedWalletRequests(UUID userId){
+    public void showUserConfirmedWalletRequests(UUID userId) {
         if (doesAccountExist(userId)) {
             System.out.println("User has not been found!\n");
         } else {
-            if (this.accounts.get(userId) instanceof User){
+            if (this.accounts.get(userId) instanceof User) {
                 ((User) this.accounts.get(userId)).showConfirmedWalletRequests();
             }
         }
     }
 
-    public void showUserUnconfirmedWalletRequests(UUID userId){
+    public void showUserUnconfirmedWalletRequests(UUID userId) {
         if (doesAccountExist(userId)) {
             System.out.println("User has not been found!\n");
         } else {
-            if (this.accounts.get(userId) instanceof User){
+            if (this.accounts.get(userId) instanceof User) {
                 ((User) this.accounts.get(userId)).showUnconfirmedWalletRequests();
             }
         }
     }
 
-    public void showUserAllCheckoutRequests(UUID userId) {
+    public void showUserAllOrders(UUID userId) {
         if (doesAccountExist(userId)) {
             System.out.println("User has not been found!\n");
         } else {
-            if (this.accounts.get(userId) instanceof User){
-                ((User) this.accounts.get(userId)).showAllCheckoutRequests();
+            if (this.accounts.get(userId) instanceof User) {
+                ((User) this.accounts.get(userId)).showAllOrders();
             }
         }
     }
 
-    public void showUserConfirmedCheckoutRequests(UUID userId){
+    public void showUserConfirmedOrders(UUID userId) {
         if (doesAccountExist(userId)) {
             System.out.println("User has not been found!\n");
         } else {
-            if (this.accounts.get(userId) instanceof User){
-                ((User) this.accounts.get(userId)).showConfirmedCheckoutRequests();
+            if (this.accounts.get(userId) instanceof User) {
+                ((User) this.accounts.get(userId)).showConfirmedOrders();
             }
         }
     }
 
-    public void showUserUnconfirmedCheckoutRequests(UUID userId){
+    public void showUserUnconfirmedOrders(UUID userId) {
         if (doesAccountExist(userId)) {
             System.out.println("User has not been found!\n");
         } else {
-            if (this.accounts.get(userId) instanceof User){
-                ((User) this.accounts.get(userId)).showUnconfirmedCheckoutRequests();
+            if (this.accounts.get(userId) instanceof User) {
+                ((User) this.accounts.get(userId)).showUnconfirmedOrders();
             }
         }
     }
@@ -337,10 +338,11 @@ public class Shop {
         boolean hasFoundAny = false;
         for (Account account : this.accounts.values()) {
             if (account instanceof User) {
+                hasFoundAny = true;
                 System.out.println(account);
             }
         }
-        if (!hasFoundAny){
+        if (!hasFoundAny) {
             System.out.println("No profile screen has been found!\n");
         }
     }
@@ -374,6 +376,7 @@ public class Shop {
                 System.out.println("This Seller has been authorized!\n");
             } else {
                 ((Seller) accounts.get(sellerID)).authorizeSeller();
+                System.out.println("Seller has been successfully authorized!\n");
             }
         }
     }
@@ -416,8 +419,17 @@ public class Shop {
     public void submitComment(UUID id, String comment) {
         if (this.products.containsKey(id)) {
             this.products.get(id).submitComment(comment);
+            System.out.println("Comment has been successfully submitted!\n");
         } else {
             System.out.println("Product has not been found!\n");
+        }
+    }
+
+    public void submitAWalletRequest(double value) {
+        WalletReq newWalletReq = new WalletReq(value, (User) this.currentAccount);
+        if (this.getCurrentAccount() instanceof User) {
+            ((User) this.getCurrentAccount()).submitAWalletRequest(newWalletReq);
+            this.walletRequests.put(newWalletReq.getId(), newWalletReq);
         }
     }
 
@@ -453,17 +465,18 @@ public class Shop {
 
     public void addProduct(Product product) {
         this.products.put(product.getId(), product);
-        if (this.accounts.get(product.getId()) instanceof Seller) {
-            ((Seller) this.accounts.get(product.getId())).getAvailableProducts().put(product.getId(), product);
-            System.out.println("Product has been successfully added!\n");
+        if (this.getCurrentAccount() instanceof Seller) {
+            ((Seller) this.getCurrentAccount()).addProduct(product);
         }
     }
 
     public void removeProduct(UUID id) {
-        this.products.remove(id);
-        if (this.accounts.get(id) instanceof Seller) {
-            ((Seller) this.accounts.get(id)).getAvailableProducts().remove(id);
+        if (doesProductExist(id)) {
+            this.products.remove(id);
+            ((Seller) this.getCurrentAccount()).removeProduct(id);
             System.out.println("Product has been successfully removed!\n");
+        } else {
+            System.out.println("Product doesn't exists\n");
         }
     }
 
@@ -478,23 +491,46 @@ public class Shop {
         }
     }
 
-    public void addShopCut(double value){
+    public void addShopCut(double value) {
+        System.out.println("Shop's cut has been deposited!\n");
         this.totalGained += value;
     }
 
 
     //Cart - Related Methods
 
+    public boolean doesCartExist(UUID cartID) {
+        for (Account account : accounts.values()) {
+            if (account instanceof User) {
+                if (((User) account).getCarts().containsKey(cartID)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void checkoutCart(UUID cartID) {
+        if (doesCartExist(cartID)) {
+            if (!((User) this.getCurrentAccount()).getCart(cartID).isCheckout()) {
+                Order order = ((User) this.getCurrentAccount()).checkoutCart(cartID);
+                this.orders.put(order.getId(), order);
+                System.out.println("Order has been successfully submitted!\n");
+            }
+        } else {
+            System.out.println("Cart has not been found!\n");
+        }
+    }
 
     //Wallet - Related Methods
 
-    public boolean doesWalletRequestExist(UUID id){
+    public boolean doesWalletRequestExist(UUID id) {
         return this.walletRequests.containsKey(id);
     }
 
     //Order - Related Methods
 
-    public boolean doesOrderExist(UUID id){
+    public boolean doesOrderExist(UUID id) {
         return this.orders.containsKey(id);
     }
 
@@ -1003,6 +1039,7 @@ public class Shop {
         boolean hasFoundAny = false;
         for (Product product : products.values()) {
             if (product instanceof Truck) {
+
                 hasFoundAny = true;
                 System.out.println(product);
             }
