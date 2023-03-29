@@ -56,6 +56,9 @@ public class Seller extends Account {
         return "Seller{" +
                 "isAuthorized=" + isAuthorized +
                 ", companyName='" + companyName + '\'' +
+                ", password='" + password + '\'' +
+                ", availableProducts=" + availableProducts +
+                ", wallet=" + wallet +
                 "} " + super.toString();
     }
 
@@ -70,15 +73,6 @@ public class Seller extends Account {
     }
 
     //Seller - Related Methods
-
-    public void addProduct(Product product) {
-        this.availableProducts.put(product.getId(), product);
-        System.out.println("Product has been successfully added!\n");
-    }
-
-    public void removeProduct(UUID id) {
-        this.availableProducts.remove(id);
-    }
 
     public boolean doesProductExist(Product product) {
         for (UUID id : availableProducts.keySet()) {
@@ -103,11 +97,11 @@ public class Seller extends Account {
         this.isAuthorized = true;
     }
 
-    public void viewWallet() {
+    public void viewWallet(){
         System.out.println("Current Wallet : " + this.wallet);
     }
 
-    public void addSellerCut(double value) {
+    public void addSellerCut(double value){
         this.wallet += value;
     }
 }

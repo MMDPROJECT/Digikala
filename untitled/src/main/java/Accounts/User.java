@@ -96,8 +96,8 @@ public class User extends Account {
         return carts.get(id);
     }
 
-
     //Override
+
 
     @Override
     public String toString() {
@@ -107,10 +107,9 @@ public class User extends Account {
                 ", orders=" + orders +
                 ", walletRequests=" + walletRequests +
                 ", purchasedProducts=" + purchasedProducts +
-                ", currentCart=" + currentCart +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
+                ", phoneNumber=" + phoneNumber +
                 ", address='" + address + '\'' +
                 ", wallet=" + wallet +
                 "} " + super.toString();
@@ -128,89 +127,90 @@ public class User extends Account {
 
     //Cart - Related Methods
 
-    public Order checkoutCart(UUID cartID) {
-        this.getCart(cartID).checkoutCart();
-        Order order = new Order(this.getCart(cartID).getName(), this.getCart(cartID).getProducts(), this.getCart(cartID).getItemNumber(), this.getCart(cartID).getTotalPrice(), this);
-        this.addOrder(order);
-        return order;
-    }
-
     public void viewCarts() {
-        if (this.carts.size() == 0) {
+        if (carts.size() == 0) {
             System.out.println("No cart has been created yet!\n");
         } else {
-            for (UUID id : this.carts.keySet()) {
-                System.out.println(this.carts.get(id));
+            for (UUID id : carts.keySet()) {
+                System.out.println(carts.get(id));
             }
         }
     }
 
     public void viewCart(UUID id) {
-        if (this.carts.containsKey(id)) {
-            System.out.println(this.carts.get(id));
+        if (carts.containsKey(id)) {
+            System.out.println(carts.get(id));
         } else {
             System.out.println("Cart has not been found!\n");
         }
     }
 
     public void addCart(ShoppingCart cart) {
-        this.carts.put(cart.getId(), cart);
+        carts.put(cart.getId(), cart);
+    }
+
+    public void checkOutCart(UUID id) {
+        if (carts.containsKey(id)) {
+            this.orders.put(id, new Order(carts.get(id).getName(), carts.get(id).getProducts(), carts.get(id).getItemNumber(), carts.get(id).getTotalPrice(), this));
+        }
+        System.out.println("Order has been successfully requested!\n");
     }
 
     //Order - Related Methods
 
-    public void showAllOrders() {
-        if (this.orders.size() == 0) {
+    public void showAllCheckoutRequests() {
+        if (orders.size() == 0) {
             System.out.println("No Checkout Request has been submitted yet!\n");
         } else {
-            for (Order order : this.orders.values()) {
-                System.out.println(order);
+            for (UUID id : orders.keySet()) {
+                System.out.println(orders.get(id));
             }
         }
     }
 
-    public void showConfirmedOrders() {
+    public void showConfirmedCheckoutRequests(){
         boolean hasFoundAny = false;
-        for (Order order : this.orders.values()) {
-            if (order.isConfirmed()) {
+        for (Order order : this.orders.values()){
+            if (order.isConfirmed()){
                 hasFoundAny = true;
                 System.out.println(order);
             }
         }
-        if (!hasFoundAny) {
+        if (!hasFoundAny){
             System.out.println("No Checkout request has been found!\n");
         }
     }
 
-    public void showUnconfirmedOrders() {
+    public void showUnconfirmedCheckoutRequests(){
         boolean hasFoundAny = false;
-        for (Order order : this.orders.values()) {
-            if (!order.isConfirmed()) {
+        for (Order order : this.orders.values()){
+            if (!order.isConfirmed()){
                 hasFoundAny = true;
                 System.out.println(order);
             }
         }
-        if (!hasFoundAny) {
+        if (!hasFoundAny){
             System.out.println("No Checkout request has been found!\n");
         }
     }
 
-    public boolean checkBuyerPocket(double value) {
+    public boolean checkBuyerPocket(double value){
         return this.wallet >= value;
     }
 
-    public void buyerPayOff(double value) {
+    public void buyerPayOff(double value){
         System.out.println("Money has been successfully paid off!\n");
         this.wallet -= value;
     }
 
     public void addOrder(Order order) {
-        this.orders.put(order.getId(), order);
+        orders.put(order.getId(), order);
     }
 
     //Wallet - Related Methods
 
-    public void submitAWalletRequest(WalletReq walletRequest) {
+    public void sendAWalletRequest(double value) {
+        WalletReq walletRequest = new WalletReq(value, this);
         this.walletRequests.put(walletRequest.getId(), walletRequest);
         System.out.println("Wallet request has been successfully sent!\n");
     }
@@ -277,22 +277,9 @@ public class User extends Account {
         System.out.println("Address has been successfully edited!\n");
     }
 
-    public void showPurchasedProducts() {
-        if (this.purchasedProducts.size() == 0) {
-            System.out.println("You haven't purchased any product yet!\n");
-        } else {
-            for (Product product : this.purchasedProducts.values()) {
-                System.out.println(product);
-            }
-        }
-    }
-
-    public boolean isProductPurchased(UUID id) {
-        return this.purchasedProducts.containsKey(id);
-    }
-
     //Product - related Methods
     public void addPurchasedProduct(Product product) {
         purchasedProducts.put(product.getId(), product);
     }
+
 }

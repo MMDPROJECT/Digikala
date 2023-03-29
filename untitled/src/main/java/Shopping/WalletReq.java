@@ -46,8 +46,8 @@ public class WalletReq {
         return "WalletReq{" +
                 "value=" + value +
                 ", isConfirmed=" + isConfirmed +
-                ", user=" + user.getUsername() +
-                ", Wallet ID=" + id +
+                ", user=" + user +
+                ", id=" + id +
                 '}';
     }
 
