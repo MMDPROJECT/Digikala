@@ -9,7 +9,7 @@ public class Children_Book extends Books {
     //Constructor
 
 
-    public Children_Book(String name, String color, int quantity, double price, Seller seller, int ISBN, int pageNumbers, String author, String language, String readingLevel, String theme) {
+    public Children_Book(String name, String color, int quantity, double price, Seller seller, String ISBN, int pageNumbers, String author, String language, String readingLevel, String theme) {
         super(name, color, quantity, price, seller, ISBN, pageNumbers, author, language);
         this.readingLevel = readingLevel;
         this.theme = theme;

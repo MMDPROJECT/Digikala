@@ -9,7 +9,7 @@ public class Poetry_Book extends Books {
     //Constructor
 
 
-    public Poetry_Book(String name, String color, int quantity, double price, Seller seller, int ISBN, int pageNumbers, String author, String language, String poeticForm, int verseNumber) {
+    public Poetry_Book(String name, String color, int quantity, double price, Seller seller, String ISBN, int pageNumbers, String author, String language, String poeticForm, int verseNumber) {
         super(name, color, quantity, price, seller, ISBN, pageNumbers, author, language);
         this.poeticForm = poeticForm;
         this.verseNumber = verseNumber;
