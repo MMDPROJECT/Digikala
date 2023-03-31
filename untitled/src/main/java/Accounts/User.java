@@ -1,6 +1,7 @@
 package Accounts;
 
 import Categories.Product;
+import Categories.Vehicles.Car;
 import Shopping.Order;
 import Shopping.ShoppingCart;
 import Shopping.WalletReq;
@@ -38,6 +39,31 @@ public class User extends Account {
     }
 
     //Getters and Setters
+
+
+    public void setCurrentCart(ShoppingCart currentCart) {
+        this.currentCart = currentCart;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setWallet(double wallet) {
+        this.wallet = wallet;
+    }
 
     public String getUsername() {
         return username;
@@ -139,8 +165,8 @@ public class User extends Account {
         if (this.carts.size() == 0) {
             System.out.println("No cart has been created yet!\n");
         } else {
-            for (UUID id : this.carts.keySet()) {
-                System.out.println(this.carts.get(id));
+            for (ShoppingCart cart : this.carts.values()){
+                System.out.println(cart);
             }
         }
     }
@@ -153,8 +179,14 @@ public class User extends Account {
         }
     }
 
-    public void addCart(ShoppingCart cart) {
-        this.carts.put(cart.getId(), cart);
+    public void addCart(String name) {
+        ShoppingCart shoppingCart = new ShoppingCart(name);
+        this.carts.put(shoppingCart.getId(), shoppingCart);
+        System.out.println("Cart has been successfully added!\n");
+    }
+
+    public boolean hasSelectedCart(){
+        return this.currentCart != null;
     }
 
     //Order - Related Methods
@@ -210,8 +242,12 @@ public class User extends Account {
 
     //Wallet - Related Methods
 
-    public void submitAWalletRequest(WalletReq walletRequest) {
-        this.walletRequests.put(walletRequest.getId(), walletRequest);
+    public void viewWallet(){
+        System.out.println("Current wallet: " + this.getWallet() + "\n");
+    }
+
+    public void submitAWalletRequest(WalletReq walletReq) {
+        this.walletRequests.put(walletReq.getId(), walletReq);
         System.out.println("Wallet request has been successfully sent!\n");
     }
 
@@ -258,22 +294,22 @@ public class User extends Account {
     //User - Related Methods
 
     public void updatePassword(String newPassword) {
-        this.password = newPassword;
+        this.setPassword(newPassword);
         System.out.println("Password has been successfully edited!\n");
     }
 
     public void updateEmail(String newEmail) {
-        this.email = newEmail;
+        this.setEmail(newEmail);
         System.out.println("Email has been successfully edited!\n");
     }
 
     public void updatePhoneNumber(String newPhoneNumber) {
-        this.phoneNumber = newPhoneNumber;
+        this.setPhoneNumber(phoneNumber);
         System.out.println("Phone Number has been successfully edited!\n");
     }
 
     public void updateAddress(String newAddress) {
-        this.address = newAddress;
+        this.setAddress(newAddress);
         System.out.println("Address has been successfully edited!\n");
     }
 

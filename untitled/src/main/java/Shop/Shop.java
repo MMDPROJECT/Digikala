@@ -387,8 +387,8 @@ public class Shop {
         for (Account account : accounts.values()) {
             if (account instanceof User) {
                 if (account.accountLogin(username, password)) {
+                    setCurrentAccount(account);
                     System.out.println("User has been successfully logged in!\n");
-                    this.currentAccount = account;
                     return true;
                 } else {
                     System.out.println("Username or password is wrong!\n");
@@ -399,8 +399,8 @@ public class Shop {
     }
 
     public void userSignUp(String username, String password, String email, String phoneNumber, String address) {
-        if (doesAccountExist(username)) {
-            System.out.println("This user has already exist!\n");
+        if (this.doesAccountExist(username)) {
+            System.out.println("This user already exist!\n");
         } else {
             User newUser = new User(username, password, email, phoneNumber, address);
             accounts.put(newUser.getId(), newUser);
@@ -426,18 +426,17 @@ public class Shop {
     }
 
     public void submitAWalletRequest(double value) {
-        WalletReq newWalletReq = new WalletReq(value, (User) this.currentAccount);
-        if (this.getCurrentAccount() instanceof User) {
-            ((User) this.getCurrentAccount()).submitAWalletRequest(newWalletReq);
-            this.walletRequests.put(newWalletReq.getId(), newWalletReq);
-        }
+        WalletReq newWalletReq = new WalletReq(value, ((User) this.getCurrentAccount()));
+        ((User) this.getCurrentAccount()).submitAWalletRequest(newWalletReq);
+        this.walletRequests.put(newWalletReq.getId(), newWalletReq);
+        System.out.println("Wallet request has been successfully submitted!\n");
     }
 
     //Seller - Related Methods
 
     public void sellerSignUp(String companyName, String password) {
-        if (doesAccountExist(companyName)) {
-            System.out.println("This Seller has already exist!\n");
+        if (this.doesAccountExist(companyName)) {
+            System.out.println("This Seller already exist!\n");
         } else {
             Seller newSeller = new Seller(companyName, password);
             this.accounts.put(newSeller.getId(), newSeller);
@@ -465,9 +464,7 @@ public class Shop {
 
     public void addProduct(Product product) {
         this.products.put(product.getId(), product);
-        if (this.getCurrentAccount() instanceof Seller) {
-            ((Seller) this.getCurrentAccount()).addProduct(product);
-        }
+        ((Seller) this.getCurrentAccount()).addProduct(product);
     }
 
     public void removeProduct(UUID id) {
@@ -511,11 +508,13 @@ public class Shop {
     }
 
     public void checkoutCart(UUID cartID) {
-        if (doesCartExist(cartID)) {
-            if (!((User) this.getCurrentAccount()).getCart(cartID).isCheckout()) {
+        if (this.doesCartExist(cartID)) {
+            if (!((User) this.getCurrentAccount()).getCart(cartID).hasCheckout()) {
                 Order order = ((User) this.getCurrentAccount()).checkoutCart(cartID);
                 this.orders.put(order.getId(), order);
                 System.out.println("Order has been successfully submitted!\n");
+            } else {
+                System.out.println("Cart has been checkedout earlier!\n");
             }
         } else {
             System.out.println("Cart has not been found!\n");

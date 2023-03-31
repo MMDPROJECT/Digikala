@@ -12,7 +12,7 @@ public class ShoppingCart {
     private final UUID id;
     private final String name;
     private double totalPrice;
-    private boolean isCheckout;
+    private boolean hasCheckout;
 
     //Constructor
 
@@ -22,7 +22,7 @@ public class ShoppingCart {
         this.itemNumber = itemNumber;
         this.totalPrice = totalPrice;
         this.id = UUID.randomUUID();
-        this.isCheckout = false;
+        this.hasCheckout = false;
     }
 
     public ShoppingCart(String name) {
@@ -54,8 +54,8 @@ public class ShoppingCart {
         return this.name;
     }
 
-    public boolean isCheckout() {
-        return isCheckout;
+    public boolean hasCheckout() {
+        return this.hasCheckout;
     }
 
     //Cart - Related Methods
@@ -147,12 +147,12 @@ public class ShoppingCart {
                 ", Cart ID=" + id +
                 ", name='" + name + '\'' +
                 ", totalPrice=" + totalPrice +
-                ", isCheckout=" + isCheckout +
+                ", isCheckout=" + hasCheckout +
                 '}';
     }
 
     public void checkoutCart() {
-        this.isCheckout = true;
+        this.hasCheckout = true;
     }
 
     //Override
