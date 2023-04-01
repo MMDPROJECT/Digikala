@@ -1,7 +1,8 @@
 package Categories.Vehicles;
 
-import Accounts.Seller;
 import Categories.Product;
+
+import java.util.UUID;
 
 public class Vehicles extends Product {
     private final double weight;
@@ -15,8 +16,8 @@ public class Vehicles extends Product {
 
     //Constructor
 
-    public Vehicles(String name, String color, int quantity, double price, Seller seller, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model) {
-        super(name, color, quantity, price, seller);
+    public Vehicles(String name, String color, int quantity, double price, UUID sellerID, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model) {
+        super(name, color, quantity, price, sellerID);
         this.weight = weight;
         this.horsePower = horsePower;
         this.engineModel = engineModel;

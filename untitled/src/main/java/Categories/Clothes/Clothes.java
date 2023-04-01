@@ -1,11 +1,12 @@
 package Categories.Clothes;
 
-import Accounts.Seller;
 import Categories.Clothes.Enums.ClothDurability;
 import Categories.Clothes.Enums.ClothGender;
 import Categories.Clothes.Enums.ClothMaterial;
 import Categories.Clothes.Enums.ClothSize;
 import Categories.Product;
+
+import java.util.UUID;
 
 public abstract class Clothes extends Product {
 
@@ -17,15 +18,16 @@ public abstract class Clothes extends Product {
 
     //Constructor
 
-    public Clothes(String name, String color, int quantity, double price, Seller seller, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability) {
-        super(name, color, quantity, price, seller);
+    public Clothes(String name, String color, int quantity, double price, UUID sellerID, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability) {
+        super(name, color, quantity, price, sellerID);
         this.size = size;
         this.gender = gender;
         this.material = material;
         this.brand = brand;
         this.durability = durability;
     }
-//Getter and Setters
+
+    //Getter and Setters
 
     public ClothGender getGender() {
         return gender;
@@ -43,6 +45,9 @@ public abstract class Clothes extends Product {
         return durability;
     }
 
+    public ClothSize getSize() {
+        return size;
+    }
     //Overrides
 
     @Override

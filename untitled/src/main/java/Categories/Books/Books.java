@@ -1,7 +1,8 @@
 package Categories.Books;
 
-import Accounts.Seller;
 import Categories.Product;
+
+import java.util.UUID;
 
 public abstract class Books extends Product {
     private final String ISBN;
@@ -11,8 +12,8 @@ public abstract class Books extends Product {
 
     //Constructor
 
-    public Books(String name, String color, int quantity, double price, Seller seller, String ISBN, int pageNumbers, String author, String language) {
-        super(name, color, quantity, price, seller);
+    public Books(String name, String color, int quantity, double price, UUID sellerID, String ISBN, int pageNumbers, String author, String language) {
+        super(name, color, quantity, price, sellerID);
         this.ISBN = ISBN;
         this.pageNumbers = pageNumbers;
         this.author = author;

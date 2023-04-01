@@ -1,9 +1,9 @@
 package Categories.SuperMarket;
 
-import Accounts.Seller;
 import Categories.SuperMarket.Enums.ProteinProductType;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Proteins extends SuperMarket {
     private final String brand;
@@ -12,8 +12,8 @@ public class Proteins extends SuperMarket {
 
     //Constructor
 
-    public Proteins(String name, String color, int quantity, double price, Seller seller, boolean hasBox, double weight, double salt, double calories, double fat, double sugar, ArrayList<String> ingredientItems, String countryOfOrigin, String brand, double protein, ProteinProductType productType) {
-        super(name, color, quantity, price, seller, hasBox, weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin);
+    public Proteins(String name, String color, int quantity, double price, UUID sellerID, boolean hasBox, double weight, double salt, double calories, double fat, double sugar, ArrayList<String> ingredientItems, String countryOfOrigin, String brand, double protein, ProteinProductType productType) {
+        super(name, color, quantity, price, sellerID, hasBox, weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin);
         this.brand = brand;
         this.protein = protein;
         this.productType = productType;

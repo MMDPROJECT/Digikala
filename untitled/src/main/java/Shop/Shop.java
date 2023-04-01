@@ -265,7 +265,7 @@ public class Shop {
                 getOrder(id).orderConfirm();
                 getOrder(id).getBuyer().buyerPayOff(getOrder(id).calcBuyerPayOff());
                 addShopCut(getOrder(id).calcShopCut());
-                getOrder(id).calcSellerCut();
+                calcSellerCut(id);
                 getOrder(id).updateStocks();
                 getOrder(id).updateUserPurchasedProducts();
             } else {
@@ -531,6 +531,13 @@ public class Shop {
 
     public boolean doesOrderExist(UUID id) {
         return this.orders.containsKey(id);
+    }
+
+    public void calcSellerCut(UUID orderID) {
+        for (Product product : getOrder(orderID).getProducts()) {
+            ((Seller) this.accounts.get(product.getSellerId())).addSellerCut(0.9 * product.getPrice() * getOrder(orderID).getItemNumber().get(orderID));
+        }
+        System.out.println("Sellers cut has been deposited!\n");
     }
 
     //Product - Related Methods

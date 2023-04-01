@@ -1,7 +1,8 @@
 package Categories.Home;
 
-import Accounts.Seller;
 import Categories.Product;
+
+import java.util.UUID;
 
 public class Home extends Product {
     private final boolean hasController;
@@ -11,8 +12,8 @@ public class Home extends Product {
 
     //Constructor
 
-    public Home(String name, String color, int quantity, double price, Seller seller, boolean hasController, double height, double width, double weight) {
-        super(name, color, quantity, price, seller);
+    public Home(String name, String color, int quantity, double price, UUID sellerID, boolean hasController, double height, double width, double weight) {
+        super(name, color, quantity, price, sellerID);
         this.hasController = hasController;
         this.height = height;
         this.width = width;

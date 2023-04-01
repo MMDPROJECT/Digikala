@@ -1,8 +1,9 @@
 package Categories.Beauty;
 
-import Accounts.Seller;
 import Categories.Beauty.Enums.MatterState;
 import Categories.Product;
+
+import java.util.UUID;
 
 public class Beauty extends Product {
     private final MatterState materialState;
@@ -10,8 +11,8 @@ public class Beauty extends Product {
 
     //Constructor
 
-    public Beauty(String name, String color, int quantity, double price, Seller seller, MatterState materialState, boolean hasBox) {
-        super(name, color, quantity, price, seller);
+    public Beauty(String name, String color, int quantity, double price, UUID sellerID, MatterState materialState, boolean hasBox) {
+        super(name, color, quantity, price, sellerID);
         this.materialState = materialState;
         this.hasBox = hasBox;
     }

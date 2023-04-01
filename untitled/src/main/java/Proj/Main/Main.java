@@ -6,6 +6,7 @@ import Accounts.User;
 import Categories.Beauty.Enums.MatterState;
 import Categories.Beauty.Enums.PenType;
 import Categories.Beauty.EyeBrowMakeUp;
+import Categories.Beauty.EyeMakeUp;
 import Categories.Books.Children_Book;
 import Categories.Books.Fiction_Book;
 import Categories.Books.Poetry_Book;
@@ -64,7 +65,7 @@ public class Main {
         Admin admin1 = new Admin("MMDPROJECT", "1382", "Bushehr, Borazjan");
         Seller seller = new Seller("Apple", "1900");
         User user1 = new User("Hossein", "1381", "hossein.com", "09170861077", "Bushehr");
-        Product product = new Ball("Nike Premier League Academy Ball 2023", "white and red-blue combined", 2, 100.5, seller, 0.5, "Ball", "Nike", BallSize.ADULT, BallMaterial.PU, true);
+        Product product = new Ball("Nike Premier League Academy Ball 2023", "white and red-blue combined", 2, 100.5, seller.getId(), 0.5, "Ball", "Nike", BallSize.ADULT, BallMaterial.PU, true);
         shop.sellerSignUp(seller);
         shop.adminSignUp(admin1);
         shop.userSignUp(user1);
@@ -711,7 +712,7 @@ public class Main {
                                         Enter :
                                         5- Material State
                                         \t-Solid, Powder, Liquid
-                                        6- Does it has box?
+                                        6- Does it have box?
                                         \t-true, false
                                         """);
                                 String matterState = input.nextLine();
@@ -722,7 +723,7 @@ public class Main {
                                                 Enter :
                                                 7- Type of Pen
                                                 \t- Eyeliner, Mascara, Eyeshadow
-                                                8- Does it has Water Resistance?
+                                                8- Does it have Water Resistance?
                                                 \t- true, false
                                                 9- Brand
                                                 10-Longevity(per hour)
@@ -732,14 +733,16 @@ public class Main {
                                         String brand = input.nextLine();
                                         int longevity = input.nextInt();
                                         input.nextLine();
-                                        EyeBrowMakeUp eyeBrowMakeUp = new EyeBrowMakeUp(name, color, quantity, price, (Seller) shop.getCurrentAccount(), MatterState.valueOf(matterState.toUpperCase()), Boolean.parseBoolean(hasBox), PenType.valueOf(penType.toUpperCase()), Boolean.parseBoolean(hasWaterResistance), brand, longevity);
+                                        EyeBrowMakeUp eyeBrowMakeUp = new EyeBrowMakeUp(name, color, quantity, price, shop.getCurrentAccount().getId(), MatterState.valueOf(matterState.toUpperCase()), Boolean.parseBoolean(hasBox), PenType.valueOf(penType.toUpperCase()), Boolean.parseBoolean(hasWaterResistance), brand, longevity);
                                         shop.addProduct(eyeBrowMakeUp);
+                                        EyeBrowMakeUp.insert(eyeBrowMakeUp.getId(), eyeBrowMakeUp.getName(), eyeBrowMakeUp.getColor(), eyeBrowMakeUp.getPrice(), eyeBrowMakeUp.getSellerId(), eyeBrowMakeUp.getQuantity(), eyeBrowMakeUp.getComments(), eyeBrowMakeUp.getMaterialState(), eyeBrowMakeUp.isHasBox(), eyeBrowMakeUp.getPenType(), eyeBrowMakeUp.isHasWaterResistance(), eyeBrowMakeUp.getBrand(), eyeBrowMakeUp.getLongevity());
                                     }
                                     case 2 -> {
                                         System.out.println("""
                                                 Enter :
                                                 7- Type of Pen
-                                                8- Does it has Water Resistance?
+                                                \t- Eyeliner, Mascara, Eyeshadow
+                                                8- Does it have Water Resistance?
                                                 \t- true, false
                                                 9- Brand
                                                 10- longevity
@@ -749,8 +752,9 @@ public class Main {
                                         String brand = input.nextLine();
                                         int longevity = input.nextInt();
                                         input.nextLine();
-                                        EyeBrowMakeUp eyeMakeUp = new EyeBrowMakeUp(name, color, quantity, price, (Seller) shop.getCurrentAccount(), MatterState.valueOf(matterState.toUpperCase()), Boolean.parseBoolean(hasBox), PenType.valueOf(penType.toUpperCase()), Boolean.parseBoolean(hasWaterResistance), brand, longevity);
+                                        EyeBrowMakeUp eyeMakeUp = new EyeBrowMakeUp(name, color, quantity, price, shop.getCurrentAccount().getId(), MatterState.valueOf(matterState.toUpperCase()), Boolean.parseBoolean(hasBox), PenType.valueOf(penType.toUpperCase()), Boolean.parseBoolean(hasWaterResistance), brand, longevity);
                                         shop.addProduct(eyeMakeUp);
+                                        EyeMakeUp.insert(eyeMakeUp.getId(), eyeMakeUp.getName(), eyeMakeUp.getColor(), eyeMakeUp.getPrice(), eyeMakeUp.getSellerId(), eyeMakeUp.getQuantity(), eyeMakeUp.getComments(), eyeMakeUp.getMaterialState(), eyeMakeUp.isHasBox(), eyeMakeUp.getPenType(), eyeMakeUp.isHasWaterResistance(), eyeMakeUp.getBrand(), eyeMakeUp.getLongevity());
                                     }
                                 }
                             }
@@ -793,8 +797,9 @@ public class Main {
                                                 break;
                                             }
                                         }
-                                        Fiction_Book fiction_book = new Fiction_Book(name, color, quantity, price, (Seller) shop.getCurrentAccount(), ISBN, pageNumber, author, language, characters, tone);
+                                        Fiction_Book fiction_book = new Fiction_Book(name, color, quantity, price, shop.getCurrentAccount().getId(), ISBN, pageNumber, author, language, characters, tone);
                                         shop.addProduct(fiction_book);
+                                        Fiction_Book.insert(fiction_book.getId(), fiction_book.getName(), fiction_book.getColor(), fiction_book.getPrice(), fiction_book.getSellerId(), fiction_book.getQuantity(), fiction_book.getComments(), fiction_book.getISBN(), fiction_book.getPageNumbers(), fiction_book.getAuthor(), fiction_book.getLanguage(), fiction_book.getTone(), fiction_book.getCharacters());
                                     }
                                     case 2 -> {
                                         System.out.println("""
@@ -803,8 +808,9 @@ public class Main {
                                                 """);
                                         String readingLevel = input.nextLine();
                                         String theme = input.nextLine();
-                                        Children_Book children_book = new Children_Book(name, color, quantity, price, (Seller) shop.getCurrentAccount(), ISBN, pageNumber, author, language, readingLevel, theme);
+                                        Children_Book children_book = new Children_Book(name, color, quantity, price, shop.getCurrentAccount().getId(), ISBN, pageNumber, author, language, readingLevel, theme);
                                         shop.addProduct(children_book);
+                                        Children_Book.insert(children_book.getId(), children_book.getName(), children_book.getColor(), children_book.getPrice(), children_book.getSellerId(), children_book.getQuantity(), children_book.getComments(), children_book.getISBN(), children_book.getPageNumbers(), children_book.getAuthor(), children_book.getLanguage(), children_book.getReadingLevel(), children_book.getTheme());
                                     }
                                     case 3 -> {
                                         System.out.println("""
@@ -814,8 +820,9 @@ public class Main {
                                         String poeticForm = input.nextLine();
                                         int verseNumber = input.nextInt();
                                         input.nextLine();
-                                        Poetry_Book poetry_book = new Poetry_Book(name, color, quantity, price, (Seller) shop.getCurrentAccount(), ISBN, pageNumber, author, language, poeticForm, verseNumber);
+                                        Poetry_Book poetry_book = new Poetry_Book(name, color, quantity, price, shop.getCurrentAccount().getId(), ISBN, pageNumber, author, language, poeticForm, verseNumber);
                                         shop.addProduct(poetry_book);
+                                        Poetry_Book.insert(poetry_book.getId(), poetry_book.getName(), poetry_book.getColor(), poetry_book.getPrice(), poetry_book.getSellerId(), poetry_book.getQuantity(), poetry_book.getComments(), poetry_book.getISBN(), poetry_book.getPageNumbers(), poetry_book.getAuthor(), poetry_book.getLanguage(), poetry_book.getPoeticForm(), poetry_book.getVersesNumber());
                                     }
                                 }
                             }
@@ -852,21 +859,22 @@ public class Main {
                                         System.out.println("""
                                                 Enter :
                                                 10- Button Number
-                                                11- Does it has Cap?
+                                                11- Does it have Cap?
                                                 \t- true, false
                                                 """);
                                         int buttonNumber = input.nextInt();
                                         input.nextLine();
                                         String hasCap = input.nextLine();
-                                        Coat coat = new Coat(name, color, quantity, price, (Seller) shop.getCurrentAccount(), ClothSize.valueOf(size.toUpperCase()), ClothGender.valueOf(clothGender.toUpperCase()), ClothMaterial.valueOf(clothMaterial.toUpperCase()), brand, ClothDurability.valueOf(durability.toUpperCase()), buttonNumber, Boolean.parseBoolean(hasCap));
+                                        Coat coat = new Coat(name, color, quantity, price, shop.getCurrentAccount().getId(), ClothSize.valueOf(size.toUpperCase()), ClothGender.valueOf(clothGender.toUpperCase()), ClothMaterial.valueOf(clothMaterial.toUpperCase()), brand, ClothDurability.valueOf(durability.toUpperCase()), buttonNumber, Boolean.parseBoolean(hasCap));
                                         shop.addProduct(coat);
+                                        Coat.insert(coat.getId(), coat.getName(), coat.getColor(), coat.getPrice(), coat.getSellerId(), coat.getQuantity(), coat.getComments(), coat.getSize(), coat.getGender(), coat.getMaterial(), coat.getBrand(), coat.getDurability(), coat.getButtonNumber(), coat.isHasCap());
                                     }
                                     case 2 -> {
                                         System.out.println("""
                                                 Enter :
                                                 10- Height (per meter)
                                                 11- Pocket Number
-                                                12- Does it has Zipper?
+                                                12- Does it have Zipper?
                                                 \t- true, false
                                                 """);
                                         double height = input.nextDouble();
@@ -874,8 +882,9 @@ public class Main {
                                         int pocketNumber = input.nextInt();
                                         input.nextLine();
                                         String hasZipper = input.nextLine();
-                                        Jean jean = new Jean(name, color, quantity, price, (Seller) shop.getCurrentAccount(), ClothSize.valueOf(size.toUpperCase()), ClothGender.valueOf(clothGender.toUpperCase()), ClothMaterial.valueOf(clothMaterial.toUpperCase()), brand, ClothDurability.valueOf(durability.toUpperCase()), height, pocketNumber, Boolean.parseBoolean(hasZipper));
+                                        Jean jean = new Jean(name, color, quantity, price, shop.getCurrentAccount().getId(), ClothSize.valueOf(size.toUpperCase()), ClothGender.valueOf(clothGender.toUpperCase()), ClothMaterial.valueOf(clothMaterial.toUpperCase()), brand, ClothDurability.valueOf(durability.toUpperCase()), height, pocketNumber, Boolean.parseBoolean(hasZipper));
                                         shop.addProduct(jean);
+                                        Jean.insert(jean.getId(), jean.getName(), jean.getColor(), jean.getPrice(), jean.getSellerId(), jean.getQuantity(), jean.getComments(), jean.getSize(), jean.getGender(), jean.getMaterial(), jean.getBrand(), jean.getDurability(), jean.getHeight(), jean.getPocketNumber(), jean.isHasZipper());
                                     }
                                     case 3 -> {
                                         System.out.println("""
@@ -886,8 +895,9 @@ public class Main {
                                         int buttonNumber = input.nextInt();
                                         input.nextLine();
                                         String design = input.nextLine();
-                                        Sweater sweater = new Sweater(name, color, quantity, price, (Seller) shop.getCurrentAccount(), ClothSize.valueOf(size.toUpperCase()), ClothGender.valueOf(clothGender.toUpperCase()), ClothMaterial.valueOf(clothMaterial.toUpperCase()), brand, ClothDurability.valueOf(durability.toUpperCase()), buttonNumber, design);
+                                        Sweater sweater = new Sweater(name, color, quantity, price, shop.getCurrentAccount().getId(), ClothSize.valueOf(size.toUpperCase()), ClothGender.valueOf(clothGender.toUpperCase()), ClothMaterial.valueOf(clothMaterial.toUpperCase()), brand, ClothDurability.valueOf(durability.toUpperCase()), buttonNumber, design);
                                         shop.addProduct(sweater);
+                                        Sweater.insert(sweater.getId(), sweater.getName(), sweater.getColor(), sweater.getPrice(), sweater.getSellerId(), sweater.getQuantity(), sweater.getComments(), sweater.getSize(), sweater.getGender(), sweater.getMaterial(), sweater.getBrand(), sweater.getDurability(), sweater.getButtonNumber(), sweater.getDesign());
                                     }
                                 }
                             }
@@ -923,9 +933,9 @@ public class Main {
                                                 11- CPU
                                                 12- GPU
                                                 13- Fan Number
-                                                14- Does it has Keyboard Light?
+                                                14- Does it have Keyboard Light?
                                                 \t- true, false
-                                                15- Does it has Finger Print Recognition System?
+                                                15- Does it have Finger Print Recognition System?
                                                 \t- true, false
                                                 16- Keyboard Language
                                                 17- Port Number
@@ -940,8 +950,9 @@ public class Main {
                                         String keyboardLanguage = input.nextLine();
                                         int portNumber = input.nextInt();
                                         input.nextLine();
-                                        Laptop laptop = new Laptop(name, color, quantity, price, (Seller) shop.getCurrentAccount(), brand, model, OS, screenSize, batteryCapacity, webcamModel, CPU, GPU, fanNumber, Boolean.parseBoolean(hasKeyboardLight), Boolean.parseBoolean(hasFingerPrint), keyboardLanguage, portNumber);
+                                        Laptop laptop = new Laptop(name, color, quantity, price, shop.getCurrentAccount().getId(), brand, model, OS, screenSize, batteryCapacity, webcamModel, CPU, GPU, fanNumber, Boolean.parseBoolean(hasKeyboardLight), Boolean.parseBoolean(hasFingerPrint), keyboardLanguage, portNumber);
                                         shop.addProduct(laptop);
+                                        Laptop.insert(laptop.getId(), laptop.getName(), laptop.getColor(), laptop.getPrice(), laptop.getSellerId(), laptop.getQuantity(), laptop.getComments(), laptop.getBrand(), laptop.getWebcamModel(), laptop.getOS(), laptop.getScreenSize(), laptop.getBatteryCapacity(), laptop.getWebcamModel(), laptop.getCPU(), laptop.getGPU(), laptop.getFanNumber(), laptop.isHasKeyboardLight(), laptop.isHasFingerPrint(), laptop.getKeyboardLanguage(), laptop.getPortNumber());
                                     }
                                     case 2 -> {
                                         System.out.println("""
@@ -968,26 +979,28 @@ public class Main {
                                         String displayResolution = input.nextLine();
                                         String ringTone = input.nextLine();
                                         String CPU = input.nextLine();
-                                        SmartPhone smartPhone = new SmartPhone(name, color, quantity, price, (Seller) shop.getCurrentAccount(), brand, model, OS, screenSize, batteryCapacity, rearCameraQuality, selfieCameraQuality, cameraNumber, storage, OSVersion, displayResolution, ringTone, CPU);
+                                        SmartPhone smartPhone = new SmartPhone(name, color, quantity, price, shop.getCurrentAccount().getId(), brand, model, OS, screenSize, batteryCapacity, rearCameraQuality, selfieCameraQuality, cameraNumber, storage, OSVersion, displayResolution, ringTone, CPU);
                                         shop.addProduct(smartPhone);
+                                        SmartPhone.insert(smartPhone.getId(), smartPhone.getName(), smartPhone.getColor(), smartPhone.getPrice(), smartPhone.getSellerId(), smartPhone.getQuantity(), smartPhone.getComments(), smartPhone.getBrand(), smartPhone.getModel(), smartPhone.getOS(), smartPhone.getScreenSize(), smartPhone.getBatteryCapacity(), smartPhone.getRearCameraQuality(), smartPhone.getSelfieCameraQuality(), smartPhone.getCameraNumber(), smartPhone.getStorage(), smartPhone.getOSVersion(), smartPhone.getDisplayResolution(), smartPhone.getRingTone(), smartPhone.getCPU());
                                     }
                                     case 3 -> {
                                         System.out.println("""
                                                 Enter :
                                                 1- Processor
-                                                2- Does it has Heart Rate Tracker?
+                                                2- Does it have Heart Rate Tracker?
                                                 \t- true, false
-                                                3- Does it has Step Tracker?
+                                                3- Does it have Step Tracker?
                                                 \t- true, false
-                                                4- Does it has Caloric Tracker?
+                                                4- Does it have Caloric Tracker?
                                                 \t- true, false
                                                 """);
                                         String processor = input.nextLine();
                                         String hasHeartRateTracker = input.nextLine();
                                         String hasStepTracker = input.nextLine();
                                         String hasCaloricTracker = input.nextLine();
-                                        SmartWatch smartWatch = new SmartWatch(name, color, quantity, price, (Seller) shop.getCurrentAccount(), brand, model, OS, screenSize, batteryCapacity, processor, Boolean.parseBoolean(hasHeartRateTracker), Boolean.parseBoolean(hasStepTracker), Boolean.parseBoolean(hasCaloricTracker));
+                                        SmartWatch smartWatch = new SmartWatch(name, color, quantity, price, shop.getCurrentAccount().getId(), brand, model, OS, screenSize, batteryCapacity, processor, Boolean.parseBoolean(hasHeartRateTracker), Boolean.parseBoolean(hasStepTracker), Boolean.parseBoolean(hasCaloricTracker));
                                         shop.addProduct(smartWatch);
+                                        SmartWatch.insert(smartWatch.getId(), smartWatch.getName(), smartWatch.getColor(), smartWatch.getPrice(), smartWatch.getSellerId(), smartWatch.getQuantity(), smartWatch.getComments(), smartWatch.getBrand(), smartWatch.getModel(), smartWatch.getOS(), smartWatch.getScreenSize(), smartWatch.getBatteryCapacity(), smartWatch.isHasHeartRateTracker(), smartWatch.isHasStepTracker(), smartWatch.isHasCaloricTracker());
                                     }
                                 }
                             }
@@ -1003,7 +1016,7 @@ public class Main {
 
                                 System.out.println("""
                                         Enter :
-                                        5- Does it has Controller?
+                                        5- Does it have Controller?
                                         \t- true, false
                                         6- Height
                                         7- Width
@@ -1024,9 +1037,9 @@ public class Main {
                                                 10- Energy Efficiency
                                                 11- Air Filterer
                                                 12- Fan Number
-                                                13- Does it has Remote Control?
+                                                13- Does it have Remote Control?
                                                 \t- true, false
-                                                14- Does it has Timer?
+                                                14- Does it have Timer?
                                                 \t- true, false
                                                 """);
                                         double coolingCapacity = input.nextDouble();
@@ -1038,18 +1051,19 @@ public class Main {
                                         input.nextLine();
                                         String hasRemoteControl = input.nextLine();
                                         String hasTimer = input.nextLine();
-                                        AirConditioner airConditioner = new AirConditioner(name, color, quantity, price, (Seller) shop.getCurrentAccount(), Boolean.parseBoolean(hasController), height, width, weight, coolingCapacity, energyEfficiency, airFilter, fanNumber, Boolean.parseBoolean(hasRemoteControl), Boolean.parseBoolean(hasTimer));
+                                        AirConditioner airConditioner = new AirConditioner(name, color, quantity, price, shop.getCurrentAccount().getId(), Boolean.parseBoolean(hasController), height, width, weight, coolingCapacity, energyEfficiency, airFilter, fanNumber, Boolean.parseBoolean(hasRemoteControl), Boolean.parseBoolean(hasTimer));
                                         shop.addProduct(airConditioner);
+                                        AirConditioner.insert(airConditioner.getId(), airConditioner.getName(), airConditioner.getColor(), airConditioner.getPrice(), airConditioner.getSellerId(), airConditioner.getQuantity(), airConditioner.getComments(), airConditioner.isHasController(), airConditioner.getHeight(), airConditioner.getWidth(), airConditioner.getWeight(), airConditioner.getCoolingCapacity(), airConditioner.getEnergyEfficiency(), airConditioner.getAirFilter(), airConditioner.getFanNumber(), airConditioner.isHasRemoteControl(), airConditioner.isHasTimer());
                                     }
                                     case 2 -> {
                                         System.out.println("""
                                                 Enter :
                                                 9- Floor Number
-                                                10- Does it has Fridge?
+                                                10- Does it have Fridge?
                                                 \t- true, false
                                                 11- Refrigerator Type
                                                 \t- Side By Side, French Door, Compact, Wine
-                                                12- Does it has Digital Controlling System?
+                                                12- Does it have Digital Controlling System?
                                                 \t- true, false
                                                 """);
                                         int floorNumber = input.nextInt();
@@ -1057,8 +1071,9 @@ public class Main {
                                         String hasFridge = input.nextLine();
                                         String Refrigerator_type = input.nextLine();
                                         String hasDigitalController = input.nextLine();
-                                        Refrigerator refrigerator = new Refrigerator(name, color, quantity, price, (Seller) shop.getCurrentAccount(), Boolean.parseBoolean(hasController), height, width, height, floorNumber, Boolean.parseBoolean(hasFridge), RefrigeratorType.valueOf(Refrigerator_type.toUpperCase()), Boolean.parseBoolean(hasDigitalController));
+                                        Refrigerator refrigerator = new Refrigerator(name, color, quantity, price, shop.getCurrentAccount().getId(), Boolean.parseBoolean(hasController), height, width, height, floorNumber, Boolean.parseBoolean(hasFridge), RefrigeratorType.valueOf(Refrigerator_type.toUpperCase()), Boolean.parseBoolean(hasDigitalController));
                                         shop.addProduct(refrigerator);
+                                        Refrigerator.insert(refrigerator.getId(), refrigerator.getName(), refrigerator.getColor(), refrigerator.getPrice(), refrigerator.getSellerId(), refrigerator.getQuantity(), refrigerator.getComments(), refrigerator.isHasController(), refrigerator.getHeight(), refrigerator.getWidth(), refrigerator.getWeight(), refrigerator.getFloorNumber(), refrigerator.isHasFridge(), refrigerator.getRefrigeratorType(), refrigerator.isHasDigitalControllingSystem());
                                     }
                                     case 3 -> {
                                         System.out.println("""
@@ -1066,9 +1081,9 @@ public class Main {
                                                 9- Refresh Rate
                                                 10- Is Mountable on the Wall?
                                                 \t- true, false
-                                                11- Does it has 3D Feature?
+                                                11- Does it have 3D Feature?
                                                 \t- true, false
-                                                12- Does it has Stand?
+                                                12- Does it have Stand?
                                                 \t- true, false
                                                 """);
                                         int refreshRate = input.nextInt();
@@ -1076,8 +1091,9 @@ public class Main {
                                         String mountableOnWall = input.nextLine();
                                         String has3D = input.nextLine();
                                         String hasStand = input.nextLine();
-                                        TV tv = new TV(name, color, quantity, price, (Seller) shop.getCurrentAccount(), Boolean.parseBoolean(hasController), height, width, weight, refreshRate, Boolean.parseBoolean(mountableOnWall), Boolean.parseBoolean(has3D), Boolean.parseBoolean(hasStand));
+                                        TV tv = new TV(name, color, quantity, price, shop.getCurrentAccount().getId(), Boolean.parseBoolean(hasController), height, width, weight, refreshRate, Boolean.parseBoolean(mountableOnWall), Boolean.parseBoolean(has3D), Boolean.parseBoolean(hasStand));
                                         shop.addProduct(tv);
+                                        TV.insert(tv.getId(), tv.getName(), tv.getColor(), tv.getPrice(), tv.getSellerId(), tv.getQuantity(), tv.getComments(), tv.isHasController(), tv.getHeight(), tv.getWidth(), tv.getWeight(), tv.getRefreshRate(), tv.isMountableOnWall(), tv.isHas3D(), tv.isHasStand());
                                     }
                                 }
                             }
@@ -1115,8 +1131,9 @@ public class Main {
                                         String ball_size = input.nextLine();
                                         String ball_material = input.nextLine();
                                         String isRightHandOriented = input.nextLine();
-                                        Ball ball = new Ball(name, color, quantity, price, (Seller) shop.getCurrentAccount(), weight, sportType, brand, BallSize.valueOf(ball_size.toUpperCase()), BallMaterial.valueOf(ball_material.toUpperCase()), Boolean.parseBoolean(isRightHandOriented));
+                                        Ball ball = new Ball(name, color, quantity, price, shop.getCurrentAccount().getId(), weight, sportType, brand, BallSize.valueOf(ball_size.toUpperCase()), BallMaterial.valueOf(ball_material.toUpperCase()), Boolean.parseBoolean(isRightHandOriented));
                                         shop.addProduct(ball);
+                                        Ball.insert(ball.getId(), ball.getName(), ball.getColor(), ball.getPrice(), ball.getSellerId(), ball.getQuantity(), ball.getComments(), ball.getWeight(), ball.getSportType(), ball.getBrand(), ball.getSize(), ball.getMaterial(), ball.isRightHandOriented());
                                     }
                                     case 2 -> {
                                         System.out.println("""
@@ -1134,8 +1151,9 @@ public class Main {
                                         String gloveSize = input.nextLine();
                                         String gloveUser = input.nextLine();
                                         String gloveStyle = input.nextLine();
-                                        Gloves glove = new Gloves(name, color, quantity, price, (Seller) shop.getCurrentAccount(), weight, sportType, brand, GloveMaterial.valueOf(gloveMaterial.toUpperCase()), GloveSize.valueOf(gloveSize.toUpperCase()), GloveUser.valueOf(gloveUser.toUpperCase()), GloveStyle.valueOf(gloveStyle.toUpperCase()));
+                                        Gloves glove = new Gloves(name, color, quantity, price, shop.getCurrentAccount().getId(), weight, sportType, brand, GloveMaterial.valueOf(gloveMaterial.toUpperCase()), GloveSize.valueOf(gloveSize.toUpperCase()), GloveUser.valueOf(gloveUser.toUpperCase()), GloveStyle.valueOf(gloveStyle.toUpperCase()));
                                         shop.addProduct(glove);
+                                        Gloves.insert(glove.getId(), glove.getName(), glove.getColor(), glove.getPrice(), glove.getSellerId(), glove.getQuantity(), glove.getComments(), glove.getWeight(), glove.getSportType(), glove.getBrand(), glove.getMaterial(), glove.getSize(), glove.getSuggestedUser(), glove.getStyle());
                                     }
                                     case 3 -> {
                                         System.out.println("""
@@ -1152,8 +1170,9 @@ public class Main {
                                         input.nextLine();
                                         String racketDurability = input.nextLine();
                                         String shape = input.nextLine();
-                                        Rackets racket = new Rackets(name, color, quantity, price, (Seller) shop.getCurrentAccount(), weight, sportType, brand, length, width, RacketDurability.valueOf(racketDurability.toUpperCase()), shape);
+                                        Rackets racket = new Rackets(name, color, quantity, price, shop.getCurrentAccount().getId(), weight, sportType, brand, length, width, RacketDurability.valueOf(racketDurability.toUpperCase()), shape);
                                         shop.addProduct(racket);
+                                        Rackets.insert(racket.getId(), racket.getName(), racket.getColor(), racket.getPrice(), racket.getSellerId(), racket.getQuantity(), racket.getComments(), racket.getWeight(), racket.getSportType(), racket.getBrand(), racket.getLength(), racket.getWidth(), racket.getDurability(), racket.getShape());
                                     }
                                 }
                             }
@@ -1169,7 +1188,7 @@ public class Main {
 
                                 System.out.println("""
                                         Enter :
-                                        5- Does it has Box?
+                                        5- Does it have Box?
                                         \t true, false
                                         6- Weight
                                         7- Salt
@@ -1211,7 +1230,7 @@ public class Main {
                                                 """);
                                         String isDomestic = input.nextLine();
                                         String dairyGroup = input.nextLine();
-                                        Dairy dairyProduct = new Dairy(name, color, quantity, price, (Seller) shop.getCurrentAccount(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, Boolean.parseBoolean(isDomestic), DairyGroups.valueOf(dairyGroup));
+                                        Dairy dairyProduct = new Dairy(name, color, quantity, price, shop.getCurrentAccount().getId(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, Boolean.parseBoolean(isDomestic), DairyGroups.valueOf(dairyGroup));
                                         shop.addProduct(dairyProduct);
                                     }
                                     case 2 -> {
@@ -1229,7 +1248,7 @@ public class Main {
                                         double litters = input.nextDouble();
                                         input.nextLine();
                                         String size = input.nextLine();
-                                        Drinks drink = new Drinks(name, color, quantity, price, (Seller) shop.getCurrentAccount(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, taste, Boolean.parseBoolean(isSoftDrink), litters, DrinkSize.valueOf(size.toUpperCase()));
+                                        Drinks drink = new Drinks(name, color, quantity, price, shop.getCurrentAccount().getId(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, taste, Boolean.parseBoolean(isSoftDrink), litters, DrinkSize.valueOf(size.toUpperCase()));
                                         shop.addProduct(drink);
                                     }
                                     case 3 -> {
@@ -1244,7 +1263,7 @@ public class Main {
                                         double proteinAmount = input.nextDouble();
                                         input.nextLine();
                                         String productType = input.nextLine();
-                                        Proteins protein = new Proteins(name, color, quantity, price, (Seller) shop.getCurrentAccount(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, brand, proteinAmount, ProteinProductType.valueOf(productType.toUpperCase()));
+                                        Proteins protein = new Proteins(name, color, quantity, price, shop.getCurrentAccount().getId(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, brand, proteinAmount, ProteinProductType.valueOf(productType.toUpperCase()));
                                         shop.addProduct(protein);
                                     }
                                 }
@@ -1262,7 +1281,7 @@ public class Main {
                                 System.out.println("""
                                         Enter :
                                         5- Weight
-                                        6- Does it has Box?
+                                        6- Does it have Box?
                                         \t- true, false
                                         7- Is Silent?
                                         \t- true, false
@@ -1293,7 +1312,7 @@ public class Main {
                                         input.nextLine();
                                         int maxSpinSpeed = input.nextInt();
                                         input.nextLine();
-                                        Drill drill = new Drill(name, color, quantity, price, (Seller) shop.getCurrentAccount(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, voltage, PowerSource.valueOf(powerSource.toUpperCase()), minSpinSpeed, maxSpinSpeed);
+                                        Drill drill = new Drill(name, color, quantity, price, shop.getCurrentAccount().getId(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, voltage, PowerSource.valueOf(powerSource.toUpperCase()), minSpinSpeed, maxSpinSpeed);
                                         shop.addProduct(drill);
                                     }
                                     case 2 -> {
@@ -1309,7 +1328,7 @@ public class Main {
                                         input.nextLine();
                                         String powerSource = input.nextLine();
                                         String usageLevel = input.nextLine();
-                                        SolderingSystem solderingSystem = new SolderingSystem(name, color, quantity, price, (Seller) shop.getCurrentAccount(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, voltage, PowerSource.valueOf(powerSource.toUpperCase()), UsageLevel.valueOf(usageLevel.toUpperCase()));
+                                        SolderingSystem solderingSystem = new SolderingSystem(name, color, quantity, price, shop.getCurrentAccount().getId(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, voltage, PowerSource.valueOf(powerSource.toUpperCase()), UsageLevel.valueOf(usageLevel.toUpperCase()));
                                         shop.addProduct(solderingSystem);
                                     }
                                     case 3 -> {
@@ -1324,7 +1343,7 @@ public class Main {
                                         input.nextLine();
                                         String style = input.nextLine();
                                         String material = input.nextLine();
-                                        Spanner spanner = new Spanner(name, color, quantity, price, (Seller) shop.getCurrentAccount(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, size, style, SpannerMaterial.valueOf(material.toUpperCase()));
+                                        Spanner spanner = new Spanner(name, color, quantity, price, shop.getCurrentAccount().getId(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, size, style, SpannerMaterial.valueOf(material.toUpperCase()));
                                         shop.addProduct(spanner);
                                     }
                                 }
@@ -1341,7 +1360,7 @@ public class Main {
 
                                 System.out.println("""
                                         Enter :
-                                        5- Does it has Box?
+                                        5- Does it have Box?
                                         \t- true, false
                                         6- Difficulty Level
                                         \t- Easy, Normal, Hard
@@ -1364,7 +1383,7 @@ public class Main {
                                         input.nextLine();
                                         int timeToFinish = input.nextInt();
                                         input.nextLine();
-                                        BoardGames boardGame = new BoardGames(name, color, quantity, price, (Seller) shop.getCurrentAccount(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer), size, playerNumber, timeToFinish);
+                                        BoardGames boardGame = new BoardGames(name, color, quantity, price, shop.getCurrentAccount().getId(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer), size, playerNumber, timeToFinish);
                                         shop.addProduct(boardGame);
                                     }
                                     case 2 -> {
@@ -1380,7 +1399,7 @@ public class Main {
                                         input.nextLine();
                                         int gangNumber = input.nextInt();
                                         input.nextLine();
-                                        CardGames cardGame = new CardGames(name, color, quantity, price, (Seller) shop.getCurrentAccount(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer), cardNumber, playerNumber, gangNumber);
+                                        CardGames cardGame = new CardGames(name, color, quantity, price, shop.getCurrentAccount().getId(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer), cardNumber, playerNumber, gangNumber);
                                         shop.addProduct(cardGame);
                                     }
                                     case 3 -> {
@@ -1392,7 +1411,7 @@ public class Main {
                                         int partNumber = input.nextInt();
                                         input.nextLine();
                                         String finalPicture = input.nextLine();
-                                        Puzzles puzzle = new Puzzles(name, color, quantity, price, (Seller) shop.getCurrentAccount(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer.toUpperCase()), partNumber, finalPicture);
+                                        Puzzles puzzle = new Puzzles(name, color, quantity, price, shop.getCurrentAccount().getId(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer.toUpperCase()), partNumber, finalPicture);
                                         shop.addProduct(puzzle);
                                     }
                                 }
@@ -1444,14 +1463,14 @@ public class Main {
                                         String speakerModel = input.nextLine();
                                         int seatNumber = input.nextInt();
                                         input.nextLine();
-                                        Car car = new Car(name, color, quantity, price, (Seller) shop.getCurrentAccount(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic.toUpperCase()), maxSpeed, brand, model, Boolean.parseBoolean(isRightSteering), speakerModel, seatNumber);
+                                        Car car = new Car(name, color, quantity, price, shop.getCurrentAccount().getId(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic.toUpperCase()), maxSpeed, brand, model, Boolean.parseBoolean(isRightSteering), speakerModel, seatNumber);
                                         shop.addProduct(car);
                                     }
                                     case 2 -> {
                                         System.out.println("""
                                                 Enter :
                                                 13- Seat Number
-                                                14- Does it has Wing Mirror ?
+                                                14- Does it have Wing Mirror ?
                                                 \t- true, false
                                                 15- Noise Level
                                                 \t- Low, Normal, High
@@ -1460,7 +1479,7 @@ public class Main {
                                         input.nextLine();
                                         String hasWingMirror = input.nextLine();
                                         String noiseLevel = input.nextLine();
-                                        Motorcycle motorcycle = new Motorcycle(name, color, quantity, price, (Seller) shop.getCurrentAccount(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic), maxSpeed, brand, model, seatNumber, Boolean.parseBoolean(hasWingMirror), NoiseLevel.valueOf(noiseLevel.toUpperCase()));
+                                        Motorcycle motorcycle = new Motorcycle(name, color, quantity, price, shop.getCurrentAccount().getId(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic), maxSpeed, brand, model, seatNumber, Boolean.parseBoolean(hasWingMirror), NoiseLevel.valueOf(noiseLevel.toUpperCase()));
                                         shop.addProduct(motorcycle);
                                     }
                                     case 3 -> {
@@ -1468,12 +1487,12 @@ public class Main {
                                                 Enter :
                                                 13- Type of the Truck
                                                 \t- Pickup, Dump, SemiTrailer, Tanker, Box, Fire
-                                                14- Does it has bed?
+                                                14- Does it have bed?
                                                 \t- true, false
                                                 """);
                                         String truckType = input.nextLine();
                                         String hasBed = input.nextLine();
-                                        Truck truck = new Truck(name, color, quantity, price, (Seller) shop.getCurrentAccount(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic), maxSpeed, brand, model, TruckType.valueOf(truckType.toUpperCase()), Boolean.parseBoolean(hasBed));
+                                        Truck truck = new Truck(name, color, quantity, price, shop.getCurrentAccount().getId(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic), maxSpeed, brand, model, TruckType.valueOf(truckType.toUpperCase()), Boolean.parseBoolean(hasBed));
                                         shop.addProduct(truck);
                                     }
                                 }

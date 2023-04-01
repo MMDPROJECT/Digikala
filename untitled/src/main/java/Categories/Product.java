@@ -1,7 +1,5 @@
 package Categories;
 
-import Accounts.Seller;
-
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -11,18 +9,18 @@ public abstract class Product {
     private final String name;
     private final String color;
     private final double price;
-    private final Seller seller;
+    private final UUID sellerId;
     private int quantity;
 
     //Constructor
 
-    public Product(String name, String color, int quantity, double price, Seller seller) {
+    public Product(String name, String color, int quantity, double price, UUID sellerId) {
         this.name = name;
         this.color = color;
         this.quantity = quantity;
         this.price = price;
         this.id = UUID.randomUUID();
-        this.seller = seller;
+        this.sellerId = sellerId;
         this.comments = new ArrayList<>();
     }
 
@@ -43,8 +41,8 @@ public abstract class Product {
         return quantity;
     }
 
-    public Seller getSeller() {
-        return seller;
+    public UUID getSellerId() {
+        return sellerId;
     }
 
     public ArrayList<String> getComments() {
@@ -88,7 +86,7 @@ public abstract class Product {
                 ", name='" + name + '\'' +
                 ", color='" + color + '\'' +
                 ", price=" + price +
-                ", seller=" + seller +
+                ", sellerid=" + sellerId +
                 ", comments=" + comments +
                 ", quantity=" + quantity +
                 '}';

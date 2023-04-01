@@ -1,8 +1,16 @@
 package Categories.Sports;
 
-import Accounts.Seller;
 import Categories.Sports.Enums.BallMaterial;
 import Categories.Sports.Enums.BallSize;
+import Database_Insert.Connect;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class Ball extends Sports {
     private final BallSize size;
@@ -11,8 +19,8 @@ public class Ball extends Sports {
 
     //Constructor
 
-    public Ball(String name, String color, int quantity, double price, Seller seller, double weight, String sportType, String brand, BallSize size, BallMaterial material, boolean isRightHandOriented) {
-        super(name, color, quantity, price, seller, weight, sportType, brand);
+    public Ball(String name, String color, int quantity, double price, UUID sellerID, double weight, String sportType, String brand, BallSize size, BallMaterial material, boolean isRightHandOriented) {
+        super(name, color, quantity, price, sellerID, weight, sportType, brand);
         this.size = size;
         this.material = material;
         this.isRightHandOriented = isRightHandOriented;
@@ -40,5 +48,33 @@ public class Ball extends Sports {
                 ", material=" + material +
                 ", isRightHandOriented=" + isRightHandOriented +
                 "} " + super.toString();
+    }
+
+    public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, double weight, String sportType, String brand, BallSize size, BallMaterial material, boolean isRightHandOriented) {
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, sportType, brand, size, material, isRightHandOriented) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        try {
+            Connection conn = Connect.connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, productID.toString());
+            pstmt.setString(2, name);
+            pstmt.setString(3, color);
+            pstmt.setDouble(4, price);
+            pstmt.setString(5, sellerID.toString());
+            pstmt.setInt(6, quantity);
+            JSONObject json1 = new JSONObject();
+            json1.put("comments", new JSONArray(comments));
+            String strComments = json1.toString();
+            pstmt.setString(7, strComments);
+            pstmt.setDouble(8, weight);
+            pstmt.setString(9, sportType.toString());
+            pstmt.setString(10, brand);
+            pstmt.setString(11, size.toString());
+            pstmt.setString(12, material.toString());
+            pstmt.setString(13, Boolean.toString(isRightHandOriented));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

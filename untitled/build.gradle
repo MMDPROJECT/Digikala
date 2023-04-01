@@ -15,6 +15,10 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     // https://mvnrepository.com/artifact/junit/junit
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
+// https://mvnrepository.com/artifact/org.json/json
+    implementation group: 'org.json', name: 'json', version: '20230227'
+// https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
+    implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.41.2.1'
 }
 
 test {

@@ -1,7 +1,6 @@
 package Accounts;
 
 import Categories.Product;
-import Categories.Vehicles.Car;
 import Shopping.Order;
 import Shopping.ShoppingCart;
 import Shopping.WalletReq;
@@ -40,31 +39,6 @@ public class User extends Account {
 
     //Getters and Setters
 
-
-    public void setCurrentCart(ShoppingCart currentCart) {
-        this.currentCart = currentCart;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setWallet(double wallet) {
-        this.wallet = wallet;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -73,20 +47,40 @@ public class User extends Account {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getAddress() {
         return address;
     }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public double getWallet() {
         return wallet;
+    }
+
+    public void setWallet(double wallet) {
+        this.wallet = wallet;
     }
 
     public HashMap<UUID, ShoppingCart> getCarts() {
@@ -107,6 +101,10 @@ public class User extends Account {
 
     public ShoppingCart getCurrentCart() {
         return currentCart;
+    }
+
+    public void setCurrentCart(ShoppingCart currentCart) {
+        this.currentCart = currentCart;
     }
 
     public void setCurrentCart(UUID cartID) {
@@ -165,7 +163,7 @@ public class User extends Account {
         if (this.carts.size() == 0) {
             System.out.println("No cart has been created yet!\n");
         } else {
-            for (ShoppingCart cart : this.carts.values()){
+            for (ShoppingCart cart : this.carts.values()) {
                 System.out.println(cart);
             }
         }
@@ -185,7 +183,7 @@ public class User extends Account {
         System.out.println("Cart has been successfully added!\n");
     }
 
-    public boolean hasSelectedCart(){
+    public boolean hasSelectedCart() {
         return this.currentCart != null;
     }
 
@@ -242,7 +240,7 @@ public class User extends Account {
 
     //Wallet - Related Methods
 
-    public void viewWallet(){
+    public void viewWallet() {
         System.out.println("Current wallet: " + this.getWallet() + "\n");
     }
 

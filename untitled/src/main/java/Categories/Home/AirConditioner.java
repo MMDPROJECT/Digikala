@@ -1,6 +1,14 @@
 package Categories.Home;
 
-import Accounts.Seller;
+import Database_Insert.Connect;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class AirConditioner extends Home {
     private final double coolingCapacity;
@@ -12,8 +20,8 @@ public class AirConditioner extends Home {
 
     //Constructor
 
-    public AirConditioner(String name, String color, int quantity, double price, Seller seller, boolean hasController, double height, double width, double weight, double coolingCapacity, double energyEfficiency, String airFilter, int fanNumber, boolean hasRemoteControl, boolean hasTimer) {
-        super(name, color, quantity, price, seller, hasController, height, width, weight);
+    public AirConditioner(String name, String color, int quantity, double price, UUID sellerID, boolean hasController, double height, double width, double weight, double coolingCapacity, double energyEfficiency, String airFilter, int fanNumber, boolean hasRemoteControl, boolean hasTimer) {
+        super(name, color, quantity, price, sellerID, hasController, height, width, weight);
         this.coolingCapacity = coolingCapacity;
         this.energyEfficiency = energyEfficiency;
         this.airFilter = airFilter;
@@ -24,6 +32,38 @@ public class AirConditioner extends Home {
 
 
     //Getters and Setters
+
+    public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, boolean hasController, double height, double width, double weight, double coolingCapacity, double energyEfficiency, String airFilter, int fanNumber, boolean hasRemoteControl, boolean hasTimer) {
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasController, height, width, weight, coolingCapacity, energyEfficiency, airFilter, fanNumber, hasRemoteControl, hasTimer) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        try {
+            Connection conn = Connect.connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, productID.toString());
+            pstmt.setString(2, name);
+            pstmt.setString(3, color);
+            pstmt.setDouble(4, price);
+            pstmt.setString(5, sellerID.toString());
+            pstmt.setInt(6, quantity);
+            JSONObject json1 = new JSONObject();
+            json1.put("comments", new JSONArray(comments));
+            String strComments = json1.toString();
+            pstmt.setString(7, strComments);
+            pstmt.setString(8, Boolean.toString(hasController));
+            pstmt.setDouble(9, height);
+            pstmt.setDouble(10, width);
+            pstmt.setDouble(11, weight);
+            pstmt.setDouble(12, coolingCapacity);
+            pstmt.setDouble(13, energyEfficiency);
+            pstmt.setString(14, airFilter);
+            pstmt.setInt(15, fanNumber);
+            pstmt.setString(16, Boolean.toString(hasRemoteControl));
+            pstmt.setString(17, Boolean.toString(hasTimer));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     public double getCoolingCapacity() {
         return coolingCapacity;
@@ -45,11 +85,11 @@ public class AirConditioner extends Home {
         return hasRemoteControl;
     }
 
+    //Override
+
     public boolean isHasTimer() {
         return hasTimer;
     }
-
-    //Override
 
     @Override
     public String toString() {

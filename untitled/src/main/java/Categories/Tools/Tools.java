@@ -1,7 +1,8 @@
 package Categories.Tools;
 
-import Accounts.Seller;
 import Categories.Product;
+
+import java.util.UUID;
 
 public class Tools extends Product {
     private final double weight;
@@ -12,8 +13,8 @@ public class Tools extends Product {
 
     //Constructor
 
-    public Tools(String name, String color, int quantity, double price, Seller seller, double weight, boolean hasBox, boolean isSilent, boolean isChargeable, String brand) {
-        super(name, color, quantity, price, seller);
+    public Tools(String name, String color, int quantity, double price, UUID sellerID, double weight, boolean hasBox, boolean isSilent, boolean isChargeable, String brand) {
+        super(name, color, quantity, price, sellerID);
         this.weight = weight;
         this.hasBox = hasBox;
         this.isSilent = isSilent;

@@ -102,12 +102,6 @@ public class Order extends ShoppingCart {
         return cut;
     }
 
-    public void calcSellerCut() {
-        for (Product product : this.getProducts()) {
-            product.getSeller().addSellerCut(product.getPrice() * getItemNumber().get(product.getId()));
-        }
-        System.out.println("Sellers cut has deposited!\n");
-    }
 
     public void orderConfirm() {
         this.isConfirmed = true;

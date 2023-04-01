@@ -1,9 +1,9 @@
 package Categories.SuperMarket;
 
-import Accounts.Seller;
 import Categories.Product;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class SuperMarket extends Product {
     private final boolean hasBox;
@@ -17,8 +17,8 @@ public class SuperMarket extends Product {
 
     //Constructor
 
-    public SuperMarket(String name, String color, int quantity, double price, Seller seller, boolean hasBox, double weight, double salt, double calories, double fat, double sugar, ArrayList<String> ingredientItems, String countryOfOrigin) {
-        super(name, color, quantity, price, seller);
+    public SuperMarket(String name, String color, int quantity, double price, UUID sellerID, boolean hasBox, double weight, double salt, double calories, double fat, double sugar, ArrayList<String> ingredientItems, String countryOfOrigin) {
+        super(name, color, quantity, price, sellerID);
         this.hasBox = hasBox;
         this.weight = weight;
         this.salt = salt;

@@ -1,7 +1,8 @@
 package Categories.ToysAndGames;
 
-import Accounts.Seller;
 import Categories.ToysAndGames.Enums.DifficultyLevel;
+
+import java.util.UUID;
 
 public class Puzzles extends ToysAndGames {
     private final int partNumber;
@@ -9,8 +10,8 @@ public class Puzzles extends ToysAndGames {
 
     //Constructor
 
-    public Puzzles(String name, String color, int quantity, double price, Seller seller, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer, int partNumber, String finalPicture) {
-        super(name, color, quantity, price, seller, hasBox, difficultyLevel, isMultiplayer);
+    public Puzzles(String name, String color, int quantity, double price, UUID sellerID, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer, int partNumber, String finalPicture) {
+        super(name, color, quantity, price, sellerID, hasBox, difficultyLevel, isMultiplayer);
         this.partNumber = partNumber;
         this.finalPicture = finalPicture;
     }

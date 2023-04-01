@@ -1,6 +1,6 @@
 package Categories.Vehicles;
 
-import Accounts.Seller;
+import java.util.UUID;
 
 public class Car extends Vehicles {
     private final boolean isRightSteering;
@@ -9,8 +9,8 @@ public class Car extends Vehicles {
 
     //Constructor
 
-    public Car(String name, String color, int quantity, double price, Seller seller, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model, boolean isRightSteering, String speakerModel, int seatNumber) {
-        super(name, color, quantity, price, seller, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model);
+    public Car(String name, String color, int quantity, double price, UUID sellerID, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model, boolean isRightSteering, String speakerModel, int seatNumber) {
+        super(name, color, quantity, price, sellerID, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model);
         this.isRightSteering = isRightSteering;
         this.speakerModel = speakerModel;
         this.seatNumber = seatNumber;

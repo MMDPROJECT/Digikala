@@ -1,7 +1,8 @@
 package Categories.Sports;
 
-import Accounts.Seller;
 import Categories.Product;
+
+import java.util.UUID;
 
 public class Sports extends Product {
     private final double weight;
@@ -10,8 +11,8 @@ public class Sports extends Product {
 
     //Constructor
 
-    public Sports(String name, String color, int quantity, double price, Seller seller, double weight, String sportType, String brand) {
-        super(name, color, quantity, price, seller);
+    public Sports(String name, String color, int quantity, double price, UUID sellerID, double weight, String sportType, String brand) {
+        super(name, color, quantity, price, sellerID);
         this.weight = weight;
         this.sportType = sportType;
         this.brand = brand;

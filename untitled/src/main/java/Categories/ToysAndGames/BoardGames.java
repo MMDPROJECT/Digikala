@@ -1,7 +1,8 @@
 package Categories.ToysAndGames;
 
-import Accounts.Seller;
 import Categories.ToysAndGames.Enums.DifficultyLevel;
+
+import java.util.UUID;
 
 public class BoardGames extends ToysAndGames {
     private final String size;    //Example: 2 * 2, 9 * 9
@@ -10,8 +11,8 @@ public class BoardGames extends ToysAndGames {
 
     //Constructor
 
-    public BoardGames(String name, String color, int quantity, double price, Seller seller, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer, String size, int playerNumber, int timeToFinish) {
-        super(name, color, quantity, price, seller, hasBox, difficultyLevel, isMultiplayer);
+    public BoardGames(String name, String color, int quantity, double price, UUID sellerID, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer, String size, int playerNumber, int timeToFinish) {
+        super(name, color, quantity, price, sellerID, hasBox, difficultyLevel, isMultiplayer);
         this.size = size;
         this.playerNumber = playerNumber;
         this.timeToFinish = timeToFinish;
