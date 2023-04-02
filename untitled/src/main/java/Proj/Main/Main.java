@@ -126,6 +126,7 @@ public class Main {
                 if (shop.userLogin(username, password)) {
                     userPage(shop);
                 } else {
+                    System.out.println("Username or password is wrong!\n");
                     runMenu(shop);
                 }
             }
@@ -555,11 +556,14 @@ public class Main {
                     }
                     case 5 -> {
                         System.out.println("Enter : - Cart ID\n");
-                        String productID = input.nextLine();
-                        if (!shop.hasCheckout(UUID.fromString(productID))) {
-                            ShoppingCart cart = shop.getCart(UUID.fromString(productID));
+                        String cartID = input.nextLine();
+                        if (!shop.hasCheckout(UUID.fromString(cartID))) {
+                            ShoppingCart cart = shop.getCart(UUID.fromString(cartID));
                             Order newOrder = new Order(cart.getName(), cart.getProducts(), cart.getItemNumber(), cart.getTotalPrice(), shop.getCurrentAccount().getAccountID());
+                            shop.checkoutCartInDatabase(cart.getCartID());
                             shop.addOrder(newOrder);
+                        } else {
+                            System.out.println("Cart has been checkout earlier!\n");
                         }
                     }
                     default -> throw new IllegalStateException("Unexpected value: " + optionMenu);
@@ -658,58 +662,57 @@ public class Main {
 
     public static void sellerPage(Shop shop) {
         System.out.println("------------------------------ " + shop.getCurrentAccount().getUsername().toUpperCase() + " ------------------------------");
-        if (!((Seller)shop.getCurrentAccount()).isAuthorized()){
+        if (!((Seller) shop.getCurrentAccount()).isAuthorized()) {
             System.out.println("Seller has not been authorized yet!\n");
             runMenu(shop);
-        }
-        else {
+        } else {
             System.out.println("""
-                1- Product Management
-                \t- Add a new Product
-                \t- Remove a Product By ID
-                \t- Show all Available Products
-                                           
-                2- View Wallet
-                                           
-                3- Back to Main Menu
-                """);
+                    1- Product Management
+                    \t- Add a new Product
+                    \t- Remove a Product By ID
+                    \t- Show all Available Products
+                                               
+                    2- View Wallet
+                                               
+                    3- Back to Main Menu
+                    """);
             int optionMenu = input.nextInt();
             input.nextLine();
             switch (optionMenu) {
                 case 1 -> {
                     //Product Management
                     System.out.println("""
-                        1- Add a new Product
-                        2- Remove a Product by ID
-                        3- Show all Available Products
-                        """);
+                            1- Add a new Product
+                            2- Remove a Product by ID
+                            3- Show all Available Products
+                            """);
                     optionMenu = input.nextInt();
                     input.nextLine();
                     switch (optionMenu) {
                         case 1 -> {
                             System.out.println("""
-                                Select a category from below:
-                                1- Beauty
-                                2- Books
-                                3- Clothes
-                                4- Electronics
-                                5- Home
-                                6- Sports
-                                7- SuperMarket
-                                8- Tools
-                                9- Toys And Games
-                                10- Vehicles
-                                """);
+                                    Select a category from below:
+                                    1- Beauty
+                                    2- Books
+                                    3- Clothes
+                                    4- Electronics
+                                    5- Home
+                                    6- Sports
+                                    7- SuperMarket
+                                    8- Tools
+                                    9- Toys And Games
+                                    10- Vehicles
+                                    """);
                             optionMenu = input.nextInt();
                             input.nextLine();
                             System.out.println("""
-                                (In each part you will be asked about some information, please answer them correctly)
-                                Enter:
-                                1- Name
-                                2- Color
-                                3- Quantity
-                                4- Price
-                                """);
+                                    (In each part you will be asked about some information, please answer them correctly)
+                                    Enter:
+                                    1- Name
+                                    2- Color
+                                    3- Quantity
+                                    4- Price
+                                    """);
                             String name = input.nextLine();
                             String color = input.nextLine();
                             int quantity = input.nextInt();
@@ -719,33 +722,33 @@ public class Main {
                             switch (optionMenu) {
                                 case 1 -> {
                                     System.out.println("""
-                                        Select one subcategory from below:
-                                        1- Eye Brow Makeup
-                                        2- Eye Makeup
-                                        """);
+                                            Select one subcategory from below:
+                                            1- Eye Brow Makeup
+                                            2- Eye Makeup
+                                            """);
                                     optionMenu = input.nextInt();
                                     input.nextLine();
 
                                     System.out.println("""
-                                        Enter :
-                                        5- Material State
-                                        \t-Solid, Powder, Liquid
-                                        6- Does it have box?
-                                        \t-true, false
-                                        """);
+                                            Enter :
+                                            5- Material State
+                                            \t-Solid, Powder, Liquid
+                                            6- Does it have box?
+                                            \t-true, false
+                                            """);
                                     String matterState = input.nextLine();
                                     String hasBox = input.nextLine();
                                     switch (optionMenu) {
                                         case 1 -> {
                                             System.out.println("""
-                                                Enter :
-                                                7- Type of Pen
-                                                \t- Eyeliner, Mascara, Eyeshadow
-                                                8- Does it have Water Resistance?
-                                                \t- true, false
-                                                9- Brand
-                                                10-Longevity(per hour)
-                                                """);
+                                                    Enter :
+                                                    7- Type of Pen
+                                                    \t- Eyeliner, Mascara, Eyeshadow
+                                                    8- Does it have Water Resistance?
+                                                    \t- true, false
+                                                    9- Brand
+                                                    10-Longevity(per hour)
+                                                    """);
                                             String penType = input.nextLine();
                                             String hasWaterResistance = input.nextLine();
                                             String brand = input.nextLine();
@@ -756,14 +759,14 @@ public class Main {
                                         }
                                         case 2 -> {
                                             System.out.println("""
-                                                Enter :
-                                                7- Type of Pen
-                                                \t- Eyeliner, Mascara, Eyeshadow
-                                                8- Does it have Water Resistance?
-                                                \t- true, false
-                                                9- Brand
-                                                10- longevity
-                                                """);
+                                                    Enter :
+                                                    7- Type of Pen
+                                                    \t- Eyeliner, Mascara, Eyeshadow
+                                                    8- Does it have Water Resistance?
+                                                    \t- true, false
+                                                    9- Brand
+                                                    10- longevity
+                                                    """);
                                             String penType = input.nextLine();
                                             String hasWaterResistance = input.nextLine();
                                             String brand = input.nextLine();
@@ -776,21 +779,21 @@ public class Main {
                                 }
                                 case 2 -> {
                                     System.out.println("""
-                                        Select one subcategory from below:
-                                        1- Fiction book
-                                        2- Children book
-                                        3- Poetry book
-                                        """);
+                                            Select one subcategory from below:
+                                            1- Fiction book
+                                            2- Children book
+                                            3- Poetry book
+                                            """);
                                     optionMenu = input.nextInt();
                                     input.nextLine();
 
                                     System.out.println("""
-                                        Enter :
-                                        5- ISBN
-                                        6- Page Numbers
-                                        7- Author
-                                        8- Language
-                                        """);
+                                            Enter :
+                                            5- ISBN
+                                            6- Page Numbers
+                                            7- Author
+                                            8- Language
+                                            """);
                                     String ISBN = input.nextLine();
                                     int pageNumber = input.nextInt();
                                     input.nextLine();
@@ -799,9 +802,9 @@ public class Main {
                                     switch (optionMenu) {
                                         case 1 -> {
                                             System.out.println("""
-                                                Enter :
-                                                9- Tone
-                                                """);
+                                                    Enter :
+                                                    9- Tone
+                                                    """);
                                             String tone = input.nextLine();
                                             System.out.println("10- Enter characters one after the other and enter -1 when are you finished");
                                             ArrayList<String> characters = new ArrayList<>();
@@ -818,9 +821,9 @@ public class Main {
                                         }
                                         case 2 -> {
                                             System.out.println("""
-                                                9- Reading Level(for example: 8-12 yrs olds)
-                                                10- Theme
-                                                """);
+                                                    9- Reading Level(for example: 8-12 yrs olds)
+                                                    10- Theme
+                                                    """);
                                             String readingLevel = input.nextLine();
                                             String theme = input.nextLine();
                                             Children_Book children_book = new Children_Book(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), ISBN, pageNumber, author, language, readingLevel, theme);
@@ -828,9 +831,9 @@ public class Main {
                                         }
                                         case 3 -> {
                                             System.out.println("""
-                                                9- Poetic Form
-                                                10- Count of Verses
-                                                """);
+                                                    9- Poetic Form
+                                                    10- Count of Verses
+                                                    """);
                                             String poeticForm = input.nextLine();
                                             int verseNumber = input.nextInt();
                                             input.nextLine();
@@ -841,26 +844,26 @@ public class Main {
                                 }
                                 case 3 -> {
                                     System.out.println("""
-                                        Select one subcategory from below:
-                                        1- Coat
-                                        2- Jean
-                                        3- Sweater
-                                        """);
+                                            Select one subcategory from below:
+                                            1- Coat
+                                            2- Jean
+                                            3- Sweater
+                                            """);
                                     optionMenu = input.nextInt();
                                     input.nextLine();
 
                                     System.out.println("""
-                                        Enter :
-                                        5- Size
-                                        \t- Small, Medium, Large, XLarge
-                                        6- Cloth's Gender
-                                        \t- Male, Female, Unisex
-                                        7- Cloth's Material
-                                        \t- Polyester, Cotton, Wool, Other
-                                        8- Brand
-                                        9- Durability
-                                        \t- High, Medium, Low
-                                        """);
+                                            Enter :
+                                            5- Size
+                                            \t- Small, Medium, Large, XLarge
+                                            6- Cloth's Gender
+                                            \t- Male, Female, Unisex
+                                            7- Cloth's Material
+                                            \t- Polyester, Cotton, Wool, Other
+                                            8- Brand
+                                            9- Durability
+                                            \t- High, Medium, Low
+                                            """);
                                     String size = input.nextLine();
                                     String clothGender = input.nextLine();
                                     String clothMaterial = input.nextLine();
@@ -870,11 +873,11 @@ public class Main {
                                     switch (optionMenu) {
                                         case 1 -> {
                                             System.out.println("""
-                                                Enter :
-                                                10- Button Number
-                                                11- Does it have Cap?
-                                                \t- true, false
-                                                """);
+                                                    Enter :
+                                                    10- Button Number
+                                                    11- Does it have Cap?
+                                                    \t- true, false
+                                                    """);
                                             int buttonNumber = input.nextInt();
                                             input.nextLine();
                                             String hasCap = input.nextLine();
@@ -883,12 +886,12 @@ public class Main {
                                         }
                                         case 2 -> {
                                             System.out.println("""
-                                                Enter :
-                                                10- Height (per meter)
-                                                11- Pocket Number
-                                                12- Does it have Zipper?
-                                                \t- true, false
-                                                """);
+                                                    Enter :
+                                                    10- Height (per meter)
+                                                    11- Pocket Number
+                                                    12- Does it have Zipper?
+                                                    \t- true, false
+                                                    """);
                                             double height = input.nextDouble();
                                             input.nextLine();
                                             int pocketNumber = input.nextInt();
@@ -899,10 +902,10 @@ public class Main {
                                         }
                                         case 3 -> {
                                             System.out.println("""
-                                                Enter :
-                                                10- Button Number
-                                                11- Design (for example : dragon on the arms, creepy stuff)
-                                                """);
+                                                    Enter :
+                                                    10- Button Number
+                                                    11- Design (for example : dragon on the arms, creepy stuff)
+                                                    """);
                                             int buttonNumber = input.nextInt();
                                             input.nextLine();
                                             String design = input.nextLine();
@@ -913,22 +916,22 @@ public class Main {
                                 }
                                 case 4 -> {
                                     System.out.println("""
-                                        Select one subcategory from below:
-                                        1- Laptop
-                                        2- Smart Phone
-                                        3- Smart Watch
-                                        """);
+                                            Select one subcategory from below:
+                                            1- Laptop
+                                            2- Smart Phone
+                                            3- Smart Watch
+                                            """);
                                     optionMenu = input.nextInt();
                                     input.nextLine();
 
                                     System.out.println("""
-                                        Enter :
-                                        5- Brand
-                                        6- Model
-                                        7- OS
-                                        8- Screen Size (for example: 10 inches)
-                                        9- Battery Capacity
-                                        """);
+                                            Enter :
+                                            5- Brand
+                                            6- Model
+                                            7- OS
+                                            8- Screen Size (for example: 10 inches)
+                                            9- Battery Capacity
+                                            """);
                                     String brand = input.nextLine();
                                     String model = input.nextLine();
                                     String OS = input.nextLine();
@@ -938,18 +941,18 @@ public class Main {
                                     switch (optionMenu) {
                                         case 1 -> {
                                             System.out.println("""
-                                                Enter :
-                                                10- Webcam Model
-                                                11- CPU
-                                                12- GPU
-                                                13- Fan Number
-                                                14- Does it have Keyboard Light?
-                                                \t- true, false
-                                                15- Does it have Finger Print Recognition System?
-                                                \t- true, false
-                                                16- Keyboard Language
-                                                17- Port Number
-                                                """);
+                                                    Enter :
+                                                    10- Webcam Model
+                                                    11- CPU
+                                                    12- GPU
+                                                    13- Fan Number
+                                                    14- Does it have Keyboard Light?
+                                                    \t- true, false
+                                                    15- Does it have Finger Print Recognition System?
+                                                    \t- true, false
+                                                    16- Keyboard Language
+                                                    17- Port Number
+                                                    """);
                                             String webcamModel = input.nextLine();
                                             String CPU = input.nextLine();
                                             String GPU = input.nextLine();
@@ -965,16 +968,16 @@ public class Main {
                                         }
                                         case 2 -> {
                                             System.out.println("""
-                                                Enter :
-                                                1- Rear Camera Quality
-                                                2- Selfie Camera Quality
-                                                3- Camera Number
-                                                4- Storage(per Gigabyte)
-                                                5- OS Version (for example : android 11.1)
-                                                6- Display Resolution
-                                                7- Ring Tone
-                                                8- CPU
-                                                """);
+                                                    Enter :
+                                                    1- Rear Camera Quality
+                                                    2- Selfie Camera Quality
+                                                    3- Camera Number
+                                                    4- Storage(per Gigabyte)
+                                                    5- OS Version (for example : android 11.1)
+                                                    6- Display Resolution
+                                                    7- Ring Tone
+                                                    8- CPU
+                                                    """);
                                             int rearCameraQuality = input.nextInt();
                                             input.nextLine();
                                             int selfieCameraQuality = input.nextInt();
@@ -993,15 +996,15 @@ public class Main {
                                         }
                                         case 3 -> {
                                             System.out.println("""
-                                                Enter :
-                                                1- Processor
-                                                2- Does it have Heart Rate Tracker?
-                                                \t- true, false
-                                                3- Does it have Step Tracker?
-                                                \t- true, false
-                                                4- Does it have Caloric Tracker?
-                                                \t- true, false
-                                                """);
+                                                    Enter :
+                                                    1- Processor
+                                                    2- Does it have Heart Rate Tracker?
+                                                    \t- true, false
+                                                    3- Does it have Step Tracker?
+                                                    \t- true, false
+                                                    4- Does it have Caloric Tracker?
+                                                    \t- true, false
+                                                    """);
                                             String processor = input.nextLine();
                                             String hasHeartRateTracker = input.nextLine();
                                             String hasStepTracker = input.nextLine();
@@ -1013,22 +1016,22 @@ public class Main {
                                 }
                                 case 5 -> {
                                     System.out.println("""
-                                        Select one subcategory from below:
-                                        1- Air Conditioner
-                                        2- Refrigerator
-                                        3- TV
-                                        """);
+                                            Select one subcategory from below:
+                                            1- Air Conditioner
+                                            2- Refrigerator
+                                            3- TV
+                                            """);
                                     optionMenu = input.nextInt();
                                     input.nextLine();
 
                                     System.out.println("""
-                                        Enter :
-                                        5- Does it have Controller?
-                                        \t- true, false
-                                        6- Height
-                                        7- Width
-                                        8- Weight
-                                        """);
+                                            Enter :
+                                            5- Does it have Controller?
+                                            \t- true, false
+                                            6- Height
+                                            7- Width
+                                            8- Weight
+                                            """);
                                     String hasController = input.nextLine();
                                     double height = input.nextDouble();
                                     input.nextLine();
@@ -1039,16 +1042,16 @@ public class Main {
                                     switch (optionMenu) {
                                         case 1 -> {
                                             System.out.println("""
-                                                Enter :
-                                                9- Cooling Capacity
-                                                10- Energy Efficiency
-                                                11- Air Filterer
-                                                12- Fan Number
-                                                13- Does it have Remote Control?
-                                                \t- true, false
-                                                14- Does it have Timer?
-                                                \t- true, false
-                                                """);
+                                                    Enter :
+                                                    9- Cooling Capacity
+                                                    10- Energy Efficiency
+                                                    11- Air Filterer
+                                                    12- Fan Number
+                                                    13- Does it have Remote Control?
+                                                    \t- true, false
+                                                    14- Does it have Timer?
+                                                    \t- true, false
+                                                    """);
                                             double coolingCapacity = input.nextDouble();
                                             input.nextLine();
                                             double energyEfficiency = input.nextDouble();
@@ -1063,15 +1066,15 @@ public class Main {
                                         }
                                         case 2 -> {
                                             System.out.println("""
-                                                Enter :
-                                                9- Floor Number
-                                                10- Does it have Fridge?
-                                                \t- true, false
-                                                11- Refrigerator Type
-                                                \t- Side By Side, French Door, Compact, Wine
-                                                12- Does it have Digital Controlling System?
-                                                \t- true, false
-                                                """);
+                                                    Enter :
+                                                    9- Floor Number
+                                                    10- Does it have Fridge?
+                                                    \t- true, false
+                                                    11- Refrigerator Type
+                                                    \t- Side By Side, French Door, Compact, Wine
+                                                    12- Does it have Digital Controlling System?
+                                                    \t- true, false
+                                                    """);
                                             int floorNumber = input.nextInt();
                                             input.nextLine();
                                             String hasFridge = input.nextLine();
@@ -1082,15 +1085,15 @@ public class Main {
                                         }
                                         case 3 -> {
                                             System.out.println("""
-                                                Enter :
-                                                9- Refresh Rate
-                                                10- Is Mountable on the Wall?
-                                                \t- true, false
-                                                11- Does it have 3D Feature?
-                                                \t- true, false
-                                                12- Does it have Stand?
-                                                \t- true, false
-                                                """);
+                                                    Enter :
+                                                    9- Refresh Rate
+                                                    10- Is Mountable on the Wall?
+                                                    \t- true, false
+                                                    11- Does it have 3D Feature?
+                                                    \t- true, false
+                                                    12- Does it have Stand?
+                                                    \t- true, false
+                                                    """);
                                             int refreshRate = input.nextInt();
                                             input.nextLine();
                                             String mountableOnWall = input.nextLine();
@@ -1103,20 +1106,20 @@ public class Main {
                                 }
                                 case 6 -> {
                                     System.out.println("""
-                                        Select one subcategory from below:
-                                        1- Balls
-                                        2- Gloves
-                                        3- Rackets
-                                        """);
+                                            Select one subcategory from below:
+                                            1- Balls
+                                            2- Gloves
+                                            3- Rackets
+                                            """);
                                     optionMenu = input.nextInt();
                                     input.nextLine();
 
                                     System.out.println("""
-                                        Enter :
-                                        5- Weight
-                                        6- Sport Type (for example : American Football, Soccer, Baseball...)
-                                        7- Brand
-                                        """);
+                                            Enter :
+                                            5- Weight
+                                            6- Sport Type (for example : American Football, Soccer, Baseball...)
+                                            7- Brand
+                                            """);
                                     double weight = input.nextDouble();
                                     input.nextLine();
                                     String sportType = input.nextLine();
@@ -1124,14 +1127,14 @@ public class Main {
                                     switch (optionMenu) {
                                         case 1 -> {
                                             System.out.println("""
-                                                Enter :
-                                                8- Ball Size
-                                                \t- For kids, TeenAges, Young, Adult
-                                                9-  Ball Material
-                                                \t- Leather, RUBBER, PU, PVC, FOAM
-                                                10- Is Right Hand Oriented?
-                                                \t- true, false
-                                                """);
+                                                    Enter :
+                                                    8- Ball Size
+                                                    \t- For kids, TeenAges, Young, Adult
+                                                    9-  Ball Material
+                                                    \t- Leather, RUBBER, PU, PVC, FOAM
+                                                    10- Is Right Hand Oriented?
+                                                    \t- true, false
+                                                    """);
                                             String ball_size = input.nextLine();
                                             String ball_material = input.nextLine();
                                             String isRightHandOriented = input.nextLine();
@@ -1140,16 +1143,16 @@ public class Main {
                                         }
                                         case 2 -> {
                                             System.out.println("""
-                                                Enter :
-                                                8- Gloves Material
-                                                \t- Leather, Neoprene, Mesh, Rubber, Fleece
-                                                9- Gloves Size
-                                                \t- Small, Medium, Large
-                                                10- Gloves Suggested Users
-                                                \t- Mens, Females, Unisex
-                                                11- Gloves Style
-                                                \t- Classic, Fingerless, Mittens, TouchScreen, Fashion
-                                                """);
+                                                    Enter :
+                                                    8- Gloves Material
+                                                    \t- Leather, Neoprene, Mesh, Rubber, Fleece
+                                                    9- Gloves Size
+                                                    \t- Small, Medium, Large
+                                                    10- Gloves Suggested Users
+                                                    \t- Mens, Females, Unisex
+                                                    11- Gloves Style
+                                                    \t- Classic, Fingerless, Mittens, TouchScreen, Fashion
+                                                    """);
                                             String gloveMaterial = input.nextLine();
                                             String gloveSize = input.nextLine();
                                             String gloveUser = input.nextLine();
@@ -1159,13 +1162,13 @@ public class Main {
                                         }
                                         case 3 -> {
                                             System.out.println("""
-                                                Enter :
-                                                8- Length
-                                                9- Width
-                                                10- Durability
-                                                \t- Low, Medium, High
-                                                11- Shape
-                                                """);
+                                                    Enter :
+                                                    8- Length
+                                                    9- Width
+                                                    10- Durability
+                                                    \t- Low, Medium, High
+                                                    11- Shape
+                                                    """);
                                             double length = input.nextDouble();
                                             input.nextLine();
                                             double width = input.nextDouble();
@@ -1179,25 +1182,25 @@ public class Main {
                                 }
                                 case 7 -> {
                                     System.out.println("""
-                                        Select one subcategory from below:
-                                        1- Dairy
-                                        2- Drink
-                                        3- Protein
-                                        """);
+                                            Select one subcategory from below:
+                                            1- Dairy
+                                            2- Drink
+                                            3- Protein
+                                            """);
                                     optionMenu = input.nextInt();
                                     input.nextLine();
 
                                     System.out.println("""
-                                        Enter :
-                                        5- Does it have Box?
-                                        \t true, false
-                                        6- Weight
-                                        7- Salt
-                                        8- Calories
-                                        9- Fat
-                                        10- Sugar
-                                        11- Country Of Origin
-                                        """);
+                                            Enter :
+                                            5- Does it have Box?
+                                            \t true, false
+                                            6- Weight
+                                            7- Salt
+                                            8- Calories
+                                            9- Fat
+                                            10- Sugar
+                                            11- Country Of Origin
+                                            """);
                                     String hasBox = input.nextLine();
                                     double weight = input.nextDouble();
                                     input.nextLine();
@@ -1223,12 +1226,12 @@ public class Main {
                                     switch (optionMenu) {
                                         case 1 -> {
                                             System.out.println("""
-                                                Enter :
-                                                12- Is Domestic?
-                                                \t- true, false
-                                                13- Dairy Group
-                                                \t- Yogurt, Curd, Cheese, SourCream, Milk, Butter
-                                                """);
+                                                    Enter :
+                                                    12- Is Domestic?
+                                                    \t- true, false
+                                                    13- Dairy Group
+                                                    \t- Yogurt, Curd, Cheese, SourCream, Milk, Butter
+                                                    """);
                                             String isDomestic = input.nextLine();
                                             String dairyGroup = input.nextLine();
                                             Dairy dairyProduct = new Dairy(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, Boolean.parseBoolean(isDomestic), DairyGroups.valueOf(dairyGroup.toUpperCase()));
@@ -1236,14 +1239,14 @@ public class Main {
                                         }
                                         case 2 -> {
                                             System.out.println("""
-                                                Enter :
-                                                12- What does it Taste?(for example : dragon fruit or ...)
-                                                13- Is Soft Drink?
-                                                \t- true, false
-                                                14- Litters
-                                                15- Drink Size
-                                                \t- Individual, Family
-                                                """);
+                                                    Enter :
+                                                    12- What does it Taste?(for example : dragon fruit or ...)
+                                                    13- Is Soft Drink?
+                                                    \t- true, false
+                                                    14- Litters
+                                                    15- Drink Size
+                                                    \t- Individual, Family
+                                                    """);
                                             String taste = input.nextLine();
                                             String isSoftDrink = input.nextLine();
                                             double litters = input.nextDouble();
@@ -1254,12 +1257,12 @@ public class Main {
                                         }
                                         case 3 -> {
                                             System.out.println("""
-                                                Enter :
-                                                12- Brand
-                                                13- Protein Amount
-                                                14- Product Type
-                                                \t- Bologna, Sausage, ChickenMeat, Fish, Shrimp, BirdEggs
-                                                """);
+                                                    Enter :
+                                                    12- Brand
+                                                    13- Protein Amount
+                                                    14- Product Type
+                                                    \t- Bologna, Sausage, ChickenMeat, Fish, Shrimp, BirdEggs
+                                                    """);
                                             String brand = input.nextLine();
                                             double proteinAmount = input.nextDouble();
                                             input.nextLine();
@@ -1271,25 +1274,25 @@ public class Main {
                                 }
                                 case 8 -> {
                                     System.out.println("""
-                                        Select one subcategory from below:
-                                        1- Drill
-                                        2- Soldering System
-                                        3- Spanner
-                                        """);
+                                            Select one subcategory from below:
+                                            1- Drill
+                                            2- Soldering System
+                                            3- Spanner
+                                            """);
                                     optionMenu = input.nextInt();
                                     input.nextLine();
 
                                     System.out.println("""
-                                        Enter :
-                                        5- Weight
-                                        6- Does it have Box?
-                                        \t- true, false
-                                        7- Is Silent?
-                                        \t- true, false
-                                        8- Is Chargeable?
-                                        \t- true, false
-                                        9- Brand
-                                        """);
+                                            Enter :
+                                            5- Weight
+                                            6- Does it have Box?
+                                            \t- true, false
+                                            7- Is Silent?
+                                            \t- true, false
+                                            8- Is Chargeable?
+                                            \t- true, false
+                                            9- Brand
+                                            """);
                                     double weight = input.nextDouble();
                                     input.nextLine();
                                     String hasBox = input.nextLine();
@@ -1299,13 +1302,13 @@ public class Main {
                                     switch (optionMenu) {
                                         case 1 -> {
                                             System.out.println("""
-                                                Enter :
-                                                10- Voltage
-                                                11- Power Source
-                                                \t- AC, DC
-                                                12- Minimum Spin Speed
-                                                13- Maximum Spin Speed
-                                                """);
+                                                    Enter :
+                                                    10- Voltage
+                                                    11- Power Source
+                                                    \t- AC, DC
+                                                    12- Minimum Spin Speed
+                                                    13- Maximum Spin Speed
+                                                    """);
                                             int voltage = input.nextInt();
                                             input.nextLine();
                                             String powerSource = input.nextLine();
@@ -1318,13 +1321,13 @@ public class Main {
                                         }
                                         case 2 -> {
                                             System.out.println("""
-                                                Enter :
-                                                10- Voltage
-                                                11- Power Source
-                                                \t- AC, DC
-                                                12- Usage Level
-                                                \t- Beginner, Intermediate, Professional
-                                                """);
+                                                    Enter :
+                                                    10- Voltage
+                                                    11- Power Source
+                                                    \t- AC, DC
+                                                    12- Usage Level
+                                                    \t- Beginner, Intermediate, Professional
+                                                    """);
                                             int voltage = input.nextInt();
                                             input.nextLine();
                                             String powerSource = input.nextLine();
@@ -1334,12 +1337,12 @@ public class Main {
                                         }
                                         case 3 -> {
                                             System.out.println("""
-                                                Enter :
-                                                10- Size (Thickness in millimeter)
-                                                11- Style (for example : Combination open end / 12 point / 15° / Offset ring end)
-                                                12- Material
-                                                \t- Steel, Aluminium, Titanium, Plastic, Composite
-                                                """);
+                                                    Enter :
+                                                    10- Size (Thickness in millimeter)
+                                                    11- Style (for example : Combination open end / 12 point / 15° / Offset ring end)
+                                                    12- Material
+                                                    \t- Steel, Aluminium, Titanium, Plastic, Composite
+                                                    """);
                                             int size = input.nextInt();
                                             input.nextLine();
                                             String style = input.nextLine();
@@ -1351,34 +1354,34 @@ public class Main {
                                 }
                                 case 9 -> {
                                     System.out.println("""
-                                        Select one subcategory from below:
-                                        1- Board Game
-                                        2- Card Game
-                                        3- Puzzle
-                                        """);
+                                            Select one subcategory from below:
+                                            1- Board Game
+                                            2- Card Game
+                                            3- Puzzle
+                                            """);
                                     optionMenu = input.nextInt();
                                     input.nextLine();
 
                                     System.out.println("""
-                                        Enter :
-                                        5- Does it have Box?
-                                        \t- true, false
-                                        6- Difficulty Level
-                                        \t- Easy, Normal, Hard
-                                        7- Is Multiplayer?
-                                        \t true, false
-                                        """);
+                                            Enter :
+                                            5- Does it have Box?
+                                            \t- true, false
+                                            6- Difficulty Level
+                                            \t- Easy, Normal, Hard
+                                            7- Is Multiplayer?
+                                            \t true, false
+                                            """);
                                     String hasBox = input.nextLine();
                                     String difficultyLevel = input.nextLine();
                                     String isMultiplayer = input.nextLine();
                                     switch (optionMenu) {
                                         case 1 -> {
                                             System.out.println("""
-                                                Enter :
-                                                8- Size (for example : 2 by 2)
-                                                9- Player Number
-                                                10- Time To Finish(per minute)
-                                                """);
+                                                    Enter :
+                                                    8- Size (for example : 2 by 2)
+                                                    9- Player Number
+                                                    10- Time To Finish(per minute)
+                                                    """);
                                             String size = input.nextLine();
                                             int playerNumber = input.nextInt();
                                             input.nextLine();
@@ -1389,11 +1392,11 @@ public class Main {
                                         }
                                         case 2 -> {
                                             System.out.println("""
-                                                Enter :
-                                                8- Card Number
-                                                9- Player Number
-                                                10- Gang Number
-                                                """);
+                                                    Enter :
+                                                    8- Card Number
+                                                    9- Player Number
+                                                    10- Gang Number
+                                                    """);
                                             int cardNumber = input.nextInt();
                                             input.nextLine();
                                             int playerNumber = input.nextInt();
@@ -1405,10 +1408,10 @@ public class Main {
                                         }
                                         case 3 -> {
                                             System.out.println("""
-                                                Enter :
-                                                1- partNumber
-                                                2- finalPicture
-                                                """);
+                                                    Enter :
+                                                    1- partNumber
+                                                    2- finalPicture
+                                                    """);
                                             int partNumber = input.nextInt();
                                             input.nextLine();
                                             String finalPicture = input.nextLine();
@@ -1419,26 +1422,26 @@ public class Main {
                                 }
                                 case 10 -> {
                                     System.out.println("""
-                                        Select one subcategory from below:
-                                        1- Car
-                                        2- Motorcycle
-                                        3- Truck
-                                        """);
+                                            Select one subcategory from below:
+                                            1- Car
+                                            2- Motorcycle
+                                            3- Truck
+                                            """);
                                     optionMenu = input.nextInt();
                                     input.nextLine();
 
                                     System.out.println("""
-                                        Enter :
-                                        5- Weight
-                                        6- Horse Power
-                                        7- Engine Model
-                                        8- Wheel Number
-                                        9- Is Automatic?
-                                        \t- true, false
-                                        10- Maximum Speed
-                                        11- Brand
-                                        12- Model
-                                        """);
+                                            Enter :
+                                            5- Weight
+                                            6- Horse Power
+                                            7- Engine Model
+                                            8- Wheel Number
+                                            9- Is Automatic?
+                                            \t- true, false
+                                            10- Maximum Speed
+                                            11- Brand
+                                            12- Model
+                                            """);
                                     double weight = input.nextDouble();
                                     input.nextLine();
                                     int horsePower = input.nextInt();
@@ -1454,12 +1457,12 @@ public class Main {
                                     switch (optionMenu) {
                                         case 1 -> {
                                             System.out.println("""
-                                                Enter :
-                                                13- Is Right Steering?
-                                                \t true, false
-                                                14- Speaker Model
-                                                15- Seat Number
-                                                """);
+                                                    Enter :
+                                                    13- Is Right Steering?
+                                                    \t true, false
+                                                    14- Speaker Model
+                                                    15- Seat Number
+                                                    """);
                                             String isRightSteering = input.nextLine();
                                             String speakerModel = input.nextLine();
                                             int seatNumber = input.nextInt();
@@ -1469,13 +1472,13 @@ public class Main {
                                         }
                                         case 2 -> {
                                             System.out.println("""
-                                                Enter :
-                                                13- Seat Number
-                                                14- Does it have Wing Mirror ?
-                                                \t- true, false
-                                                15- Noise Level
-                                                \t- Low, Normal, High
-                                                """);
+                                                    Enter :
+                                                    13- Seat Number
+                                                    14- Does it have Wing Mirror ?
+                                                    \t- true, false
+                                                    15- Noise Level
+                                                    \t- Low, Normal, High
+                                                    """);
                                             int seatNumber = input.nextInt();
                                             input.nextLine();
                                             String hasWingMirror = input.nextLine();
@@ -1485,12 +1488,12 @@ public class Main {
                                         }
                                         case 3 -> {
                                             System.out.println("""
-                                                Enter :
-                                                13- Type of the Truck
-                                                \t- Pickup, Dump, SemiTrailer, Tanker, Box, Fire
-                                                14- Does it have bed?
-                                                \t- true, false
-                                                """);
+                                                    Enter :
+                                                    13- Type of the Truck
+                                                    \t- Pickup, Dump, SemiTrailer, Tanker, Box, Fire
+                                                    14- Does it have bed?
+                                                    \t- true, false
+                                                    """);
                                             String truckType = input.nextLine();
                                             String hasBed = input.nextLine();
                                             Truck truck = new Truck(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic), maxSpeed, brand, model, TruckType.valueOf(truckType.toUpperCase()), Boolean.parseBoolean(hasBed));

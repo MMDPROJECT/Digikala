@@ -48,8 +48,13 @@ import Shopping.Order;
 import Shopping.ShoppingCart;
 import Shopping.WalletReq;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.UUID;
+
+import static Connection.Connect.connect;
 
 public class Shop {
     private final String name;
@@ -253,17 +258,19 @@ public class Shop {
         }
     }
 
-    public void orderConfirm(UUID id) {
-        if (!doesOrderExist(id)) {
+    public void orderConfirm(UUID orderID) {
+        if (!doesOrderExist(orderID)) {
             System.out.println("Order has not been found!\n");
         } else {
-            if (((User) this.accounts.get(getOrder(id).getBuyer())).checkBuyerPocket(getOrder(id).calcBuyerPayOff())) {
-                getOrder(id).orderConfirm();
-                ((User) this.accounts.get(getOrder(id).getBuyer())).buyerPayOff(getOrder(id).calcBuyerPayOff());
-                addShopCut(getOrder(id).calcShopCut());
-                calcSellerCut(id);
-                getOrder(id).updateStocks();
-                updateUserPurchasedProducts(id);
+            Order order = getOrder(orderID);
+            User buyer = ((User) this.accounts.get(order.getBuyerID()));
+            if (buyer.checkBuyerPocket(order.calcBuyerPayOff())) {
+                order.orderConfirm();
+                buyer.buyerPayOff(order.calcBuyerPayOff());
+                addShopCut(order.calcShopCut());
+                calcSellerCut(orderID);
+                order.updateStocks();
+                updateUserPurchasedProducts(orderID);
             } else {
                 System.out.println("Order can't be done, due to lack of money\n");
             }
@@ -370,9 +377,10 @@ public class Shop {
     public void sellerAuthorization(UUID sellerID) {
         if (accounts.get(sellerID) instanceof Seller) {
             if (((Seller) accounts.get(sellerID)).isAuthorized()) {
-                System.out.println("This Seller has been authorized!\n");
+                System.out.println("This Seller has been authorized earlier!\n");
             } else {
                 ((Seller) accounts.get(sellerID)).authorizeSeller();
+                this.sellerAuthorizeInDatabase(sellerID);
                 System.out.println("Seller has been successfully authorized!\n");
             }
         }
@@ -387,8 +395,6 @@ public class Shop {
                     setCurrentAccount(account);
                     System.out.println("User has been successfully logged in!\n");
                     return true;
-                } else {
-                    System.out.println("Username or password is wrong!\n");
                 }
             }
         }
@@ -453,7 +459,7 @@ public class Shop {
     }
 
     public void sellerSignUp(Seller seller) {
-        if (!doesAccountExist(seller.getCompanyName())){
+        if (!doesAccountExist(seller.getCompanyName())) {
             this.accounts.put(seller.getAccountID(), seller);
             System.out.println("Seller has been successfully added!\n");
         } else {
@@ -477,16 +483,31 @@ public class Shop {
 
     public void addProduct(Product product) {
         this.products.put(product.getProductID(), product);
-        ((Seller)this.accounts.get(this.products.get(product.getProductID()).getSellerId())).addProduct(product);
+        ((Seller) this.accounts.get(this.products.get(product.getProductID()).getSellerId())).addProduct(product);
     }
 
-    public void removeProduct(UUID id) {
-        if (doesProductExist(id)) {
-            this.products.remove(id);
-            ((Seller) this.getCurrentAccount()).removeProduct(id);
+    public void removeProduct(UUID productID) {
+        if (doesProductExist(productID)) {
+            this.products.remove(productID);
+            ((Seller) this.getCurrentAccount()).removeProduct(productID);
             System.out.println("Product has been successfully removed!\n");
+            removeProductFromDB(productID);
         } else {
             System.out.println("Product doesn't exists\n");
+        }
+    }
+
+    public void removeProductFromDB(UUID productID) {
+        String sql = "DELETE FROM Products WHERE ProductID = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, productID.toString());
+            stmt.executeUpdate();
+            System.out.println("Product has been successfully removed from DataBase!\n");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -504,6 +525,7 @@ public class Shop {
     public void addShopCut(double value) {
         System.out.println("Shop's cut has been deposited!\n");
         this.totalGained += value;
+
     }
 
 
@@ -556,11 +578,14 @@ public class Shop {
         return this.walletRequests.containsKey(id);
     }
 
-    public void walletConfirm(UUID id) {
-        if (this.walletRequests.containsKey(id)) {
-            if (!this.getWalletRequest(id).isConfirmed()) {
-                this.getWalletRequest(id).setConfirmed();
-                this.getUser(this.getWalletRequest(id).getUser()).addWallet(this.getWalletRequest(id).getValue());
+    public void walletConfirm(UUID walletID) {
+        if (this.walletRequests.containsKey(walletID)) {
+            if (!this.getWalletRequest(walletID).isConfirmed()) {
+                User user = getUser(this.getWalletRequest(walletID).getUser());
+                WalletReq walletReq = getWalletRequest(walletID);
+                walletReq.setConfirmed();
+                user.addWallet(walletReq.getValue());
+                this.updateUserWalletInDatabase(user.getAccountID());
             } else {
                 System.out.println("This wallet request has been confirmed earlier");
             }
@@ -585,8 +610,9 @@ public class Shop {
     }
 
     public void calcSellerCut(UUID orderID) {
-        for (Product product : getOrder(orderID).getProducts()) {
-            ((Seller) this.accounts.get(product.getSellerId())).addSellerCut(0.9 * product.getPrice() * getOrder(orderID).getItemNumber().get(orderID));
+        Order order = getOrder(orderID);
+        for (Product product : order.getProducts()) {
+            ((Seller) this.accounts.get(product.getSellerId())).addSellerCut(0.9 * product.getPrice() * order.getItemNumber().get(product.getProductID()));
         }
         System.out.println("Sellers cut has been deposited!\n");
     }
@@ -1103,6 +1129,53 @@ public class Shop {
         }
         if (!hasFoundAny) {
             System.out.println("No Product has been found!\n");
+        }
+    }
+
+    //Database - Related methods
+
+    public void updateUserWalletInDatabase(UUID userID) {
+        String sql = "UPDATE Users SET wallet = ? WHERE AccountID = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setDouble(1, this.getUser(userID).getWallet());
+            stmt.setString(2, userID.toString());
+            stmt.executeUpdate();
+            System.out.println("User's wallet has been successfully updated in database!\n");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void sellerAuthorizeInDatabase(UUID sellerID) {
+        String sql = "UPDATE Sellers SET isAuthorized = ? WHERE AccountID = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, Boolean.toString(true));
+            stmt.setString(2, sellerID.toString());
+            stmt.executeUpdate();
+            System.out.println("Seller has been authorized in Database!\n");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void checkoutCartInDatabase(UUID cartID) {
+        String sql = "UPDATE Carts SET hasCheckout = ? WHERE cartID = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, Boolean.toString(true));
+            stmt.setString(2, cartID.toString());
+            stmt.executeUpdate();
+            System.out.println("cart has been successfully checkout in Database!\n");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 }

@@ -72,6 +72,7 @@ public class WalletReq {
 
     public void setConfirmed() {
         this.isConfirmed = true;
+        confirmWalletReqInDatabase();
     }
 
     //Wallet - Related Methods
@@ -84,5 +85,22 @@ public class WalletReq {
                 ", walletID=" + walletID +
                 ", isConfirmed=" + isConfirmed +
                 '}';
+    }
+
+    //Database - Related methods
+
+    public void confirmWalletReqInDatabase() {
+        String sql = "UPDATE WalletRequest SET isConfirmed = ? WHERE WalletRequestID = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, Boolean.toString(true));
+            stmt.setString(2, walletID.toString());
+            stmt.executeUpdate();
+            System.out.println("Wallet has been confirmed in the database!\n");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

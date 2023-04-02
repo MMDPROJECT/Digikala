@@ -164,11 +164,11 @@ public class User extends Account {
         if (this.carts.containsKey(cartID)) {
             this.currentCartID = cartID;
             System.out.println("Cart has been successfully switched to " + cartID + "\n");
+            this.switchCartDatabase(cartID);
         } else {
             System.out.println("Cart has not been found!\n");
         }
     }
-
 
     //Override
 
@@ -284,6 +284,7 @@ public class User extends Account {
     public void buyerPayOff(double value) {
         System.out.println("Money has been successfully paid off!\n");
         this.wallet -= value;
+        updateUserWalletInDatabase();
     }
 
     //Wallet - Related Methods
@@ -380,5 +381,37 @@ public class User extends Account {
     //Product - related Methods
     public void addPurchasedProduct(Product product) {
         purchasedProducts.put(product.getProductID(), product);
+    }
+
+    //Database - Related methods
+
+    public void switchCartDatabase(UUID cartID) {
+        String sql = "UPDATE Users SET currentCartID = ? WHERE AccountID = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, cartID.toString());
+            stmt.setString(2, getAccountID().toString());
+            stmt.executeUpdate();
+            System.out.println("Current cart has been successfully updated in DataBase!\n");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void updateUserWalletInDatabase() {
+        String sql = "UPDATE Users SET wallet = ? WHERE AccountID = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setDouble(1, this.getWallet());
+            stmt.setString(2, getAccountID().toString());
+            stmt.executeUpdate();
+            System.out.println("User's wallet has been successfully updated in Database!\n");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

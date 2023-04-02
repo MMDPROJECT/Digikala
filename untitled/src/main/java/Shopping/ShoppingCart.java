@@ -140,6 +140,7 @@ public class ShoppingCart {
             this.products.add(product);
             this.itemNumber.put(product.getProductID(), amount);
             System.out.println("Product has been successfully added to the cart!\n");
+            updateCartInDatabase();
         } else {
             System.out.println("Remaining stock is not enough\n");
         }
@@ -150,6 +151,7 @@ public class ShoppingCart {
         if (getProduct(id).getQuantity() >= amount + this.itemNumber.get(id)) {
             this.itemNumber.replace(id, this.itemNumber.get(id) + amount);
             System.out.println("Cart has been successfully updated!\n");
+            updateCartInDatabase();
         } else {
             System.out.println("Remaining stock is not enough\n");
         }
@@ -161,21 +163,11 @@ public class ShoppingCart {
             getProduct(id).increaseProduct(amount);
             itemNumber.replace(id, itemNumber.get(id) - amount);
             System.out.println("Cart has been successfully updated!\n");
+            updateCartInDatabase();
         } else {
             System.out.println("Something went wrong! Please try again\n");
         }
         totalPrice = updateTotalPrice();
-    }
-
-    public void removeProduct(UUID id) {
-        if (doesProductExist(id)) {
-            products.remove(getProduct(id));
-            itemNumber.remove(id);
-            System.out.println("Product has been successfully removed!\n");
-            totalPrice = updateTotalPrice();
-        } else {
-            System.out.println("Product has not been found!\n");
-        }
     }
 
     public void viewCart() {
@@ -197,6 +189,21 @@ public class ShoppingCart {
         return totalPrice;
     }
 
+    //Database - Related methods
+
+    public void removeProduct(UUID id) {
+        if (doesProductExist(id)) {
+            products.remove(getProduct(id));
+            itemNumber.remove(id);
+            System.out.println("Product has been successfully removed!\n");
+            totalPrice = updateTotalPrice();
+            updateCartInDatabase();
+        } else {
+            System.out.println("Product has not been found!\n");
+        }
+    }
+
+
     @Override
     public String toString() {
         return "ShoppingCart{" +
@@ -212,5 +219,28 @@ public class ShoppingCart {
 
     public void checkoutCart() {
         this.hasCheckout = true;
+    }
+
+    //Database - related methods
+
+    public void updateCartInDatabase() {
+        String sql = "UPDATE Carts SET itemNumber = ? WHERE cartID = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                String json = objectMapper.writeValueAsString(itemNumber);
+                stmt.setString(1, json);
+                stmt.setString(2, cartID.toString());
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            stmt.executeUpdate();
+            System.out.println("Cart has been successfully updated in Database!\n");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

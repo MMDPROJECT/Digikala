@@ -147,5 +147,23 @@ public class Seller extends Account {
 
     public void addSellerCut(double value) {
         this.wallet += value;
+        updateSellerWalletInDatabase();
+    }
+
+    //Database - Related methods
+
+    public void updateSellerWalletInDatabase() {
+        String sql = "UPDATE Sellers SET wallet = ? WHERE AccountID = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setDouble(1, wallet);
+            stmt.setString(2, getAccountID().toString());
+            stmt.executeUpdate();
+            System.out.println("Seller's wallet has been successfully updated in Database!\n");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

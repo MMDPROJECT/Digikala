@@ -106,7 +106,6 @@ public class Order extends ShoppingCart {
         for (Product product : getProducts()) {
             product.decreaseProduct(getItemNumber().get(product.getProductID()));
         }
-        System.out.println("Stocks has been successfully updated!\n");
     }
 
     public double calcBuyerPayOff() {
@@ -127,5 +126,23 @@ public class Order extends ShoppingCart {
 
     public void orderConfirm() {
         this.isConfirmed = true;
+        confirmOrderInDatabase();
+    }
+
+    //Database - Related methods
+
+    public void confirmOrderInDatabase() {
+        String sql = "UPDATE Orders SET isConfirmed = ? WHERE orderID = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, Boolean.toString(true));
+            stmt.setString(2, orderID.toString());
+            stmt.executeUpdate();
+            System.out.println("Order has been successfully confirmed in Database!\n");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

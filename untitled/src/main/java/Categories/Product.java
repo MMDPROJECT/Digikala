@@ -1,7 +1,15 @@
 package Categories;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
+
+import static Connection.Connect.connect;
 
 public abstract class Product {
     final ArrayList<String> comments;
@@ -77,14 +85,17 @@ public abstract class Product {
 
     public void submitComment(String newComment) {
         this.comments.add(newComment);
+        updateCommentsInDatabase();
     }
 
     public void increaseProduct(int quantity) {
         this.quantity += quantity;
+        updateProductStocksInDatabase();
     }
 
     public void decreaseProduct(int quantity) {
         this.quantity -= quantity;
+        updateProductStocksInDatabase();
     }
 
     //Override
@@ -100,5 +111,40 @@ public abstract class Product {
                 ", sellerId=" + sellerId +
                 ", quantity=" + quantity +
                 '}';
+    }
+
+    //Database - Related methods
+
+    public void updateCommentsInDatabase() {
+        String sql = "UPDATE Products SET comments = ? WHERE ProductID = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("comments", new JSONArray(comments));
+            String arr = jsonObject.toString();
+            stmt.setString(1, arr);
+            stmt.setString(2, productID.toString());
+            stmt.executeUpdate();
+            System.out.println("Comment has been successfully submitted in Database!\n");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void updateProductStocksInDatabase() {
+        String sql = "UPDATE Products SET quantity = ? WHERE ProductID = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, quantity);
+            stmt.setString(2, productID.toString());
+            stmt.executeUpdate();
+            System.out.println("Product stocks has been successfully updated in Database!\n");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
