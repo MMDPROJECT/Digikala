@@ -1213,7 +1213,7 @@ public class Main {
                                 ArrayList<String> ingredientItems = new ArrayList<>();
                                 while (true) {
                                     String item = input.nextLine();
-                                    if (item.equals("-1")) {
+                                    if (!item.equals("-1")) {
                                         ingredientItems.add(item);
                                     } else {
                                         break;
@@ -1230,8 +1230,9 @@ public class Main {
                                                 """);
                                         String isDomestic = input.nextLine();
                                         String dairyGroup = input.nextLine();
-                                        Dairy dairyProduct = new Dairy(name, color, quantity, price, shop.getCurrentAccount().getId(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, Boolean.parseBoolean(isDomestic), DairyGroups.valueOf(dairyGroup));
+                                        Dairy dairyProduct = new Dairy(name, color, quantity, price, shop.getCurrentAccount().getId(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, Boolean.parseBoolean(isDomestic), DairyGroups.valueOf(dairyGroup.toUpperCase()));
                                         shop.addProduct(dairyProduct);
+                                        Dairy.insert(dairyProduct.getId(), dairyProduct.getName(), dairyProduct.getColor(), dairyProduct.getPrice(), dairyProduct.getSellerId(), dairyProduct.getQuantity(), dairyProduct.getComments(), dairyProduct.isHasBox(), dairyProduct.getWeight(), dairyProduct.getSalt(), dairyProduct.getCalories(), dairyProduct.getFat(), dairyProduct.getSugar(), dairyProduct.getIngredientItems(), dairyProduct.getCountryOfOrigin(), dairyProduct.isDomestic(), dairyProduct.getDairyGroup());
                                     }
                                     case 2 -> {
                                         System.out.println("""
@@ -1250,6 +1251,7 @@ public class Main {
                                         String size = input.nextLine();
                                         Drinks drink = new Drinks(name, color, quantity, price, shop.getCurrentAccount().getId(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, taste, Boolean.parseBoolean(isSoftDrink), litters, DrinkSize.valueOf(size.toUpperCase()));
                                         shop.addProduct(drink);
+                                        Drinks.insert(drink.getId(), drink.getName(), drink.getColor(), drink.getPrice(), drink.getSellerId(), drink.getQuantity(), drink.getComments(), drink.isHasBox(), drink.getWeight(), drink.getSalt(), drink.getCalories(), drink.getFat(), drink.getSugar(), drink.getIngredientItems(), drink.getCountryOfOrigin(), drink.isSoftDrink(), drink.getLitters(), drink.getSize());
                                     }
                                     case 3 -> {
                                         System.out.println("""
@@ -1265,6 +1267,7 @@ public class Main {
                                         String productType = input.nextLine();
                                         Proteins protein = new Proteins(name, color, quantity, price, shop.getCurrentAccount().getId(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, brand, proteinAmount, ProteinProductType.valueOf(productType.toUpperCase()));
                                         shop.addProduct(protein);
+                                        Proteins.insert(protein.getId(), protein.getName(), protein.getColor(), protein.getPrice(), protein.getSellerId(), protein.getQuantity(), protein.getComments(), protein.isHasBox(), protein.getWeight(), protein.getSalt(), protein.getCalories(), protein.getFat(), protein.getSugar(), protein.getIngredientItems(), protein.getCountryOfOrigin(), protein.getBrand(), protein.getProtein(), protein.getProductType());
                                     }
                                 }
                             }
@@ -1314,6 +1317,7 @@ public class Main {
                                         input.nextLine();
                                         Drill drill = new Drill(name, color, quantity, price, shop.getCurrentAccount().getId(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, voltage, PowerSource.valueOf(powerSource.toUpperCase()), minSpinSpeed, maxSpinSpeed);
                                         shop.addProduct(drill);
+                                        Drill.insert(drill.getId(), drill.getName(), drill.getColor(), drill.getPrice(), drill.getSellerId(), drill.getQuantity(), drill.getComments(), drill.getWeight(), drill.isHasBox(), drill.isSilent(), drill.isChargeable(), drill.getBrand(), drill.getVoltage(), drill.getPowerSource(), drill.getMinSpinSpeed(), drill.getMaxSpinSpeed());
                                     }
                                     case 2 -> {
                                         System.out.println("""
@@ -1330,6 +1334,7 @@ public class Main {
                                         String usageLevel = input.nextLine();
                                         SolderingSystem solderingSystem = new SolderingSystem(name, color, quantity, price, shop.getCurrentAccount().getId(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, voltage, PowerSource.valueOf(powerSource.toUpperCase()), UsageLevel.valueOf(usageLevel.toUpperCase()));
                                         shop.addProduct(solderingSystem);
+                                        SolderingSystem.insert(solderingSystem.getId(), solderingSystem.getName(), solderingSystem.getColor(), solderingSystem.getPrice(), solderingSystem.getSellerId(), solderingSystem.getQuantity(), solderingSystem.getComments(), solderingSystem.getWeight(), solderingSystem.isHasBox(), solderingSystem.isSilent(), solderingSystem.isChargeable(), solderingSystem.getBrand(), solderingSystem.getVoltage(), solderingSystem.getPowerSource(), solderingSystem.getUsageLevel());
                                     }
                                     case 3 -> {
                                         System.out.println("""
@@ -1345,6 +1350,7 @@ public class Main {
                                         String material = input.nextLine();
                                         Spanner spanner = new Spanner(name, color, quantity, price, shop.getCurrentAccount().getId(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, size, style, SpannerMaterial.valueOf(material.toUpperCase()));
                                         shop.addProduct(spanner);
+                                        Spanner.insert(spanner.getId(), spanner.getName(), spanner.getColor(), spanner.getPrice(), spanner.getSellerId(), spanner.getQuantity(), spanner.getComments(), spanner.getWeight(), spanner.isHasBox(), spanner.isSilent(), spanner.isChargeable(), spanner.getBrand(), spanner.getSize(), spanner.getStyle(), spanner.getMaterial());
                                     }
                                 }
                             }
@@ -1385,6 +1391,7 @@ public class Main {
                                         input.nextLine();
                                         BoardGames boardGame = new BoardGames(name, color, quantity, price, shop.getCurrentAccount().getId(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer), size, playerNumber, timeToFinish);
                                         shop.addProduct(boardGame);
+                                        BoardGames.insert(boardGame.getId(), boardGame.getName(), boardGame.getColor(), boardGame.getPrice(), boardGame.getSellerId(), boardGame.getQuantity(), boardGame.getComments(), boardGame.isHasBox(), boardGame.getDifficultyLevel(), boardGame.isMultiplayer(), boardGame.getSize(), boardGame.getPlayerNumber(), boardGame.getTimeToFinish());
                                     }
                                     case 2 -> {
                                         System.out.println("""
@@ -1401,6 +1408,7 @@ public class Main {
                                         input.nextLine();
                                         CardGames cardGame = new CardGames(name, color, quantity, price, shop.getCurrentAccount().getId(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer), cardNumber, playerNumber, gangNumber);
                                         shop.addProduct(cardGame);
+                                        CardGames.insert(cardGame.getId(), cardGame.getName(), cardGame.getColor(), cardGame.getPrice(), cardGame.getSellerId(), cardGame.getQuantity(), cardGame.getComments(), cardGame.isHasBox(), cardGame.getDifficultyLevel(), cardGame.isMultiplayer(), cardGame.getCardNumber(), cardGame.getPlayerNumber(), cardGame.getGangNumber());
                                     }
                                     case 3 -> {
                                         System.out.println("""
@@ -1413,6 +1421,7 @@ public class Main {
                                         String finalPicture = input.nextLine();
                                         Puzzles puzzle = new Puzzles(name, color, quantity, price, shop.getCurrentAccount().getId(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer.toUpperCase()), partNumber, finalPicture);
                                         shop.addProduct(puzzle);
+                                        Puzzles.insert(puzzle.getId(), puzzle.getName(), puzzle.getColor(), puzzle.getPrice(), puzzle.getSellerId(), puzzle.getQuantity(), puzzle.getComments(), puzzle.isHasBox(), puzzle.getDifficultyLevel(), puzzle.isMultiplayer(), puzzle.getPartNumber(), puzzle.getFinalPicture());
                                     }
                                 }
                             }
@@ -1465,6 +1474,7 @@ public class Main {
                                         input.nextLine();
                                         Car car = new Car(name, color, quantity, price, shop.getCurrentAccount().getId(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic.toUpperCase()), maxSpeed, brand, model, Boolean.parseBoolean(isRightSteering), speakerModel, seatNumber);
                                         shop.addProduct(car);
+                                        Car.insert(car.getId(), car.getName(), car.getColor(), car.getPrice(), car.getSellerId(), car.getQuantity(), car.getComments(), car.getWeight(), car.getHorsePower(), car.getEngineModel(), car.getWheelNumber(), car.isAutomatic(), car.getMaxSpeed(), car.getBrand(), car.getModel(), car.isRightSteering(), car.getSpeakerModel(), car.getSeatNumber());
                                     }
                                     case 2 -> {
                                         System.out.println("""
@@ -1481,6 +1491,7 @@ public class Main {
                                         String noiseLevel = input.nextLine();
                                         Motorcycle motorcycle = new Motorcycle(name, color, quantity, price, shop.getCurrentAccount().getId(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic), maxSpeed, brand, model, seatNumber, Boolean.parseBoolean(hasWingMirror), NoiseLevel.valueOf(noiseLevel.toUpperCase()));
                                         shop.addProduct(motorcycle);
+                                        Motorcycle.insert(motorcycle.getId(), motorcycle.getName(), motorcycle.getColor(), motorcycle.getPrice(), motorcycle.getSellerId(), motorcycle.getQuantity(), motorcycle.getComments(), motorcycle.getWeight(), motorcycle.getHorsePower(), motorcycle.getEngineModel(), motorcycle.getWheelNumber(), motorcycle.isAutomatic(), motorcycle.getMaxSpeed(), motorcycle.getBrand(), motorcycle.getModel(), motorcycle.getSeatNumber(), motorcycle.isHasWingMirror(), motorcycle.getNoiseLevel());
                                     }
                                     case 3 -> {
                                         System.out.println("""
@@ -1494,6 +1505,7 @@ public class Main {
                                         String hasBed = input.nextLine();
                                         Truck truck = new Truck(name, color, quantity, price, shop.getCurrentAccount().getId(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic), maxSpeed, brand, model, TruckType.valueOf(truckType.toUpperCase()), Boolean.parseBoolean(hasBed));
                                         shop.addProduct(truck);
+                                        Truck.insert(truck.getId(), truck.getName(), truck.getColor(), truck.getPrice(), truck.getSellerId(), truck.getQuantity(), truck.getComments(), truck.getWeight(), truck.getHorsePower(), truck.getEngineModel(), truck.getWheelNumber(), truck.isAutomatic(), truck.getMaxSpeed(), truck.getBrand(), truck.getModel(), truck.getTruckType(), truck.isHasBed());
                                     }
                                 }
                             }

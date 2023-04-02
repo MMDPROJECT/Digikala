@@ -12,5 +12,10 @@
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/Sports/Gloves.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/Sports/Rackets.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/Sports/Sports.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/SuperMarket/Dairy.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/SuperMarket/Proteins.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/Tools/SolderingSystem.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/Vehicles/Car.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/Vehicles/Motorcycle.java" dialect="GenericSQL" />
   </component>
 </project>
