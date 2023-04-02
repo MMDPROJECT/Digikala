@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import static Database_Insert.Connect.connect;
+import static Connection.Connect.connect;
 
 public class Order extends ShoppingCart {
     private final LocalDate date;
@@ -29,6 +29,7 @@ public class Order extends ShoppingCart {
         this.orderID = UUID.randomUUID();
         this.date = LocalDate.from(LocalDateTime.now());
         this.isConfirmed = false;
+        insert();
     }
 
     public Order(ArrayList<Product> products, HashMap<UUID, Integer> itemNumber, UUID cartID, UUID userID, String name, double totalPrice, boolean hasCheckout, LocalDate date, UUID buyerID, UUID orderID, boolean isConfirmed) {
@@ -41,6 +42,22 @@ public class Order extends ShoppingCart {
 
     //Getters and Setters
 
+    public void insert() {
+        String sql = "INSERT INTO Orders(date, dateTimeFormatter, buyerID, orderID, isConfirmed) VALUES(?,?,?,?,?)";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, date.toString());
+            pstmt.setString(2, dateTimeFormatter.toString());
+            pstmt.setString(3, buyerID.toString());
+            pstmt.setString(4, orderID.toString());
+            pstmt.setString(5, Boolean.toString(isConfirmed));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     public LocalDate getDate() {
         return date;
@@ -54,7 +71,6 @@ public class Order extends ShoppingCart {
         return buyerID;
     }
 
-
     public UUID getOrderID() {
         return orderID;
     }
@@ -67,23 +83,24 @@ public class Order extends ShoppingCart {
         isConfirmed = confirmed;
     }
 
+    //Override
+
     public UUID getBuyerID() {
         return buyerID;
     }
 
-    //Override
+    //Order - Related Methods
 
     @Override
     public String toString() {
         return "Order{" +
                 "date=" + date +
-                ", buyer=" + buyerID +
-                ", Order ID=" + orderID +
+                ", dateTimeFormatter=" + dateTimeFormatter +
+                ", buyerID=" + buyerID +
+                ", orderID=" + orderID +
                 ", isConfirmed=" + isConfirmed +
                 "} " + super.toString();
     }
-
-    //Order - Related Methods
 
     public void updateStocks() {
         for (Product product : getProducts()) {
@@ -91,8 +108,6 @@ public class Order extends ShoppingCart {
         }
         System.out.println("Stocks has been successfully updated!\n");
     }
-
-
 
     public double calcBuyerPayOff() {
         double total = 0;
@@ -110,26 +125,7 @@ public class Order extends ShoppingCart {
         return cut;
     }
 
-
     public void orderConfirm() {
         this.isConfirmed = true;
-    }
-
-
-    public static void insert(LocalDate date, DateTimeFormatter dateTimeFormatter, UUID buyerID, UUID orderID, boolean isConfirmed) {
-        String sql = "INSERT INTO Orders(date, dateTimeFormatter, buyerID, orderID, isConfirmed) VALUES(?,?,?,?,?)";
-
-        try{
-            Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, date.toString());
-            pstmt.setString(2, dateTimeFormatter.toString());
-            pstmt.setString(3, buyerID.toString());
-            pstmt.setString(4, orderID.toString());
-            pstmt.setString(5, Boolean.toString(isConfirmed));
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
     }
 }

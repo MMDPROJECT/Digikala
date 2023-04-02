@@ -2,7 +2,7 @@ package Categories.Sports;
 
 import Categories.Sports.Enums.BallMaterial;
 import Categories.Sports.Enums.BallSize;
-import Database_Insert.Connect;
+import Connection.Connect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -24,6 +24,7 @@ public class Ball extends Sports {
         this.size = size;
         this.material = material;
         this.isRightHandOriented = isRightHandOriented;
+        insert();
     }
 
     public Ball(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, double weight, String sportType, String brand, BallSize size, BallMaterial material, boolean isRightHandOriented) {
@@ -35,25 +36,25 @@ public class Ball extends Sports {
 
     //Getters and Setters
 
-    public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, double weight, String sportType, String brand, BallSize size, BallMaterial material, boolean isRightHandOriented) {
+    public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, sportType, brand, size, material, isRightHandOriented, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, productID.toString());
-            pstmt.setString(2, name);
-            pstmt.setString(3, color);
-            pstmt.setDouble(4, price);
-            pstmt.setString(5, sellerID.toString());
-            pstmt.setInt(6, quantity);
-            JSONObject json1 = new JSONObject();
-            json1.put("comments", new JSONArray(comments));
-            String strComments = json1.toString();
+            pstmt.setString(1, getProductID().toString());
+            pstmt.setString(2, getName());
+            pstmt.setString(3, getColor());
+            pstmt.setDouble(4, getPrice());
+            pstmt.setString(5, getSellerId().toString());
+            pstmt.setInt(6, getQuantity());
+            JSONObject jsonComments = new JSONObject();
+            jsonComments.put("comments", new JSONArray(getComments()));
+            String strComments = jsonComments.toString();
             pstmt.setString(7, strComments);
-            pstmt.setDouble(8, weight);
-            pstmt.setString(9, sportType);
-            pstmt.setString(10, brand);
+            pstmt.setDouble(8, getWeight());
+            pstmt.setString(9, getSportType());
+            pstmt.setString(10, getBrand());
             pstmt.setString(11, size.toString());
             pstmt.setString(12, material.toString());
             pstmt.setString(13, Boolean.toString(isRightHandOriented));

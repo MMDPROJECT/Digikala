@@ -11,23 +11,22 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.UUID;
 
-import static Database_Insert.Connect.connect;
+import static Connection.Connect.connect;
 
 public class User extends Account {
     private final String username;
+    private final HashMap<UUID, ShoppingCart> carts;
+    private final HashMap<UUID, Order> orders;
+    private final HashMap<UUID, WalletReq> walletRequests;
+    private final HashMap<UUID, Product> purchasedProducts;
     private String password;
     private String email;
     private UUID currentCartID;
     private String phoneNumber;
     private String address;
     private double wallet;
-    private final HashMap<UUID, ShoppingCart> carts;
-    private final HashMap<UUID, Order> orders;
-    private final HashMap<UUID, WalletReq> walletRequests;
-    private final HashMap<UUID, Product> purchasedProducts;
 
     //Constructor
 
@@ -44,6 +43,7 @@ public class User extends Account {
         this.walletRequests = new HashMap<>();
         this.purchasedProducts = new HashMap<>();
         this.currentCartID = null;
+        insert();
     }
 
     public User(UUID id, String username, HashMap<UUID, ShoppingCart> carts, HashMap<UUID, Order> orders, HashMap<UUID, WalletReq> walletRequests, HashMap<UUID, Product> purchasedProducts, UUID currentCartID, String password, String email, String phoneNumber, String address, double wallet) {
@@ -62,6 +62,39 @@ public class User extends Account {
     }
 
     //Getters and Setters
+
+    public void insert() {
+        String sql = "INSERT INTO Users(AccountID, username, password, email, currentCartID, phoneNumber, address, wallet, carts, orders, walletRequests, purchasedProducts) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, getAccountID().toString());
+            pstmt.setString(2, username);
+            pstmt.setString(3, password);
+            pstmt.setString(4, email);
+            pstmt.setString(5, null);
+            pstmt.setString(6, phoneNumber);
+            pstmt.setString(7, address);
+            pstmt.setDouble(8, wallet);
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                String cartsJson = objectMapper.writeValueAsString(this.carts.keySet());
+                String ordersJson = objectMapper.writeValueAsString(this.orders.keySet());
+                String walletRequestsJson = objectMapper.writeValueAsString(this.walletRequests.keySet());
+                String purchasedProductsJson = objectMapper.writeValueAsString(this.purchasedProducts.keySet());
+                pstmt.setString(9, cartsJson);
+                pstmt.setString(10, ordersJson);
+                pstmt.setString(11, walletRequestsJson);
+                pstmt.setString(12, purchasedProductsJson);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     public String getUsername() {
         return username;
@@ -136,12 +169,12 @@ public class User extends Account {
         }
     }
 
+
+    //Override
+
     public ShoppingCart getCart(UUID id) {
         return carts.get(id);
     }
-
-
-    //Override
 
     @Override
     public String toString() {
@@ -165,16 +198,16 @@ public class User extends Account {
         return this.username.equalsIgnoreCase(username) && this.password.equals(password);
     }
 
+    //Cart - Related Methods
+
     @Override
     public boolean doesAccountExist(String username) {
         return this.username.equalsIgnoreCase(username);
     }
 
-    //Cart - Related Methods
-
     public Order checkoutCart(UUID cartID) {
         this.getCart(cartID).checkoutCart();
-        Order order = new Order(this.getCart(cartID).getName(), this.getCart(cartID).getProducts(), this.getCart(cartID).getItemNumber(), this.getCart(cartID).getTotalPrice(), this.getId());
+        Order order = new Order(this.getCart(cartID).getName(), this.getCart(cartID).getProducts(), this.getCart(cartID).getItemNumber(), this.getCart(cartID).getTotalPrice(), this.getAccountID());
         this.addOrder(order);
         return order;
     }
@@ -197,22 +230,16 @@ public class User extends Account {
         }
     }
 
-    public void addCart(String name) {
-        ShoppingCart shoppingCart = new ShoppingCart(name);
-        this.carts.put(shoppingCart.getOrderID(), shoppingCart);
-        System.out.println("Cart has been successfully added!\n");
-    }
-
-    public void addCart(ShoppingCart cart){
+    public void addCart(ShoppingCart cart) {
         this.carts.put(cart.getOrderID(), cart);
         System.out.println("Cart has been successfully added!\n");
     }
 
+    //Order - Related Methods
+
     public boolean hasSelectedCart() {
         return this.currentCartID != null;
     }
-
-    //Order - Related Methods
 
     public void showAllOrders() {
         if (this.orders.size() == 0) {
@@ -259,11 +286,11 @@ public class User extends Account {
         this.wallet -= value;
     }
 
+    //Wallet - Related Methods
+
     public void addOrder(Order order) {
         this.orders.put(order.getOrderID(), order);
     }
-
-    //Wallet - Related Methods
 
     public void viewWallet() {
         System.out.println("Current wallet: " + this.getWallet() + "\n");
@@ -310,11 +337,11 @@ public class User extends Account {
         }
     }
 
+    //User - Related Methods
+
     public void addWallet(double wallet) {
         this.wallet += wallet;
     }
-
-    //User - Related Methods
 
     public void updatePassword(String newPassword) {
         this.setPassword(newPassword);
@@ -327,7 +354,7 @@ public class User extends Account {
     }
 
     public void updatePhoneNumber(String newPhoneNumber) {
-        this.setPhoneNumber(phoneNumber);
+        this.setPhoneNumber(newPhoneNumber);
         System.out.println("Phone Number has been successfully edited!\n");
     }
 
@@ -353,38 +380,5 @@ public class User extends Account {
     //Product - related Methods
     public void addPurchasedProduct(Product product) {
         purchasedProducts.put(product.getProductID(), product);
-    }
-
-    public static void insert(UUID AccountID, String username, String password, String email, String phoneNumber, String address, double wallet, Set<UUID> carts, Set<UUID> orders, Set<UUID> walletRequests, Set<UUID> purchasedProducts) {
-        String sql = "INSERT INTO Users(AccountID, username, password, email, currentCartID, phoneNumber, address, wallet, carts, orders, walletRequests, purchasedProducts) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
-
-        try{
-            Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, AccountID.toString());
-            pstmt.setString(2, username);
-            pstmt.setString(3, password);
-            pstmt.setString(4, email);
-            pstmt.setString(5, null);
-            pstmt.setString(6, phoneNumber);
-            pstmt.setString(7, address);
-            pstmt.setDouble(8, wallet);
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                String cartsJson = objectMapper.writeValueAsString(carts);
-                String ordersJson = objectMapper.writeValueAsString(orders);
-                String walletRequestsJson = objectMapper.writeValueAsString(walletRequests);
-                String purchasedProductsJson = objectMapper.writeValueAsString(purchasedProducts);
-                pstmt.setString(9, cartsJson);
-                pstmt.setString(10, ordersJson);
-                pstmt.setString(11, walletRequestsJson);
-                pstmt.setString(12, purchasedProductsJson);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
     }
 }

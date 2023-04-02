@@ -11,16 +11,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import static Database_Insert.Connect.connect;
+import static Connection.Connect.connect;
 
 public class ShoppingCart {
     private final String name;
     private final UUID cartID;
     private final UUID userID;
-    private double totalPrice;
-    private boolean hasCheckout;
     private final ArrayList<Product> products;
     private final HashMap<UUID, Integer> itemNumber;  //A hashmap to store amount of each product that we have in the cart
+    private double totalPrice;
+    private boolean hasCheckout;
 
     //Constructor
 
@@ -41,6 +41,7 @@ public class ShoppingCart {
         this.totalPrice = 0;
         this.cartID = UUID.randomUUID();
         this.userID = UUID.randomUUID();
+        insert();
     }
 
     public ShoppingCart(ArrayList<Product> products, HashMap<UUID, Integer> itemNumber, UUID cartID, UUID userID, String name, double totalPrice, boolean hasCheckout) {
@@ -54,6 +55,30 @@ public class ShoppingCart {
     }
 
     //Getters and Setters
+
+    public void insert() {
+        String sql = "INSERT INTO Carts(name, cartID, userID, totalPrice, hasCheckout, itemNumber) VALUES(?,?,?,?,?,?)";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
+            pstmt.setString(2, cartID.toString());
+            pstmt.setString(3, userID.toString());
+            pstmt.setDouble(4, totalPrice);
+            pstmt.setString(5, Boolean.toString(hasCheckout));
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                String jsonItemNumber = objectMapper.writeValueAsString(itemNumber);
+                pstmt.setString(6, jsonItemNumber);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     public ArrayList<Product> getProducts() {
         return this.products;
@@ -87,11 +112,11 @@ public class ShoppingCart {
         return userID;
     }
 
+    //Cart - Related Methods
+
     public boolean isHasCheckout() {
         return hasCheckout;
     }
-
-    //Cart - Related Methods
 
     public boolean doesProductExist(Product product) {
         return this.products.contains(product);
@@ -175,41 +200,17 @@ public class ShoppingCart {
     @Override
     public String toString() {
         return "ShoppingCart{" +
-                "products=" + products +
+                "name='" + name + '\'' +
+                ", cartID=" + cartID +
+                ", userID=" + userID +
+                ", products=" + products +
                 ", itemNumber=" + itemNumber +
-                ", Cart ID=" + cartID +
-                ", name='" + name + '\'' +
                 ", totalPrice=" + totalPrice +
-                ", isCheckout=" + hasCheckout +
+                ", hasCheckout=" + hasCheckout +
                 '}';
     }
 
     public void checkoutCart() {
         this.hasCheckout = true;
-    }
-
-
-    public static void insert(String name, UUID cartID, UUID userID, double totalPrice, boolean hasCheckout, HashMap<UUID, Integer> itemNumber) {
-        String sql = "INSERT INTO Carts(name, cartID, userID, totalPrice, hasCheckout, itemNumber) VALUES(?,?,?,?,?,?)";
-
-        try{
-            Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, name);
-            pstmt.setString(2, cartID.toString());
-            pstmt.setString(3, userID.toString());
-            pstmt.setDouble(4, totalPrice);
-            pstmt.setString(5, Boolean.toString(hasCheckout));
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                String json = objectMapper.writeValueAsString(itemNumber);
-                pstmt.setString(6, json);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
     }
 }

@@ -1,7 +1,7 @@
 package Categories.Home;
 
 import Categories.Home.Enums.RefrigeratorType;
-import Database_Insert.Connect;
+import Connection.Connect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -25,6 +25,7 @@ public class Refrigerator extends Home {
         this.hasFridge = hasFridge;
         this.refrigeratorType = refrigeratorType;
         this.hasDigitalControllingSystem = hasDigitalControllingSystem;
+        insert();
     }
 
     public Refrigerator(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, boolean hasController, double height, double width, double weight, int floorNumber, boolean hasFridge, RefrigeratorType refrigeratorType, boolean hasDigitalControllingSystem) {
@@ -36,37 +37,6 @@ public class Refrigerator extends Home {
     }
 
     //Getters and Setters
-
-    public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, boolean hasController, double height, double width, double weight, int floorNumber, boolean hasFridge, RefrigeratorType refrigeratorType, boolean hasDigitalControllingSystem) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasController, height, width, weight, floorNumber, hasFridge, refrigeratorType, hasDigitalControllingSystem, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-        try {
-            Connection conn = Connect.connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, productID.toString());
-            pstmt.setString(2, name);
-            pstmt.setString(3, color);
-            pstmt.setDouble(4, price);
-            pstmt.setString(5, sellerID.toString());
-            pstmt.setInt(6, quantity);
-            JSONObject json1 = new JSONObject();
-            json1.put("comments", new JSONArray(comments));
-            String strComments = json1.toString();
-            pstmt.setString(7, strComments);
-            pstmt.setString(8, Boolean.toString(hasController));
-            pstmt.setDouble(9, height);
-            pstmt.setDouble(10, width);
-            pstmt.setDouble(11, weight);
-            pstmt.setInt(12, floorNumber);
-            pstmt.setString(13, Boolean.toString(hasFridge));
-            pstmt.setString(14, refrigeratorType.toString());
-            pstmt.setString(15, Boolean.toString(hasDigitalControllingSystem));
-            pstmt.setString(16, "Refrigerator");
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
 
     public int getFloorNumber() {
         return floorNumber;
@@ -94,5 +64,36 @@ public class Refrigerator extends Home {
                 ", refrigeratorType=" + refrigeratorType +
                 ", hasDigitalControllingSystem=" + hasDigitalControllingSystem +
                 "} " + super.toString();
+    }
+
+    public void insert() {
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasController, height, width, weight, floorNumber, hasFridge, refrigeratorType, hasDigitalControllingSystem, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        try {
+            Connection conn = Connect.connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, getProductID().toString());
+            pstmt.setString(2, getName());
+            pstmt.setString(3, getColor());
+            pstmt.setDouble(4, getPrice());
+            pstmt.setString(5, getSellerId().toString());
+            pstmt.setInt(6, getQuantity());
+            JSONObject jsonComments = new JSONObject();
+            jsonComments.put("comments", new JSONArray(getComments()));
+            String strComments = jsonComments.toString();
+            pstmt.setString(7, strComments);
+            pstmt.setString(8, Boolean.toString(isHasController()));
+            pstmt.setDouble(9, getHeight());
+            pstmt.setDouble(10, getWidth());
+            pstmt.setDouble(11, getWeight());
+            pstmt.setInt(12, floorNumber);
+            pstmt.setString(13, Boolean.toString(hasFridge));
+            pstmt.setString(14, refrigeratorType.toString());
+            pstmt.setString(15, Boolean.toString(hasDigitalControllingSystem));
+            pstmt.setString(16, "Refrigerator");
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

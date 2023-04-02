@@ -1,7 +1,7 @@
 package Categories.SuperMarket;
 
 import Categories.SuperMarket.Enums.DrinkSize;
-import Database_Insert.Connect;
+import Connection.Connect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -25,6 +25,7 @@ public class Drinks extends SuperMarket {
         this.isSoftDrink = isSoftDrink;
         this.litters = litters;
         this.size = size;
+        insert();
     }
 
     public Drinks(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, boolean hasBox, double weight, double salt, double calories, double fat, double sugar, ArrayList<String> ingredientItems, String countryOfOrigin, String taste, boolean isSoftDrink, double litters, DrinkSize size) {
@@ -37,33 +38,33 @@ public class Drinks extends SuperMarket {
 
     //Getters and Setters
 
-    public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, boolean hasBox, double weight, double salt, double calories, double fat, double sugar, ArrayList<String> IngredientItems, String CountryOfOrigin, boolean isSoftDrink, double litters, DrinkSize size) {
+    public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasBox, weight, salt, calories, fat, sugar, IngredientItems, CountryOfOrigin, isSoftDrink, litters, size, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, productID.toString());
-            pstmt.setString(2, name);
-            pstmt.setString(3, color);
-            pstmt.setDouble(4, price);
-            pstmt.setString(5, sellerID.toString());
-            pstmt.setInt(6, quantity);
-            JSONObject json1 = new JSONObject();
-            json1.put("comments", new JSONArray(comments));
-            String strComments = json1.toString();
+            pstmt.setString(1, getProductID().toString());
+            pstmt.setString(2, getName());
+            pstmt.setString(3, getColor());
+            pstmt.setDouble(4, getPrice());
+            pstmt.setString(5, getSellerId().toString());
+            pstmt.setInt(6, getQuantity());
+            JSONObject jsonComments = new JSONObject();
+            jsonComments.put("comments", new JSONArray(getComments()));
+            String strComments = jsonComments.toString();
             pstmt.setString(7, strComments);
-            pstmt.setString(8, Boolean.toString(hasBox));
-            pstmt.setDouble(9, weight);
-            pstmt.setDouble(10, salt);
-            pstmt.setDouble(11, calories);
-            pstmt.setDouble(12, fat);
-            pstmt.setDouble(13, sugar);
-            JSONObject json2 = new JSONObject();
-            json2.put("IngredientItems", new JSONArray(IngredientItems));
-            String itemsStr = json1.toString();
+            pstmt.setString(8, Boolean.toString(isHasBox()));
+            pstmt.setDouble(9, getWeight());
+            pstmt.setDouble(10, getSalt());
+            pstmt.setDouble(11, getCalories());
+            pstmt.setDouble(12, getFat());
+            pstmt.setDouble(13, getSugar());
+            JSONObject jsonItems = new JSONObject();
+            jsonItems.put("IngredientItems", new JSONArray(getIngredientItems()));
+            String itemsStr = jsonItems.toString();
             pstmt.setString(14, itemsStr);
-            pstmt.setString(15, CountryOfOrigin);
+            pstmt.setString(15, getCountryOfOrigin());
             pstmt.setString(16, Boolean.toString(isSoftDrink));
             pstmt.setDouble(17, litters);
             pstmt.setString(18, size.toString());

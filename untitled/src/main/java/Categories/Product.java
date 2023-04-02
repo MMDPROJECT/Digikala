@@ -92,12 +92,12 @@ public abstract class Product {
     @Override
     public String toString() {
         return "Product{" +
-                "Product ID=" + productID +
+                "comments=" + comments +
+                ", productID=" + productID +
                 ", name='" + name + '\'' +
                 ", color='" + color + '\'' +
                 ", price=" + price +
-                ", seller id=" + sellerId +
-                ", comments=" + comments +
+                ", sellerId=" + sellerId +
                 ", quantity=" + quantity +
                 '}';
     }

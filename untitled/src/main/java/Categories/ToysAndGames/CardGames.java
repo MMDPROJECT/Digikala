@@ -1,7 +1,7 @@
 package Categories.ToysAndGames;
 
 import Categories.ToysAndGames.Enums.DifficultyLevel;
-import Database_Insert.Connect;
+import Connection.Connect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,6 +23,7 @@ public class CardGames extends ToysAndGames {
         this.cardNumber = cardNumber;
         this.playerNumber = playerNumber;
         this.gangNumber = gangNumber;
+        insert();
     }
 
     public CardGames(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer, int cardNumber, int playerNumber, int gangNumber) {
@@ -34,25 +35,25 @@ public class CardGames extends ToysAndGames {
 
     //Getters and Setters
 
-    public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer, int cardNumber, int playerNumber, int gangNumber) {
+    public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasBox, difficultyLevel, isMultiplayer, cardNumber, playerNumber, gangNumber, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, productID.toString());
-            pstmt.setString(2, name);
-            pstmt.setString(3, color);
-            pstmt.setDouble(4, price);
-            pstmt.setString(5, sellerID.toString());
-            pstmt.setInt(6, quantity);
-            JSONObject json1 = new JSONObject();
-            json1.put("comments", new JSONArray(comments));
-            String strComments = json1.toString();
+            pstmt.setString(1, getProductID().toString());
+            pstmt.setString(2, getName());
+            pstmt.setString(3, getColor());
+            pstmt.setDouble(4, getPrice());
+            pstmt.setString(5, getSellerId().toString());
+            pstmt.setInt(6, getQuantity());
+            JSONObject jsonComments = new JSONObject();
+            jsonComments.put("comments", new JSONArray(getComments()));
+            String strComments = jsonComments.toString();
             pstmt.setString(7, strComments);
-            pstmt.setString(8, Boolean.toString(hasBox));
-            pstmt.setString(9, difficultyLevel.toString());
-            pstmt.setString(10, Boolean.toString(isMultiplayer));
+            pstmt.setString(8, Boolean.toString(isHasBox()));
+            pstmt.setString(9, getDifficultyLevel().toString());
+            pstmt.setString(10, Boolean.toString(isMultiplayer()));
             pstmt.setInt(11, cardNumber);
             pstmt.setInt(12, playerNumber);
             pstmt.setInt(13, gangNumber);

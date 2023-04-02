@@ -1,7 +1,7 @@
 package Categories.Vehicles;
 
 import Categories.Vehicles.Enums.NoiseLevel;
-import Database_Insert.Connect;
+import Connection.Connect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,6 +23,7 @@ public class Motorcycle extends Vehicles {
         this.seatNumber = seatNumber;
         this.hasWingMirror = hasWingMirror;
         this.noiseLevel = noiseLevel;
+        insert();
     }
 
     public Motorcycle(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model, int seatNumber, boolean hasWingMirror, NoiseLevel noiseLevel) {
@@ -34,30 +35,30 @@ public class Motorcycle extends Vehicles {
 
     //Getters and Setters
 
-    public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model, int seatNumber, boolean hasWingMirror, NoiseLevel noiseLevel) {
+    public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model, seatNumber, hasWingMirror, noiseLevel, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, productID.toString());
-            pstmt.setString(2, name);
-            pstmt.setString(3, color);
-            pstmt.setDouble(4, price);
-            pstmt.setString(5, sellerID.toString());
-            pstmt.setInt(6, quantity);
-            JSONObject json1 = new JSONObject();
-            json1.put("comments", new JSONArray(comments));
-            String strComments = json1.toString();
+            pstmt.setString(1, getProductID().toString());
+            pstmt.setString(2, getName());
+            pstmt.setString(3, getColor());
+            pstmt.setDouble(4, getPrice());
+            pstmt.setString(5, getSellerId().toString());
+            pstmt.setInt(6, getQuantity());
+            JSONObject jsonComments = new JSONObject();
+            jsonComments.put("comments", new JSONArray(getComments()));
+            String strComments = jsonComments.toString();
             pstmt.setString(7, strComments);
-            pstmt.setDouble(8, weight);
-            pstmt.setInt(9, horsePower);
-            pstmt.setString(10, engineModel);
-            pstmt.setInt(11, wheelNumber);
-            pstmt.setString(12, Boolean.toString(isAutomatic));
-            pstmt.setInt(13, maxSpeed);
-            pstmt.setString(14, brand);
-            pstmt.setString(15, model);
+            pstmt.setDouble(8, getWeight());
+            pstmt.setInt(9, getHorsePower());
+            pstmt.setString(10, getEngineModel());
+            pstmt.setInt(11, getWheelNumber());
+            pstmt.setString(12, Boolean.toString(isAutomatic()));
+            pstmt.setInt(13, getMaxSpeed());
+            pstmt.setString(14, getBrand());
+            pstmt.setString(15, getEngineModel());
             pstmt.setInt(16, seatNumber);
             pstmt.setString(17, Boolean.toString(hasWingMirror));
             pstmt.setString(18, noiseLevel.toString());

@@ -1,6 +1,6 @@
 package Categories.Electronics;
 
-import Database_Insert.Connect;
+import Connection.Connect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -32,6 +32,7 @@ public class Laptop extends Electronics {
         this.hasFingerPrint = hasFingerPrint;
         this.keyboardLanguage = keyboardLanguage;
         this.portNumber = portNumber;
+        insert();
     }
 
     public Laptop(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, String brand, String model, String OS, String screenSize, double batteryCapacity, String webcamModel, String CPU, String GPU, int fanNumber, boolean hasKeyboardLight, boolean hasFingerPrint, String keyboardLanguage, int portNumber) {
@@ -47,42 +48,6 @@ public class Laptop extends Electronics {
     }
 
     //Getters and Setters
-
-    public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, String brand, String model, String OS, String screenSize, double batteryCapacity, String webcamModel, String CPU, String GPU, int fanNumber, boolean hasKeyboardLight, boolean hasFingerPrint, String keyboardLanguage, int portNumber) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, brand, model, OS, screenSize, batteryCapacity, webcamModel, CPU, GPU, fanNumber, hasKeyboardLight, hasFingerPrint, keyboardLanguage, portNumber, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-        try {
-            Connection conn = Connect.connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, productID.toString());
-            pstmt.setString(2, name);
-            pstmt.setString(3, color);
-            pstmt.setDouble(4, price);
-            pstmt.setString(5, sellerID.toString());
-            pstmt.setInt(6, quantity);
-            JSONObject json1 = new JSONObject();
-            json1.put("comments", new JSONArray(comments));
-            String strComments = json1.toString();
-            pstmt.setString(7, strComments);
-            pstmt.setString(8, brand);
-            pstmt.setString(9, model);
-            pstmt.setString(10, OS);
-            pstmt.setString(11, screenSize);
-            pstmt.setDouble(12, batteryCapacity);
-            pstmt.setString(13, webcamModel);
-            pstmt.setString(14, CPU);
-            pstmt.setString(15, GPU);
-            pstmt.setInt(16, fanNumber);
-            pstmt.setString(17, Boolean.toString(hasKeyboardLight));
-            pstmt.setString(18, Boolean.toString(hasFingerPrint));
-            pstmt.setString(19, keyboardLanguage);
-            pstmt.setInt(20, portNumber);
-            pstmt.setString(21, "Laptop");
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
 
     public String getWebcamModel() {
         return webcamModel;
@@ -130,5 +95,41 @@ public class Laptop extends Electronics {
                 ", keyboardLanguage='" + keyboardLanguage + '\'' +
                 ", portNumber=" + portNumber +
                 "} " + super.toString();
+    }
+
+    public void insert() {
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, brand, model, OS, screenSize, batteryCapacity, hasHeartRateTracker, hasStepTracker, hasCaloricTracker, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        try {
+            Connection conn = Connect.connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, getProductID().toString());
+            pstmt.setString(2, getName());
+            pstmt.setString(3, getColor());
+            pstmt.setDouble(4, getPrice());
+            pstmt.setString(5, getSellerId().toString());
+            pstmt.setInt(6, getQuantity());
+            JSONObject jsonComments = new JSONObject();
+            jsonComments.put("comments", new JSONArray(getComments()));
+            String strComments = jsonComments.toString();
+            pstmt.setString(7, strComments);
+            pstmt.setString(8, getBrand());
+            pstmt.setString(9, getModel());
+            pstmt.setString(10, getOS());
+            pstmt.setString(11, getScreenSize());
+            pstmt.setDouble(12, getBatteryCapacity());
+            pstmt.setString(13, webcamModel);
+            pstmt.setString(14, CPU);
+            pstmt.setString(15, GPU);
+            pstmt.setInt(16, fanNumber);
+            pstmt.setString(17, Boolean.toString(hasKeyboardLight));
+            pstmt.setString(18, Boolean.toString(hasFingerPrint));
+            pstmt.setString(19, keyboardLanguage);
+            pstmt.setInt(20, portNumber);
+            pstmt.setString(21, "SmartPhone");
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

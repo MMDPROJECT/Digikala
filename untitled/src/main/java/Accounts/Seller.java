@@ -8,10 +8,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.UUID;
 
-import static Database_Insert.Connect.connect;
+import static Connection.Connect.connect;
 
 public class Seller extends Account {
     private final String companyName;
@@ -29,6 +28,7 @@ public class Seller extends Account {
         this.availableProducts = new HashMap<>();
         this.wallet = 0;
         this.isAuthorized = false;
+        insert();
     }
 
     public Seller(UUID id, String companyName, String password, HashMap<UUID, Product> availableProducts, double wallet, boolean isAuthorized) {
@@ -41,6 +41,27 @@ public class Seller extends Account {
     }
 
     //Getters and Setters
+
+    public void insert() {
+        String sql = "INSERT INTO Sellers(AccountID, companyName, password, availableProducts, wallet, isAuthorized) VALUES(?,?,?,?,?,?)";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, getAccountID().toString());
+            pstmt.setString(2, companyName);
+            pstmt.setString(3, password);
+            JSONObject jsonProducts = new JSONObject();
+            jsonProducts.put("availableProducts", new JSONArray(this.availableProducts.keySet()));
+            String availableProducts = jsonProducts.toString();
+            pstmt.setString(4, availableProducts);
+            pstmt.setDouble(5, wallet);
+            pstmt.setString(6, Boolean.toString(isAuthorized));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     public String getCompanyName() {
         return companyName;
@@ -62,11 +83,11 @@ public class Seller extends Account {
     public String getUsername() {
         return this.companyName;
     }
+    //Override
 
     public boolean isAuthorized() {
         return isAuthorized;
     }
-    //Override
 
     @Override
     public String toString() {
@@ -81,12 +102,12 @@ public class Seller extends Account {
         return this.companyName.equalsIgnoreCase(username) && this.password.equals(password);
     }
 
+    //Seller - Related Methods
+
     @Override
     public boolean doesAccountExist(String username) {
         return this.companyName.equalsIgnoreCase(username);
     }
-
-    //Seller - Related Methods
 
     public void addProduct(Product product) {
         this.availableProducts.put(product.getProductID(), product);
@@ -126,26 +147,5 @@ public class Seller extends Account {
 
     public void addSellerCut(double value) {
         this.wallet += value;
-    }
-
-    public static void insert(UUID accountID, String companyName, String password, Set<UUID> products, double wallet, boolean isAuthorized) {
-        String sql = "INSERT INTO Sellers(AccountID, companyName, password, availableProducts, wallet, isAuthorized) VALUES(?,?,?,?,?,?)";
-
-        try{
-            Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, accountID.toString());
-            pstmt.setString(2, companyName);
-            pstmt.setString(3, password);
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("availableProducts", new JSONArray(products));
-            String availableProducts = jsonObject.toString();
-            pstmt.setString(4, availableProducts);
-            pstmt.setDouble(5, wallet);
-            pstmt.setString(6, Boolean.toString(isAuthorized));
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
     }
 }

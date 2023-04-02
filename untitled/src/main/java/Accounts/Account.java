@@ -3,22 +3,22 @@ package Accounts;
 import java.util.UUID;
 
 public abstract class Account {
-    private final UUID id;
+    private final UUID accountID;
 
     //Constructor
 
     public Account() {
-        this.id = UUID.randomUUID();
+        this.accountID = UUID.randomUUID();
     }
 
-    public Account(UUID id) {
-        this.id = id;
+    public Account(UUID accountID) {
+        this.accountID = accountID;
     }
 
     //Getters and Setters
 
-    public UUID getId() {
-        return id;
+    public UUID getAccountID() {
+        return accountID;
     }
 
     //Override
@@ -26,7 +26,7 @@ public abstract class Account {
     @Override
     public String toString() {
         return "Account{" +
-                "Account ID=" + id +
+                "Account ID=" + accountID +
                 '}';
     }
 

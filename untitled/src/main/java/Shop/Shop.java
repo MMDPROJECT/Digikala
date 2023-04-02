@@ -131,11 +131,11 @@ public class Shop {
         this.currentAccount = currentAccount;
     }
 
-    public WalletReq getWalletRequest(UUID id){
+    public WalletReq getWalletRequest(UUID id) {
         return this.walletRequests.get(id);
     }
 
-    public User getUser(UUID id){
+    public User getUser(UUID id) {
         return (User) this.accounts.get(id);
     }
 
@@ -169,7 +169,7 @@ public class Shop {
     public void adminSignUp(String username, String password, String email) {
         if (!doesAccountExist(username)) {
             Admin newAdmin = new Admin(username, password, email);
-            accounts.put(newAdmin.getId(), newAdmin);
+            accounts.put(newAdmin.getAccountID(), newAdmin);
             System.out.println("Admin has been successfully added!\n");
         } else {
             System.out.println("This admin already exists!\n");
@@ -177,7 +177,7 @@ public class Shop {
     }
 
     public void adminSignUp(Admin admin) {
-        accounts.put(admin.getId(), admin);
+        accounts.put(admin.getAccountID(), admin);
         System.out.println("Admin has been successfully added!\n");
     }
 
@@ -269,7 +269,6 @@ public class Shop {
             }
         }
     }
-
 
 
     public void showAllUserWalletRequests(UUID userId) {
@@ -401,13 +400,18 @@ public class Shop {
             System.out.println("This user already exist!\n");
         } else {
             User newUser = new User(username, password, email, phoneNumber, address);
-            accounts.put(newUser.getId(), newUser);
+            accounts.put(newUser.getAccountID(), newUser);
             System.out.println("User has been successfully added!\n");
         }
     }
 
     public void userSignUp(User newUser) {
-        this.accounts.put(newUser.getId(), newUser);
+        if (this.doesAccountExist(newUser.getUsername())) {
+            System.out.println("This user already exist!\n");
+        } else {
+            accounts.put(newUser.getAccountID(), newUser);
+            System.out.println("User has been successfully added!\n");
+        }
     }
 
     public void addPurchasedProduct(UUID id, User user) {
@@ -424,15 +428,15 @@ public class Shop {
     }
 
     public void submitAWalletRequest(double value) {
-        WalletReq newWalletReq = new WalletReq(value, this.getCurrentAccount().getId());
+        WalletReq newWalletReq = new WalletReq(value, this.getCurrentAccount().getAccountID());
         ((User) this.getCurrentAccount()).submitAWalletRequest(newWalletReq);
         this.walletRequests.put(newWalletReq.getWalletID(), newWalletReq);
         System.out.println("Wallet request has been successfully submitted!\n");
     }
 
-    public void submitAWalletRequest(WalletReq walletReq){
+    public void submitAWalletRequest(WalletReq walletReq) {
         this.walletRequests.put(walletReq.getWalletID(), walletReq);
-        ((User)this.getCurrentAccount()).submitAWalletRequest(walletReq);
+        ((User) this.getCurrentAccount()).submitAWalletRequest(walletReq);
         System.out.println("Wallet request has been successfully submitted!\n");
     }
 
@@ -443,13 +447,18 @@ public class Shop {
             System.out.println("This Seller already exist!\n");
         } else {
             Seller newSeller = new Seller(companyName, password);
-            this.accounts.put(newSeller.getId(), newSeller);
+            this.accounts.put(newSeller.getAccountID(), newSeller);
             System.out.println("Seller has been successfully added!\n");
         }
     }
 
     public void sellerSignUp(Seller seller) {
-        this.accounts.put(seller.getId(), seller);
+        if (!doesAccountExist(seller.getCompanyName())){
+            this.accounts.put(seller.getAccountID(), seller);
+            System.out.println("Seller has been successfully added!\n");
+        } else {
+            System.out.println("This seller already exists!\n");
+        }
     }
 
     public boolean sellerLogin(String companyName, String password) {
@@ -468,7 +477,7 @@ public class Shop {
 
     public void addProduct(Product product) {
         this.products.put(product.getProductID(), product);
-        ((Seller) this.getCurrentAccount()).addProduct(product);
+        ((Seller)this.accounts.get(this.products.get(product.getProductID()).getSellerId())).addProduct(product);
     }
 
     public void removeProduct(UUID id) {
@@ -517,23 +526,23 @@ public class Shop {
         System.out.println("Order has been successfully requested!\n");
     }
 
-    public Order getOrderRequest(Order order){
+    public Order getOrderRequest(Order order) {
         return order;
     }
 
-    public boolean hasCheckout(UUID cartID){
-        for (Account account : this.accounts.values()){
-            if (account instanceof User){
+    public boolean hasCheckout(UUID cartID) {
+        for (Account account : this.accounts.values()) {
+            if (account instanceof User) {
                 return ((User) account).getCart(cartID).hasCheckout();
             }
         }
         return false;
     }
 
-    public ShoppingCart getCart(UUID cartID){
-        for (Account account : this.accounts.values()){
-            if (account instanceof User){
-                if (((User) account).getCarts().containsKey(cartID)){
+    public ShoppingCart getCart(UUID cartID) {
+        for (Account account : this.accounts.values()) {
+            if (account instanceof User) {
+                if (((User) account).getCarts().containsKey(cartID)) {
                     return ((User) account).getCart(cartID);
                 }
             }
@@ -547,26 +556,24 @@ public class Shop {
         return this.walletRequests.containsKey(id);
     }
 
-    public void walletConfirm(UUID id){
-        if (this.walletRequests.containsKey(id)){
-            if (!this.getWalletRequest(id).isConfirmed()){
+    public void walletConfirm(UUID id) {
+        if (this.walletRequests.containsKey(id)) {
+            if (!this.getWalletRequest(id).isConfirmed()) {
                 this.getWalletRequest(id).setConfirmed();
                 this.getUser(this.getWalletRequest(id).getUser()).addWallet(this.getWalletRequest(id).getValue());
-            }
-            else {
+            } else {
                 System.out.println("This wallet request has been confirmed earlier");
             }
-        }
-        else {
+        } else {
             System.out.println("Wallet request has not been found");
         }
     }
 
     //Order - Related Methods
 
-    public void updateUserPurchasedProducts(UUID orderID){
-        for (Product product : getOrder(orderID).getProducts()){
-            if (!((User)accounts.get(getOrder(orderID).getBuyer())).isProductPurchased(product.getProductID())){
+    public void updateUserPurchasedProducts(UUID orderID) {
+        for (Product product : getOrder(orderID).getProducts()) {
+            if (!((User) accounts.get(getOrder(orderID).getBuyer())).isProductPurchased(product.getProductID())) {
                 ((User) accounts.get(getOrder(orderID).getBuyer())).addPurchasedProduct(product);
             }
         }

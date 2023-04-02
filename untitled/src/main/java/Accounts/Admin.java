@@ -5,30 +5,47 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.UUID;
 
-import static Database_Insert.Connect.connect;
+import static Connection.Connect.connect;
 
 public class Admin extends Account {
     private final String username;
     private final String password;
-    private final String address;
+    private final String email;
 
     //Constructor
 
-    public Admin(String username, String password, String address) {
+    public Admin(String username, String password, String email) {
         super();
         this.username = username;
         this.password = password;
-        this.address = address;
+        this.email = email;
+        insert();
     }
 
-    public Admin(UUID id, String username, String password, String address) {
+    public Admin(UUID id, String username, String password, String email) {
         super(id);
         this.username = username;
         this.password = password;
-        this.address = address;
+        this.email = email;
     }
 
     //Getters and Setters
+
+    public void insert() {
+        String sql = "INSERT INTO Admins(AccountID, username, password, email) VALUES(?,?,?,?)";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, getAccountID().toString());
+            pstmt.setString(2, username);
+            pstmt.setString(3, password);
+            pstmt.setString(4, email);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     public String getUsername() {
         return username;
@@ -38,23 +55,20 @@ public class Admin extends Account {
         return password;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
     //Override
+
+    public String getEmail() {
+        return email;
+    }
 
     @Override
     public String toString() {
         return "Admin{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", address='" + address + '\'' +
+                ", email='" + email + '\'' +
                 "} " + super.toString();
     }
-
-    //Polymorphism
-
 
     @Override
     public boolean accountLogin(String username, String password) {
@@ -64,21 +78,5 @@ public class Admin extends Account {
     @Override
     public boolean doesAccountExist(String username) {
         return this.username.equalsIgnoreCase(username);
-    }
-
-    public static void insert(UUID accountID, String username, String password, String address) {
-        String sql = "INSERT INTO Admins(AccountID, username, password, address) VALUES(?,?,?,?)";
-
-        try{
-            Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, accountID.toString());
-            pstmt.setString(2, username);
-            pstmt.setString(3, password);
-            pstmt.setString(4, address);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
     }
 }

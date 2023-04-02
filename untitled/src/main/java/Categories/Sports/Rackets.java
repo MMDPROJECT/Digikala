@@ -1,7 +1,7 @@
 package Categories.Sports;
 
 import Categories.Sports.Enums.RacketDurability;
-import Database_Insert.Connect;
+import Connection.Connect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -25,6 +25,7 @@ public class Rackets extends Sports {
         this.width = width;
         this.durability = durability;
         Shape = shape;
+        insert();
     }
 
     public Rackets(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, double weight, String sportType, String brand, double length, double width, RacketDurability durability, String shape) {
@@ -36,36 +37,6 @@ public class Rackets extends Sports {
     }
 
     //Getters and Setters
-
-    public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, double weight, String sportType, String brand, double length, double width, RacketDurability durability, String Shape) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, sportType, brand, length, width, durability, Shape, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-        try {
-            Connection conn = Connect.connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, productID.toString());
-            pstmt.setString(2, name);
-            pstmt.setString(3, color);
-            pstmt.setDouble(4, price);
-            pstmt.setString(5, sellerID.toString());
-            pstmt.setInt(6, quantity);
-            JSONObject json1 = new JSONObject();
-            json1.put("comments", new JSONArray(comments));
-            String strComments = json1.toString();
-            pstmt.setString(7, strComments);
-            pstmt.setDouble(8, weight);
-            pstmt.setString(9, sportType);
-            pstmt.setString(10, brand);
-            pstmt.setDouble(11, length);
-            pstmt.setDouble(12, width);
-            pstmt.setString(13, durability.toString());
-            pstmt.setString(14, Shape);
-            pstmt.setString(15, "Rackets");
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
 
     public double getLength() {
         return length;
@@ -93,5 +64,35 @@ public class Rackets extends Sports {
                 ", durability=" + durability +
                 ", Shape='" + Shape + '\'' +
                 "} " + super.toString();
+    }
+
+    public void insert() {
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, sportType, brand, length, width, durability, Shape, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        try {
+            Connection conn = Connect.connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, getProductID().toString());
+            pstmt.setString(2, getName());
+            pstmt.setString(3, getColor());
+            pstmt.setDouble(4, getPrice());
+            pstmt.setString(5, getSellerId().toString());
+            pstmt.setInt(6, getQuantity());
+            JSONObject jsonComments = new JSONObject();
+            jsonComments.put("comments", new JSONArray(getComments()));
+            String strComments = jsonComments.toString();
+            pstmt.setString(7, strComments);
+            pstmt.setDouble(8, getWeight());
+            pstmt.setString(9, getSportType());
+            pstmt.setString(10, getBrand());
+            pstmt.setDouble(11, length);
+            pstmt.setDouble(12, width);
+            pstmt.setString(13, durability.toString());
+            pstmt.setString(14, Shape);
+            pstmt.setString(15, "Rackets");
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

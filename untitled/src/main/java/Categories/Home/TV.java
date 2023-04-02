@@ -1,6 +1,6 @@
 package Categories.Home;
 
-import Database_Insert.Connect;
+import Connection.Connect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -24,6 +24,7 @@ public class TV extends Home {
         this.mountableOnWall = mountableOnWall;
         this.has3D = has3D;
         this.hasStand = hasStand;
+        insert();
     }
 
     public TV(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, boolean hasController, double height, double width, double weight, int refreshRate, boolean mountableOnWall, boolean has3D, boolean hasStand) {
@@ -36,26 +37,26 @@ public class TV extends Home {
 
     //Getters and Setters
 
-    public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, boolean hasController, double height, double width, double weight, int refreshRate, boolean mountableOnWall, boolean has3D, boolean hasStand) {
+    public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasController, height, width, weight, refreshRate, mountableOnWall, has3D, hasStand, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, productID.toString());
-            pstmt.setString(2, name);
-            pstmt.setString(3, color);
-            pstmt.setDouble(4, price);
-            pstmt.setString(5, sellerID.toString());
-            pstmt.setInt(6, quantity);
-            JSONObject json1 = new JSONObject();
-            json1.put("comments", new JSONArray(comments));
-            String strComments = json1.toString();
+            pstmt.setString(1, getProductID().toString());
+            pstmt.setString(2, getName());
+            pstmt.setString(3, getColor());
+            pstmt.setDouble(4, getPrice());
+            pstmt.setString(5, getSellerId().toString());
+            pstmt.setInt(6, getQuantity());
+            JSONObject jsonComments = new JSONObject();
+            jsonComments.put("comments", new JSONArray(getComments()));
+            String strComments = jsonComments.toString();
             pstmt.setString(7, strComments);
-            pstmt.setString(8, Boolean.toString(hasController));
-            pstmt.setDouble(9, height);
-            pstmt.setDouble(10, width);
-            pstmt.setDouble(11, weight);
+            pstmt.setString(8, Boolean.toString(isHasController()));
+            pstmt.setDouble(9, getHeight());
+            pstmt.setDouble(10, getWidth());
+            pstmt.setDouble(11, getWeight());
             pstmt.setInt(12, refreshRate);
             pstmt.setString(13, Boolean.toString(mountableOnWall));
             pstmt.setString(14, Boolean.toString(has3D));

@@ -1,6 +1,6 @@
 package Categories.Electronics;
 
-import Database_Insert.Connect;
+import Connection.Connect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -32,6 +32,7 @@ public class SmartPhone extends Electronics {
         this.displayResolution = displayResolution;
         this.ringTone = ringTone;
         this.CPU = CPU;
+        insert();
     }
 
     public SmartPhone(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, String brand, String model, String OS, String screenSize, double batteryCapacity, int rearCameraQuality, int selfieCameraQuality, int cameraNumber, int storage, double OSVersion, String displayResolution, String ringTone, String CPU) {
@@ -47,42 +48,6 @@ public class SmartPhone extends Electronics {
     }
 
     //Getters and Setters
-
-    public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, String brand, String model, String OS, String screenSize, double batteryCapacity, int rearCameraQuality, int selfieCameraQuality, int cameraNumber, int storage, double OSVersion, String displayResolution, String ringTone, String CPU) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, brand, model, OS, screenSize, batteryCapacity, rearCameraQuality, selfieCameraQuality, cameraNumber, storage, OSVersion, displayResolution, ringTone, CPU, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-        try {
-            Connection conn = Connect.connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, productID.toString());
-            pstmt.setString(2, name);
-            pstmt.setString(3, color);
-            pstmt.setDouble(4, price);
-            pstmt.setString(5, sellerID.toString());
-            pstmt.setInt(6, quantity);
-            JSONObject json1 = new JSONObject();
-            json1.put("comments", new JSONArray(comments));
-            String strComments = json1.toString();
-            pstmt.setString(7, strComments);
-            pstmt.setString(8, brand);
-            pstmt.setString(9, model);
-            pstmt.setString(10, OS);
-            pstmt.setString(11, screenSize);
-            pstmt.setDouble(12, batteryCapacity);
-            pstmt.setInt(13, rearCameraQuality);
-            pstmt.setInt(14, selfieCameraQuality);
-            pstmt.setInt(15, cameraNumber);
-            pstmt.setInt(16, storage);
-            pstmt.setDouble(17, OSVersion);
-            pstmt.setString(18, displayResolution);
-            pstmt.setString(19, ringTone);
-            pstmt.setString(20, CPU);
-            pstmt.setString(21, "SmartPhone");
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
 
     public int getRearCameraQuality() {
         return rearCameraQuality;
@@ -130,5 +95,41 @@ public class SmartPhone extends Electronics {
                 ", ringTone='" + ringTone + '\'' +
                 ", CPU='" + CPU + '\'' +
                 "} " + super.toString();
+    }
+
+    public void insert() {
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, brand, model, OS, screenSize, batteryCapacity, hasHeartRateTracker, hasStepTracker, hasCaloricTracker, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        try {
+            Connection conn = Connect.connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, getProductID().toString());
+            pstmt.setString(2, getName());
+            pstmt.setString(3, getColor());
+            pstmt.setDouble(4, getPrice());
+            pstmt.setString(5, getSellerId().toString());
+            pstmt.setInt(6, getQuantity());
+            JSONObject jsonComments = new JSONObject();
+            jsonComments.put("comments", new JSONArray(getComments()));
+            String strComments = jsonComments.toString();
+            pstmt.setString(7, strComments);
+            pstmt.setString(8, getBrand());
+            pstmt.setString(9, getModel());
+            pstmt.setString(10, getOS());
+            pstmt.setString(11, getScreenSize());
+            pstmt.setDouble(12, getBatteryCapacity());
+            pstmt.setInt(13, rearCameraQuality);
+            pstmt.setInt(14, selfieCameraQuality);
+            pstmt.setInt(15, cameraNumber);
+            pstmt.setInt(16, storage);
+            pstmt.setDouble(17, OSVersion);
+            pstmt.setString(18, displayResolution);
+            pstmt.setString(19, ringTone);
+            pstmt.setString(20, CPU);
+            pstmt.setString(21, "SmartPhone");
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
