@@ -1,6 +1,5 @@
 package Categories.SuperMarket;
 
-import Categories.SuperMarket.Enums.DairyGroups;
 import Categories.SuperMarket.Enums.DrinkSize;
 import Database_Insert.Connect;
 import org.json.JSONArray;
@@ -28,39 +27,18 @@ public class Drinks extends SuperMarket {
         this.size = size;
     }
 
+    public Drinks(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, boolean hasBox, double weight, double salt, double calories, double fat, double sugar, ArrayList<String> ingredientItems, String countryOfOrigin, String taste, boolean isSoftDrink, double litters, DrinkSize size) {
+        super(comments, id, name, color, price, sellerId, quantity, hasBox, weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin);
+        this.taste = taste;
+        this.isSoftDrink = isSoftDrink;
+        this.litters = litters;
+        this.size = size;
+    }
 
     //Getters and Setters
 
-    public String getTaste() {
-        return taste;
-    }
-
-    public boolean isSoftDrink() {
-        return isSoftDrink;
-    }
-
-    public double getLitters() {
-        return litters;
-    }
-
-    public DrinkSize getSize() {
-        return size;
-    }
-
-    //Override
-
-    @Override
-    public String toString() {
-        return "Drinks{" +
-                "taste='" + taste + '\'' +
-                ", isSoftDrink=" + isSoftDrink +
-                ", litters=" + litters +
-                ", size=" + size +
-                "} " + super.toString();
-    }
-
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, boolean hasBox, double weight, double salt, double calories, double fat, double sugar, ArrayList<String> IngredientItems, String CountryOfOrigin, boolean isSoftDrink, double litters, DrinkSize size) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasBox, weight, salt, calories, fat, sugar, IngredientItems, CountryOfOrigin, isSoftDrink, litters, size) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasBox, weight, salt, calories, fat, sugar, IngredientItems, CountryOfOrigin, isSoftDrink, litters, size, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -89,9 +67,38 @@ public class Drinks extends SuperMarket {
             pstmt.setString(16, Boolean.toString(isSoftDrink));
             pstmt.setDouble(17, litters);
             pstmt.setString(18, size.toString());
+            pstmt.setString(19, "Drinks");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public String getTaste() {
+        return taste;
+    }
+
+    public boolean isSoftDrink() {
+        return isSoftDrink;
+    }
+
+    public double getLitters() {
+        return litters;
+    }
+
+    //Override
+
+    public DrinkSize getSize() {
+        return size;
+    }
+
+    @Override
+    public String toString() {
+        return "Drinks{" +
+                "taste='" + taste + '\'' +
+                ", isSoftDrink=" + isSoftDrink +
+                ", litters=" + litters +
+                ", size=" + size +
+                "} " + super.toString();
     }
 }

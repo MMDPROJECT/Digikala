@@ -26,10 +26,18 @@ public class SmartWatch extends Electronics {
         this.hasCaloricTracker = hasCaloricTracker;
     }
 
+    public SmartWatch(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, String brand, String model, String OS, String screenSize, double batteryCapacity, String processor, boolean hasHeartRateTracker, boolean hasStepTracker, boolean hasCaloricTracker) {
+        super(comments, id, name, color, price, sellerId, quantity, brand, model, OS, screenSize, batteryCapacity);
+        this.processor = processor;
+        this.hasHeartRateTracker = hasHeartRateTracker;
+        this.hasStepTracker = hasStepTracker;
+        this.hasCaloricTracker = hasCaloricTracker;
+    }
+
     //Getters and Setters
 
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, String brand, String model, String OS, String screenSize, double batteryCapacity, boolean hasHeartRateTracker, boolean hasStepTracker, boolean hasCaloricTracker) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, brand, model, OS, screenSize, batteryCapacity, hasHeartRateTracker, hasStepTracker, hasCaloricTracker) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, brand, model, OS, screenSize, batteryCapacity, hasHeartRateTracker, hasStepTracker, hasCaloricTracker, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -52,6 +60,7 @@ public class SmartWatch extends Electronics {
             pstmt.setString(13, Boolean.toString(hasHeartRateTracker));
             pstmt.setString(14, Boolean.toString(hasStepTracker));
             pstmt.setString(15, Boolean.toString(hasCaloricTracker));
+            pstmt.setString(16, "SmartWatch");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -66,11 +75,11 @@ public class SmartWatch extends Electronics {
         return hasHeartRateTracker;
     }
 
+    //Override
+
     public boolean isHasStepTracker() {
         return hasStepTracker;
     }
-
-    //Override
 
     public boolean isHasCaloricTracker() {
         return hasCaloricTracker;

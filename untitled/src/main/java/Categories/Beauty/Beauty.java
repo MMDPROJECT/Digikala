@@ -3,6 +3,7 @@ package Categories.Beauty;
 import Categories.Beauty.Enums.MatterState;
 import Categories.Product;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Beauty extends Product {
@@ -17,6 +18,11 @@ public class Beauty extends Product {
         this.hasBox = hasBox;
     }
 
+    public Beauty(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, MatterState materialState, boolean hasBox) {
+        super(comments, id, name, color, price, sellerId, quantity);
+        this.materialState = materialState;
+        this.hasBox = hasBox;
+    }
 
     //Getters and Setters
 

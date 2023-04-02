@@ -1,7 +1,6 @@
 package Categories.Tools;
 
 import Categories.Tools.Enums.PowerSource;
-import Categories.Tools.Enums.SpannerMaterial;
 import Database_Insert.Connect;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,39 +27,18 @@ public class Drill extends Tools {
         this.maxSpinSpeed = maxSpinSpeed;
     }
 
+    public Drill(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, double weight, boolean hasBox, boolean isSilent, boolean isChargeable, String brand, int voltage, PowerSource powerSource, int minSpinSpeed, int maxSpinSpeed) {
+        super(comments, id, name, color, price, sellerId, quantity, weight, hasBox, isSilent, isChargeable, brand);
+        this.voltage = voltage;
+        this.powerSource = powerSource;
+        this.minSpinSpeed = minSpinSpeed;
+        this.maxSpinSpeed = maxSpinSpeed;
+    }
 
     //Getters ana Setters
 
-    public int getVoltage() {
-        return voltage;
-    }
-
-    public PowerSource getPowerSource() {
-        return powerSource;
-    }
-
-    public int getMinSpinSpeed() {
-        return minSpinSpeed;
-    }
-
-    public int getMaxSpinSpeed() {
-        return maxSpinSpeed;
-    }
-
-    //Override
-
-    @Override
-    public String toString() {
-        return "Drill{" +
-                "voltage=" + voltage +
-                ", powerSource=" + powerSource +
-                ", minSpinSpeed=" + minSpinSpeed +
-                ", maxSpinSpeed=" + maxSpinSpeed +
-                "} " + super.toString();
-    }
-
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, double weight, boolean hasBox, boolean isSilent, boolean isChargeable, String brand, int voltage, PowerSource powerSource, int minSpinSpeed, int maxSpinSpeed) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, hasBox, isSilent, isChargeable, brand, voltage, powerSource, minSpinSpeed, maxSpinSpeed) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, hasBox, isSilent, isChargeable, brand, voltage, powerSource, minSpinSpeed, maxSpinSpeed, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -84,9 +62,38 @@ public class Drill extends Tools {
             pstmt.setString(14, powerSource.toString());
             pstmt.setInt(15, minSpinSpeed);
             pstmt.setInt(16, maxSpinSpeed);
+            pstmt.setString(17, "Drill");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public int getVoltage() {
+        return voltage;
+    }
+
+    public PowerSource getPowerSource() {
+        return powerSource;
+    }
+
+    public int getMinSpinSpeed() {
+        return minSpinSpeed;
+    }
+
+    //Override
+
+    public int getMaxSpinSpeed() {
+        return maxSpinSpeed;
+    }
+
+    @Override
+    public String toString() {
+        return "Drill{" +
+                "voltage=" + voltage +
+                ", powerSource=" + powerSource +
+                ", minSpinSpeed=" + minSpinSpeed +
+                ", maxSpinSpeed=" + maxSpinSpeed +
+                "} " + super.toString();
     }
 }

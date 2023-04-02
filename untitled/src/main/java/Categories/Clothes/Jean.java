@@ -28,11 +28,17 @@ public class Jean extends Clothes {
         this.hasZipper = hasZipper;
     }
 
+    public Jean(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability, double height, int pocketNumber, boolean hasZipper) {
+        super(comments, id, name, color, price, sellerId, quantity, size, gender, material, brand, durability);
+        this.height = height;
+        this.pocketNumber = pocketNumber;
+        this.hasZipper = hasZipper;
+    }
 
     //Getter and Setters
 
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability, double height, int pocketNumber, boolean hasZipper) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ClothSize, ClothGender, ClothMaterial, brand, ClothDurability, height, pocketNumber, hasZipper) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ClothSize, ClothGender, ClothMaterial, brand, ClothDurability, height, pocketNumber, hasZipper, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -55,6 +61,7 @@ public class Jean extends Clothes {
             pstmt.setDouble(13, height);
             pstmt.setInt(14, pocketNumber);
             pstmt.setString(15, Boolean.toString(hasZipper));
+            pstmt.setString(16, "Jean");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -65,11 +72,11 @@ public class Jean extends Clothes {
         return height;
     }
 
+    //Override
+
     public int getPocketNumber() {
         return pocketNumber;
     }
-
-    //Override
 
     public boolean isHasZipper() {
         return hasZipper;

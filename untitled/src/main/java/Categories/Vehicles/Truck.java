@@ -1,6 +1,5 @@
 package Categories.Vehicles;
 
-import Categories.Vehicles.Enums.NoiseLevel;
 import Categories.Vehicles.Enums.TruckType;
 import Database_Insert.Connect;
 import org.json.JSONArray;
@@ -24,29 +23,16 @@ public class Truck extends Vehicles {
         this.hasBed = hasBed;
     }
 
+    public Truck(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model, TruckType truckType, boolean hasBed) {
+        super(comments, id, name, color, price, sellerId, quantity, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model);
+        this.truckType = truckType;
+        this.hasBed = hasBed;
+    }
 
     //Getters and Setters
 
-    public TruckType getTruckType() {
-        return truckType;
-    }
-
-    public boolean isHasBed() {
-        return hasBed;
-    }
-
-    //Override
-
-    @Override
-    public String toString() {
-        return "Truck{" +
-                "truckType=" + truckType +
-                ", hasBed=" + hasBed +
-                "} " + super.toString();
-    }
-
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model, TruckType truckType, boolean hasBed) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model, truckType, hasBed) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model, truckType, hasBed, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -71,9 +57,28 @@ public class Truck extends Vehicles {
             pstmt.setString(15, model);
             pstmt.setString(16, truckType.toString());
             pstmt.setString(17, Boolean.toString(hasBed));
+            pstmt.setString(18, "Truck");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public TruckType getTruckType() {
+        return truckType;
+    }
+
+    //Override
+
+    public boolean isHasBed() {
+        return hasBed;
+    }
+
+    @Override
+    public String toString() {
+        return "Truck{" +
+                "truckType=" + truckType +
+                ", hasBed=" + hasBed +
+                "} " + super.toString();
     }
 }

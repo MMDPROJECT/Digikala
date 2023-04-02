@@ -27,11 +27,18 @@ public class Refrigerator extends Home {
         this.hasDigitalControllingSystem = hasDigitalControllingSystem;
     }
 
+    public Refrigerator(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, boolean hasController, double height, double width, double weight, int floorNumber, boolean hasFridge, RefrigeratorType refrigeratorType, boolean hasDigitalControllingSystem) {
+        super(comments, id, name, color, price, sellerId, quantity, hasController, height, width, weight);
+        this.floorNumber = floorNumber;
+        this.hasFridge = hasFridge;
+        this.refrigeratorType = refrigeratorType;
+        this.hasDigitalControllingSystem = hasDigitalControllingSystem;
+    }
 
     //Getters and Setters
 
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, boolean hasController, double height, double width, double weight, int floorNumber, boolean hasFridge, RefrigeratorType refrigeratorType, boolean hasDigitalControllingSystem) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasController, height, width, weight, floorNumber, hasFridge, refrigeratorType, hasDigitalControllingSystem) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasController, height, width, weight, floorNumber, hasFridge, refrigeratorType, hasDigitalControllingSystem, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -54,6 +61,7 @@ public class Refrigerator extends Home {
             pstmt.setString(13, Boolean.toString(hasFridge));
             pstmt.setString(14, refrigeratorType.toString());
             pstmt.setString(15, Boolean.toString(hasDigitalControllingSystem));
+            pstmt.setString(16, "Refrigerator");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

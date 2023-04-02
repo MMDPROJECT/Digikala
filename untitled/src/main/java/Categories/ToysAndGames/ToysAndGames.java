@@ -3,6 +3,7 @@ package Categories.ToysAndGames;
 import Categories.Product;
 import Categories.ToysAndGames.Enums.DifficultyLevel;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class ToysAndGames extends Product {
@@ -19,6 +20,12 @@ public class ToysAndGames extends Product {
         this.isMultiplayer = isMultiplayer;
     }
 
+    public ToysAndGames(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer) {
+        super(comments, id, name, color, price, sellerId, quantity);
+        this.hasBox = hasBox;
+        this.difficultyLevel = difficultyLevel;
+        this.isMultiplayer = isMultiplayer;
+    }
 
     //Getters and Setters
 

@@ -29,16 +29,23 @@ public class EyeMakeUp extends Beauty {
         this.longevity = longevity;
     }
 
+    public EyeMakeUp(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, MatterState materialState, boolean hasBox, PenType penType, boolean hasWaterResistance, String brand, int longevity) {
+        super(comments, id, name, color, price, sellerId, quantity, materialState, hasBox);
+        this.penType = penType;
+        this.hasWaterResistance = hasWaterResistance;
+        this.brand = brand;
+        this.longevity = longevity;
+    }
 
     //Getters and Setters
 
-    public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, MatterState materialState, boolean hasBox, PenType penType, boolean hasWaterResistance, String brand, int longevity) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, MatterState, hasBox, penType, hasWaterResistance, brand, longevity) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    public static void insert() {
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, MatterState, hasBox, penType, hasWaterResistance, brand, longevity, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, productID.toString());
+            pstmt.setString(1, );
             pstmt.setString(2, name);
             pstmt.setString(3, color);
             pstmt.setDouble(4, price);
@@ -54,6 +61,7 @@ public class EyeMakeUp extends Beauty {
             pstmt.setString(11, Boolean.toString(hasWaterResistance));
             pstmt.setString(12, brand);
             pstmt.setInt(13, longevity);
+            pstmt.setString(14, "EyeMakeUp");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -73,7 +81,6 @@ public class EyeMakeUp extends Beauty {
     }
 
     //Override
-
     public int getLongevity() {
         return longevity;
     }

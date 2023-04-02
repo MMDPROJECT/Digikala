@@ -34,11 +34,22 @@ public class SmartPhone extends Electronics {
         this.CPU = CPU;
     }
 
+    public SmartPhone(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, String brand, String model, String OS, String screenSize, double batteryCapacity, int rearCameraQuality, int selfieCameraQuality, int cameraNumber, int storage, double OSVersion, String displayResolution, String ringTone, String CPU) {
+        super(comments, id, name, color, price, sellerId, quantity, brand, model, OS, screenSize, batteryCapacity);
+        this.rearCameraQuality = rearCameraQuality;
+        this.selfieCameraQuality = selfieCameraQuality;
+        this.cameraNumber = cameraNumber;
+        this.storage = storage;
+        this.OSVersion = OSVersion;
+        this.displayResolution = displayResolution;
+        this.ringTone = ringTone;
+        this.CPU = CPU;
+    }
 
     //Getters and Setters
 
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, String brand, String model, String OS, String screenSize, double batteryCapacity, int rearCameraQuality, int selfieCameraQuality, int cameraNumber, int storage, double OSVersion, String displayResolution, String ringTone, String CPU) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, brand, model, OS, screenSize, batteryCapacity, rearCameraQuality, selfieCameraQuality, cameraNumber, storage, OSVersion, displayResolution, ringTone, CPU) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, brand, model, OS, screenSize, batteryCapacity, rearCameraQuality, selfieCameraQuality, cameraNumber, storage, OSVersion, displayResolution, ringTone, CPU, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -66,6 +77,7 @@ public class SmartPhone extends Electronics {
             pstmt.setString(18, displayResolution);
             pstmt.setString(19, ringTone);
             pstmt.setString(20, CPU);
+            pstmt.setString(21, "SmartPhone");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -96,11 +108,11 @@ public class SmartPhone extends Electronics {
         return displayResolution;
     }
 
+    //Override
+
     public String getRingTone() {
         return ringTone;
     }
-
-    //Override
 
     public String getCPU() {
         return CPU;

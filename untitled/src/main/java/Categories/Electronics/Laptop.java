@@ -34,10 +34,22 @@ public class Laptop extends Electronics {
         this.portNumber = portNumber;
     }
 
+    public Laptop(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, String brand, String model, String OS, String screenSize, double batteryCapacity, String webcamModel, String CPU, String GPU, int fanNumber, boolean hasKeyboardLight, boolean hasFingerPrint, String keyboardLanguage, int portNumber) {
+        super(comments, id, name, color, price, sellerId, quantity, brand, model, OS, screenSize, batteryCapacity);
+        this.webcamModel = webcamModel;
+        this.CPU = CPU;
+        this.GPU = GPU;
+        this.fanNumber = fanNumber;
+        this.hasKeyboardLight = hasKeyboardLight;
+        this.hasFingerPrint = hasFingerPrint;
+        this.keyboardLanguage = keyboardLanguage;
+        this.portNumber = portNumber;
+    }
+
     //Getters and Setters
 
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, String brand, String model, String OS, String screenSize, double batteryCapacity, String webcamModel, String CPU, String GPU, int fanNumber, boolean hasKeyboardLight, boolean hasFingerPrint, String keyboardLanguage, int portNumber) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, brand, model, OS, screenSize, batteryCapacity, webcamModel, CPU, GPU, fanNumber, hasKeyboardLight, hasFingerPrint, keyboardLanguage, portNumber) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, brand, model, OS, screenSize, batteryCapacity, webcamModel, CPU, GPU, fanNumber, hasKeyboardLight, hasFingerPrint, keyboardLanguage, portNumber, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -65,6 +77,7 @@ public class Laptop extends Electronics {
             pstmt.setString(18, Boolean.toString(hasFingerPrint));
             pstmt.setString(19, keyboardLanguage);
             pstmt.setInt(20, portNumber);
+            pstmt.setString(21, "Laptop");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -95,11 +108,11 @@ public class Laptop extends Electronics {
         return hasFingerPrint;
     }
 
+    //Override
+
     public String getKeyboardLanguage() {
         return keyboardLanguage;
     }
-
-    //Override
 
     public int getPortNumber() {
         return portNumber;

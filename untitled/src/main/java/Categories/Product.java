@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public abstract class Product {
     final ArrayList<String> comments;
-    private final UUID id;
+    private final UUID productID;
     private final String name;
     private final String color;
     private final double price;
@@ -19,9 +19,19 @@ public abstract class Product {
         this.color = color;
         this.quantity = quantity;
         this.price = price;
-        this.id = UUID.randomUUID();
+        this.productID = UUID.randomUUID();
         this.sellerId = sellerId;
         this.comments = new ArrayList<>();
+    }
+
+    public Product(ArrayList<String> comments, UUID productID, String name, String color, double price, UUID sellerId, int quantity) {
+        this.comments = comments;
+        this.productID = productID;
+        this.name = name;
+        this.color = color;
+        this.price = price;
+        this.sellerId = sellerId;
+        this.quantity = quantity;
     }
 
     //Getter and Setters
@@ -49,8 +59,8 @@ public abstract class Product {
         return comments;
     }
 
-    public UUID getId() {
-        return id;
+    public UUID getProductID() {
+        return productID;
     }
 
     //Product - Related Functions
@@ -82,11 +92,11 @@ public abstract class Product {
     @Override
     public String toString() {
         return "Product{" +
-                "Product ID=" + id +
+                "Product ID=" + productID +
                 ", name='" + name + '\'' +
                 ", color='" + color + '\'' +
                 ", price=" + price +
-                ", sellerid=" + sellerId +
+                ", seller id=" + sellerId +
                 ", comments=" + comments +
                 ", quantity=" + quantity +
                 '}';

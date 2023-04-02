@@ -2,7 +2,6 @@ package Categories.Vehicles;
 
 import Categories.Vehicles.Enums.NoiseLevel;
 import Database_Insert.Connect;
-import Shop.Shop;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -26,34 +25,17 @@ public class Motorcycle extends Vehicles {
         this.noiseLevel = noiseLevel;
     }
 
+    public Motorcycle(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model, int seatNumber, boolean hasWingMirror, NoiseLevel noiseLevel) {
+        super(comments, id, name, color, price, sellerId, quantity, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model);
+        this.seatNumber = seatNumber;
+        this.hasWingMirror = hasWingMirror;
+        this.noiseLevel = noiseLevel;
+    }
 
     //Getters and Setters
 
-    public int getSeatNumber() {
-        return seatNumber;
-    }
-
-    public boolean isHasWingMirror() {
-        return hasWingMirror;
-    }
-
-    public NoiseLevel getNoiseLevel() {
-        return noiseLevel;
-    }
-
-    //Override
-
-    @Override
-    public String toString() {
-        return "Motorcycle{" +
-                "seatNumber=" + seatNumber +
-                ", hasWingMirror=" + hasWingMirror +
-                ", noiseLevel=" + noiseLevel +
-                "} " + super.toString();
-    }
-
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model, int seatNumber, boolean hasWingMirror, NoiseLevel noiseLevel) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model, seatNumber, hasWingMirror, noiseLevel) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model, seatNumber, hasWingMirror, noiseLevel, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -79,9 +61,33 @@ public class Motorcycle extends Vehicles {
             pstmt.setInt(16, seatNumber);
             pstmt.setString(17, Boolean.toString(hasWingMirror));
             pstmt.setString(18, noiseLevel.toString());
+            pstmt.setString(19, "Motorcycle");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public int getSeatNumber() {
+        return seatNumber;
+    }
+
+    public boolean isHasWingMirror() {
+        return hasWingMirror;
+    }
+
+    //Override
+
+    public NoiseLevel getNoiseLevel() {
+        return noiseLevel;
+    }
+
+    @Override
+    public String toString() {
+        return "Motorcycle{" +
+                "seatNumber=" + seatNumber +
+                ", hasWingMirror=" + hasWingMirror +
+                ", noiseLevel=" + noiseLevel +
+                "} " + super.toString();
     }
 }

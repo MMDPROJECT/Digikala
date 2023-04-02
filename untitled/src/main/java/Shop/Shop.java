@@ -45,6 +45,7 @@ import Categories.Vehicles.Motorcycle;
 import Categories.Vehicles.Truck;
 import Categories.Vehicles.Vehicles;
 import Shopping.Order;
+import Shopping.ShoppingCart;
 import Shopping.WalletReq;
 
 import java.util.HashMap;
@@ -130,6 +131,14 @@ public class Shop {
         this.currentAccount = currentAccount;
     }
 
+    public WalletReq getWalletRequest(UUID id){
+        return this.walletRequests.get(id);
+    }
+
+    public User getUser(UUID id){
+        return (User) this.accounts.get(id);
+    }
+
     //Admin - Related Methods
 
     public boolean doesAccountExist(UUID id) {
@@ -208,19 +217,6 @@ public class Shop {
         }
     }
 
-    public void walletConfirm(UUID id) {
-        if (!this.doesWalletRequestExist(id)) {
-            System.out.println("Wallet request has not been found!\n");
-        } else {
-            if (!this.walletRequests.get(id).isConfirmed()) {
-                this.walletRequests.get(id).walletConfirm();
-                System.out.println("Wallet request has been successfully confirmed!\n");
-            } else {
-                System.out.println("This wallet request has been confirmed earlier!\n");
-            }
-        }
-    }
-
     public void showAllOrders() {
         if (this.orders.size() == 0) {
             System.out.println("No order has been submitted yet!\n");
@@ -261,18 +257,20 @@ public class Shop {
         if (!doesOrderExist(id)) {
             System.out.println("Order has not been found!\n");
         } else {
-            if (getOrder(id).getBuyer().checkBuyerPocket(getOrder(id).calcBuyerPayOff())) {
+            if (((User) this.accounts.get(getOrder(id).getBuyer())).checkBuyerPocket(getOrder(id).calcBuyerPayOff())) {
                 getOrder(id).orderConfirm();
-                getOrder(id).getBuyer().buyerPayOff(getOrder(id).calcBuyerPayOff());
+                ((User) this.accounts.get(getOrder(id).getBuyer())).buyerPayOff(getOrder(id).calcBuyerPayOff());
                 addShopCut(getOrder(id).calcShopCut());
                 calcSellerCut(id);
                 getOrder(id).updateStocks();
-                getOrder(id).updateUserPurchasedProducts();
+                updateUserPurchasedProducts(id);
             } else {
                 System.out.println("Order can't be done, due to lack of money\n");
             }
         }
     }
+
+
 
     public void showAllUserWalletRequests(UUID userId) {
         if (doesAccountExist(userId)) {
@@ -426,9 +424,15 @@ public class Shop {
     }
 
     public void submitAWalletRequest(double value) {
-        WalletReq newWalletReq = new WalletReq(value, ((User) this.getCurrentAccount()));
+        WalletReq newWalletReq = new WalletReq(value, this.getCurrentAccount().getId());
         ((User) this.getCurrentAccount()).submitAWalletRequest(newWalletReq);
-        this.walletRequests.put(newWalletReq.getId(), newWalletReq);
+        this.walletRequests.put(newWalletReq.getWalletID(), newWalletReq);
+        System.out.println("Wallet request has been successfully submitted!\n");
+    }
+
+    public void submitAWalletRequest(WalletReq walletReq){
+        this.walletRequests.put(walletReq.getWalletID(), walletReq);
+        ((User)this.getCurrentAccount()).submitAWalletRequest(walletReq);
         System.out.println("Wallet request has been successfully submitted!\n");
     }
 
@@ -463,7 +467,7 @@ public class Shop {
     }
 
     public void addProduct(Product product) {
-        this.products.put(product.getId(), product);
+        this.products.put(product.getProductID(), product);
         ((Seller) this.getCurrentAccount()).addProduct(product);
     }
 
@@ -507,18 +511,34 @@ public class Shop {
         return false;
     }
 
-    public void checkoutCart(UUID cartID) {
-        if (this.doesCartExist(cartID)) {
-            if (!((User) this.getCurrentAccount()).getCart(cartID).hasCheckout()) {
-                Order order = ((User) this.getCurrentAccount()).checkoutCart(cartID);
-                this.orders.put(order.getId(), order);
-                System.out.println("Order has been successfully submitted!\n");
-            } else {
-                System.out.println("Cart has been checkedout earlier!\n");
+    public void addOrder(Order order) {
+        this.orders.put(order.getOrderID(), order);
+        this.getUser(order.getBuyer()).addOrder(order);
+        System.out.println("Order has been successfully requested!\n");
+    }
+
+    public Order getOrderRequest(Order order){
+        return order;
+    }
+
+    public boolean hasCheckout(UUID cartID){
+        for (Account account : this.accounts.values()){
+            if (account instanceof User){
+                return ((User) account).getCart(cartID).hasCheckout();
             }
-        } else {
-            System.out.println("Cart has not been found!\n");
         }
+        return false;
+    }
+
+    public ShoppingCart getCart(UUID cartID){
+        for (Account account : this.accounts.values()){
+            if (account instanceof User){
+                if (((User) account).getCarts().containsKey(cartID)){
+                    return ((User) account).getCart(cartID);
+                }
+            }
+        }
+        return null;
     }
 
     //Wallet - Related Methods
@@ -527,7 +547,31 @@ public class Shop {
         return this.walletRequests.containsKey(id);
     }
 
+    public void walletConfirm(UUID id){
+        if (this.walletRequests.containsKey(id)){
+            if (!this.getWalletRequest(id).isConfirmed()){
+                this.getWalletRequest(id).setConfirmed();
+                this.getUser(this.getWalletRequest(id).getUser()).addWallet(this.getWalletRequest(id).getValue());
+            }
+            else {
+                System.out.println("This wallet request has been confirmed earlier");
+            }
+        }
+        else {
+            System.out.println("Wallet request has not been found");
+        }
+    }
+
     //Order - Related Methods
+
+    public void updateUserPurchasedProducts(UUID orderID){
+        for (Product product : getOrder(orderID).getProducts()){
+            if (!((User)accounts.get(getOrder(orderID).getBuyer())).isProductPurchased(product.getProductID())){
+                ((User) accounts.get(getOrder(orderID).getBuyer())).addPurchasedProduct(product);
+            }
+        }
+        System.out.println("User purchased product has been successfully updated!\n");
+    }
 
     public boolean doesOrderExist(UUID id) {
         return this.orders.containsKey(id);

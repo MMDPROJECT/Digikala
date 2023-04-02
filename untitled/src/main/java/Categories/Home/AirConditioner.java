@@ -30,11 +30,20 @@ public class AirConditioner extends Home {
         this.hasTimer = hasTimer;
     }
 
+    public AirConditioner(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, boolean hasController, double height, double width, double weight, double coolingCapacity, double energyEfficiency, String airFilter, int fanNumber, boolean hasRemoteControl, boolean hasTimer) {
+        super(comments, id, name, color, price, sellerId, quantity, hasController, height, width, weight);
+        this.coolingCapacity = coolingCapacity;
+        this.energyEfficiency = energyEfficiency;
+        this.airFilter = airFilter;
+        this.fanNumber = fanNumber;
+        this.hasRemoteControl = hasRemoteControl;
+        this.hasTimer = hasTimer;
+    }
 
     //Getters and Setters
 
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, boolean hasController, double height, double width, double weight, double coolingCapacity, double energyEfficiency, String airFilter, int fanNumber, boolean hasRemoteControl, boolean hasTimer) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasController, height, width, weight, coolingCapacity, energyEfficiency, airFilter, fanNumber, hasRemoteControl, hasTimer) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasController, height, width, weight, coolingCapacity, energyEfficiency, airFilter, fanNumber, hasRemoteControl, hasTimer, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -59,6 +68,7 @@ public class AirConditioner extends Home {
             pstmt.setInt(15, fanNumber);
             pstmt.setString(16, Boolean.toString(hasRemoteControl));
             pstmt.setString(17, Boolean.toString(hasTimer));
+            pstmt.setString(18, "AirConditioner");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -81,11 +91,11 @@ public class AirConditioner extends Home {
         return fanNumber;
     }
 
+    //Override
+
     public boolean isHasRemoteControl() {
         return hasRemoteControl;
     }
-
-    //Override
 
     public boolean isHasTimer() {
         return hasTimer;

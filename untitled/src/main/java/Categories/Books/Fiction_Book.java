@@ -22,8 +22,14 @@ public class Fiction_Book extends Books {
         this.tone = tone;
     }
 
+    public Fiction_Book(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, String ISBN, int pageNumbers, String author, String language, String tone, ArrayList<String> characters) {
+        super(comments, id, name, color, price, sellerId, quantity, ISBN, pageNumbers, author, language);
+        this.tone = tone;
+        this.characters = characters;
+    }
+
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, String ISBN, int pageNumbers, String author, String language, String tone, ArrayList<String> characters) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ISBN, pageNumbers, author, language, tone, characters) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ISBN, pageNumbers, author, language, tone, characters, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -47,6 +53,7 @@ public class Fiction_Book extends Books {
             json2.put("characters", new JSONArray(characters));
             String strCharacters = json2.toString();
             pstmt.setString(13, strCharacters);
+            pstmt.setString(14, "Fiction_Book");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -62,6 +69,8 @@ public class Fiction_Book extends Books {
         return tone;
     }
 
+    //Overrides
+
     //Fiction-Book - Related Functions
     public void showCharacters() {
         if (this.characters.size() == 0) {
@@ -73,8 +82,6 @@ public class Fiction_Book extends Books {
             }
         }
     }
-
-    //Overrides
 
     public void addCharacter(String character) {
         this.characters.add(character);

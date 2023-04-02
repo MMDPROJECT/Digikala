@@ -25,34 +25,17 @@ public class Spanner extends Tools {
         this.material = material;
     }
 
+    public Spanner(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, double weight, boolean hasBox, boolean isSilent, boolean isChargeable, String brand, int size, String style, SpannerMaterial material) {
+        super(comments, id, name, color, price, sellerId, quantity, weight, hasBox, isSilent, isChargeable, brand);
+        this.size = size;
+        this.style = style;
+        this.material = material;
+    }
 
     //Getters and Setters
 
-    public int getSize() {
-        return size;
-    }
-
-    public String getStyle() {
-        return style;
-    }
-
-    public SpannerMaterial getMaterial() {
-        return material;
-    }
-
-    //Override
-
-    @Override
-    public String toString() {
-        return "Spanner{" +
-                "size=" + size +
-                ", style='" + style + '\'' +
-                ", material=" + material +
-                "} " + super.toString();
-    }
-
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, double weight, boolean hasBox, boolean isSilent, boolean isChargeable, String brand, int size, String style, SpannerMaterial material) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, hasBox, isSilent, isChargeable, brand, size, style, material) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, hasBox, isSilent, isChargeable, brand, size, style, material, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -75,9 +58,33 @@ public class Spanner extends Tools {
             pstmt.setInt(13, size);
             pstmt.setString(14, style);
             pstmt.setString(15, material.toString());
+            pstmt.setString(16, "Spanner");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public String getStyle() {
+        return style;
+    }
+
+    //Override
+
+    public SpannerMaterial getMaterial() {
+        return material;
+    }
+
+    @Override
+    public String toString() {
+        return "Spanner{" +
+                "size=" + size +
+                ", style='" + style + '\'' +
+                ", material=" + material +
+                "} " + super.toString();
     }
 }

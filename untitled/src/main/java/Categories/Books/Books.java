@@ -2,6 +2,7 @@ package Categories.Books;
 
 import Categories.Product;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public abstract class Books extends Product {
@@ -14,6 +15,14 @@ public abstract class Books extends Product {
 
     public Books(String name, String color, int quantity, double price, UUID sellerID, String ISBN, int pageNumbers, String author, String language) {
         super(name, color, quantity, price, sellerID);
+        this.ISBN = ISBN;
+        this.pageNumbers = pageNumbers;
+        this.author = author;
+        this.language = language;
+    }
+
+    public Books(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, String ISBN, int pageNumbers, String author, String language) {
+        super(comments, id, name, color, price, sellerId, quantity);
         this.ISBN = ISBN;
         this.pageNumbers = pageNumbers;
         this.author = author;

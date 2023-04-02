@@ -26,34 +26,17 @@ public class SolderingSystem extends Tools {
         this.usageLevel = usageLevel;
     }
 
+    public SolderingSystem(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, double weight, boolean hasBox, boolean isSilent, boolean isChargeable, String brand, int voltage, PowerSource powerSource, UsageLevel usageLevel) {
+        super(comments, id, name, color, price, sellerId, quantity, weight, hasBox, isSilent, isChargeable, brand);
+        this.voltage = voltage;
+        this.powerSource = powerSource;
+        this.usageLevel = usageLevel;
+    }
 
     //Getters and Setters
 
-    public int getVoltage() {
-        return voltage;
-    }
-
-    public PowerSource getPowerSource() {
-        return powerSource;
-    }
-
-    public UsageLevel getUsageLevel() {
-        return usageLevel;
-    }
-
-    //Override
-
-    @Override
-    public String toString() {
-        return "SolderingSystem{" +
-                "voltage=" + voltage +
-                ", powerSource=" + powerSource +
-                ", usageLevel=" + usageLevel +
-                "} " + super.toString();
-    }
-
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, double weight, boolean hasBox, boolean isSilent, boolean isChargeable, String brand, int voltage, PowerSource powerSource, UsageLevel usageLevel) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, hasBox, isSilent, isChargeable, brand, voltage, powerSource, usageLevel) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, hasBox, isSilent, isChargeable, brand, voltage, powerSource, usageLevel, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -76,9 +59,33 @@ public class SolderingSystem extends Tools {
             pstmt.setInt(13, voltage);
             pstmt.setString(14, powerSource.toString());
             pstmt.setString(15, usageLevel.toString());
+            pstmt.setString(16, "SolderingSystem");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public int getVoltage() {
+        return voltage;
+    }
+
+    public PowerSource getPowerSource() {
+        return powerSource;
+    }
+
+    //Override
+
+    public UsageLevel getUsageLevel() {
+        return usageLevel;
+    }
+
+    @Override
+    public String toString() {
+        return "SolderingSystem{" +
+                "voltage=" + voltage +
+                ", powerSource=" + powerSource +
+                ", usageLevel=" + usageLevel +
+                "} " + super.toString();
     }
 }

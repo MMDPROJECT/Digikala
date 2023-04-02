@@ -1,18 +1,26 @@
 package Shopping;
 
 import Categories.Product;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static Database_Insert.Connect.connect;
+
 public class ShoppingCart {
-    private final ArrayList<Product> products;
-    private final HashMap<UUID, Integer> itemNumber;  //A hashmap to store amount of each product that we have in the cart
-    private final UUID id;
     private final String name;
+    private final UUID cartID;
+    private final UUID userID;
     private double totalPrice;
     private boolean hasCheckout;
+    private final ArrayList<Product> products;
+    private final HashMap<UUID, Integer> itemNumber;  //A hashmap to store amount of each product that we have in the cart
 
     //Constructor
 
@@ -21,7 +29,8 @@ public class ShoppingCart {
         this.products = products;
         this.itemNumber = itemNumber;
         this.totalPrice = totalPrice;
-        this.id = UUID.randomUUID();
+        this.cartID = UUID.randomUUID();
+        this.userID = UUID.randomUUID();
         this.hasCheckout = false;
     }
 
@@ -30,8 +39,20 @@ public class ShoppingCart {
         this.products = new ArrayList<>();
         this.itemNumber = new HashMap<>();
         this.totalPrice = 0;
-        this.id = UUID.randomUUID();
+        this.cartID = UUID.randomUUID();
+        this.userID = UUID.randomUUID();
     }
+
+    public ShoppingCart(ArrayList<Product> products, HashMap<UUID, Integer> itemNumber, UUID cartID, UUID userID, String name, double totalPrice, boolean hasCheckout) {
+        this.products = products;
+        this.itemNumber = itemNumber;
+        this.cartID = cartID;
+        this.userID = userID;
+        this.name = name;
+        this.totalPrice = totalPrice;
+        this.hasCheckout = hasCheckout;
+    }
+
     //Getters and Setters
 
     public ArrayList<Product> getProducts() {
@@ -46,8 +67,8 @@ public class ShoppingCart {
         return this.totalPrice;
     }
 
-    public UUID getId() {
-        return this.id;
+    public UUID getOrderID() {
+        return this.cartID;
     }
 
     public String getName() {
@@ -56,6 +77,18 @@ public class ShoppingCart {
 
     public boolean hasCheckout() {
         return this.hasCheckout;
+    }
+
+    public UUID getCartID() {
+        return cartID;
+    }
+
+    public UUID getUserID() {
+        return userID;
+    }
+
+    public boolean isHasCheckout() {
+        return hasCheckout;
     }
 
     //Cart - Related Methods
@@ -70,7 +103,7 @@ public class ShoppingCart {
 
     public Product getProduct(UUID id) {
         for (Product product : products) {
-            if (product.getId().equals(id)) {
+            if (product.getProductID().equals(id)) {
                 return product;
             }
         }
@@ -80,7 +113,7 @@ public class ShoppingCart {
     public void addProduct(Product product, int amount) {
         if (product.getQuantity() >= amount) {
             this.products.add(product);
-            this.itemNumber.put(product.getId(), amount);
+            this.itemNumber.put(product.getProductID(), amount);
             System.out.println("Product has been successfully added to the cart!\n");
         } else {
             System.out.println("Remaining stock is not enough\n");
@@ -125,7 +158,7 @@ public class ShoppingCart {
             System.out.println("Cart is empty!\n");
         } else {
             for (Product product : products) {
-                System.out.println(product + "Amount has been added to cart=" + itemNumber.get(product.getId()));
+                System.out.println(product + "Amount has been added to cart=" + itemNumber.get(product.getProductID()));
             }
             System.out.println("Total Price=" + totalPrice + "\n");
         }
@@ -134,7 +167,7 @@ public class ShoppingCart {
     public double updateTotalPrice() {
         int totalPrice = 0;
         for (Product product : this.products) {
-            totalPrice += product.getPrice() * this.itemNumber.get(product.getId());
+            totalPrice += product.getPrice() * this.itemNumber.get(product.getProductID());
         }
         return totalPrice;
     }
@@ -144,7 +177,7 @@ public class ShoppingCart {
         return "ShoppingCart{" +
                 "products=" + products +
                 ", itemNumber=" + itemNumber +
-                ", Cart ID=" + id +
+                ", Cart ID=" + cartID +
                 ", name='" + name + '\'' +
                 ", totalPrice=" + totalPrice +
                 ", isCheckout=" + hasCheckout +
@@ -155,6 +188,28 @@ public class ShoppingCart {
         this.hasCheckout = true;
     }
 
-    //Override
 
+    public static void insert(String name, UUID cartID, UUID userID, double totalPrice, boolean hasCheckout, HashMap<UUID, Integer> itemNumber) {
+        String sql = "INSERT INTO Carts(name, cartID, userID, totalPrice, hasCheckout, itemNumber) VALUES(?,?,?,?,?,?)";
+
+        try{
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
+            pstmt.setString(2, cartID.toString());
+            pstmt.setString(3, userID.toString());
+            pstmt.setDouble(4, totalPrice);
+            pstmt.setString(5, Boolean.toString(hasCheckout));
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                String json = objectMapper.writeValueAsString(itemNumber);
+                pstmt.setString(6, json);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

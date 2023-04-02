@@ -1,10 +1,10 @@
 package Categories.Sports;
 
-import Database_Insert.Connect;
 import Categories.Sports.Enums.GloveMaterial;
 import Categories.Sports.Enums.GloveSize;
 import Categories.Sports.Enums.GloveStyle;
 import Categories.Sports.Enums.GloveUser;
+import Database_Insert.Connect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -30,39 +30,18 @@ public class Gloves extends Sports {
         this.style = style;
     }
 
+    public Gloves(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, double weight, String sportType, String brand, GloveMaterial material, GloveSize size, GloveUser suggestedUser, GloveStyle style) {
+        super(comments, id, name, color, price, sellerId, quantity, weight, sportType, brand);
+        this.material = material;
+        this.size = size;
+        this.suggestedUser = suggestedUser;
+        this.style = style;
+    }
 
     //Getters and Setters
 
-    public GloveMaterial getMaterial() {
-        return material;
-    }
-
-    public GloveSize getSize() {
-        return size;
-    }
-
-    public GloveUser getSuggestedUser() {
-        return suggestedUser;
-    }
-
-    public GloveStyle getStyle() {
-        return style;
-    }
-
-    //Override
-
-    @Override
-    public String toString() {
-        return "Gloves{" +
-                "material=" + material +
-                ", size=" + size +
-                ", suggestedUser=" + suggestedUser +
-                ", style=" + style +
-                "} " + super.toString();
-    }
-
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, double weight, String sportType, String brand, GloveMaterial material, GloveSize size, GloveUser suggestedUser, GloveStyle style) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, sportType, brand, material, size, suggestedUser, style) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, sportType, brand, material, size, suggestedUser, style, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -78,15 +57,44 @@ public class Gloves extends Sports {
             String strComments = json1.toString();
             pstmt.setString(7, strComments);
             pstmt.setDouble(8, weight);
-            pstmt.setString(9, sportType.toString());
+            pstmt.setString(9, sportType);
             pstmt.setString(10, brand);
             pstmt.setString(11, material.toString());
             pstmt.setString(12, size.toString());
             pstmt.setString(13, suggestedUser.toString());
-            pstmt.setString(14,style.toString());
+            pstmt.setString(14, style.toString());
+            pstmt.setString(15, "Gloves");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public GloveMaterial getMaterial() {
+        return material;
+    }
+
+    public GloveSize getSize() {
+        return size;
+    }
+
+    public GloveUser getSuggestedUser() {
+        return suggestedUser;
+    }
+
+    //Override
+
+    public GloveStyle getStyle() {
+        return style;
+    }
+
+    @Override
+    public String toString() {
+        return "Gloves{" +
+                "material=" + material +
+                ", size=" + size +
+                ", suggestedUser=" + suggestedUser +
+                ", style=" + style +
+                "} " + super.toString();
     }
 }

@@ -23,8 +23,14 @@ public class Poetry_Book extends Books {
         this.verseNumber = verseNumber;
     }
 
+    public Poetry_Book(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, String ISBN, int pageNumbers, String author, String language, String poeticForm, int verseNumber) {
+        super(comments, id, name, color, price, sellerId, quantity, ISBN, pageNumbers, author, language);
+        this.poeticForm = poeticForm;
+        this.verseNumber = verseNumber;
+    }
+
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, String ISBN, int pageNumbers, String author, String language, String poeticForm, int verseNumber) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ISBN, pageNumbers, author, language, poeticForm, verseNumber) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ISBN, pageNumbers, author, language, poeticForm, verseNumber, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -45,18 +51,19 @@ public class Poetry_Book extends Books {
             pstmt.setString(11, language);
             pstmt.setString(12, poeticForm);
             pstmt.setInt(13, verseNumber);
+            pstmt.setString(14, "Poetry_Book");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
+    //Overrides
+
     //Getter and Setters
     public String getPoeticForm() {
         return poeticForm;
     }
-
-    //Overrides
 
     public int getVersesNumber() {
         return verseNumber;

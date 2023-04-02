@@ -24,34 +24,17 @@ public class Car extends Vehicles {
         this.seatNumber = seatNumber;
     }
 
+    public Car(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model, boolean isRightSteering, String speakerModel, int seatNumber) {
+        super(comments, id, name, color, price, sellerId, quantity, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model);
+        this.isRightSteering = isRightSteering;
+        this.speakerModel = speakerModel;
+        this.seatNumber = seatNumber;
+    }
 
     //Getters and Setters
 
-    public boolean isRightSteering() {
-        return isRightSteering;
-    }
-
-    public String getSpeakerModel() {
-        return speakerModel;
-    }
-
-    public int getSeatNumber() {
-        return seatNumber;
-    }
-
-    //Override
-
-    @Override
-    public String toString() {
-        return "Car{" +
-                "isRightSteering=" + isRightSteering +
-                ", speakerModel='" + speakerModel + '\'' +
-                ", seatNumber=" + seatNumber +
-                "} " + super.toString();
-    }
-
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model, boolean isRightSteering, String speakerModel, int seatNumber) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model, isRightSteering, speakerModel, seatNumber) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model, isRightSteering, speakerModel, seatNumber, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -77,9 +60,33 @@ public class Car extends Vehicles {
             pstmt.setString(16, Boolean.toString(isRightSteering));
             pstmt.setString(17, speakerModel);
             pstmt.setInt(18, seatNumber);
+            pstmt.setString(19, "Car");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public boolean isRightSteering() {
+        return isRightSteering;
+    }
+
+    public String getSpeakerModel() {
+        return speakerModel;
+    }
+
+    //Override
+
+    public int getSeatNumber() {
+        return seatNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "isRightSteering=" + isRightSteering +
+                ", speakerModel='" + speakerModel + '\'' +
+                ", seatNumber=" + seatNumber +
+                "} " + super.toString();
     }
 }

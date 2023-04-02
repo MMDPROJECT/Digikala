@@ -26,11 +26,16 @@ public class Coat extends Clothes {
         this.hasCap = hasCap;
     }
 
+    public Coat(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability, int buttonNumber, boolean hasCap) {
+        super(comments, id, name, color, price, sellerId, quantity, size, gender, material, brand, durability);
+        this.buttonNumber = buttonNumber;
+        this.hasCap = hasCap;
+    }
 
     //Getter and Setters
 
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability, int buttonNumber, boolean hasCap) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ClothSize, ClothGender, ClothMaterial, brand, ClothDurability, buttonNumber, hasCap) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ClothSize, ClothGender, ClothMaterial, brand, ClothDurability, buttonNumber, hasCap, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -52,18 +57,19 @@ public class Coat extends Clothes {
             pstmt.setString(12, durability.toString());
             pstmt.setInt(13, buttonNumber);
             pstmt.setString(14, Boolean.toString(hasCap));
+            pstmt.setString(15, "Coat");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
+
+    //Override
+
     public int getButtonNumber() {
         return buttonNumber;
     }
-
-
-    //Override
 
     public boolean isHasCap() {
         return hasCap;

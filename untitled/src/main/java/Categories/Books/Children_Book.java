@@ -23,8 +23,14 @@ public class Children_Book extends Books {
         this.theme = theme;
     }
 
+    public Children_Book(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, String ISBN, int pageNumbers, String author, String language, String readingLevel, String theme) {
+        super(comments, id, name, color, price, sellerId, quantity, ISBN, pageNumbers, author, language);
+        this.readingLevel = readingLevel;
+        this.theme = theme;
+    }
+
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, String ISBN, int pageNumbers, String author, String language, String readingLevel, String theme) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ISBN, pageNumbers, author, language, readingLevel, theme) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ISBN, pageNumbers, author, language, readingLevel, theme, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -45,18 +51,19 @@ public class Children_Book extends Books {
             pstmt.setString(11, language);
             pstmt.setString(12, readingLevel);
             pstmt.setString(13, theme);
+            pstmt.setString(14, "Children_Book");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
+    //Override
+
     //Getters and Setters
     public String getReadingLevel() {
         return readingLevel;
     }
-
-    //Override
 
     public String getTheme() {
         return theme;

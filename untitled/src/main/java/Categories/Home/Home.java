@@ -2,6 +2,7 @@ package Categories.Home;
 
 import Categories.Product;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Home extends Product {
@@ -20,6 +21,13 @@ public class Home extends Product {
         this.weight = weight;
     }
 
+    public Home(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, boolean hasController, double height, double width, double weight) {
+        super(comments, id, name, color, price, sellerId, quantity);
+        this.hasController = hasController;
+        this.height = height;
+        this.width = width;
+        this.weight = weight;
+    }
 
     //Getters and Setters
 

@@ -25,34 +25,17 @@ public class CardGames extends ToysAndGames {
         this.gangNumber = gangNumber;
     }
 
+    public CardGames(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer, int cardNumber, int playerNumber, int gangNumber) {
+        super(comments, id, name, color, price, sellerId, quantity, hasBox, difficultyLevel, isMultiplayer);
+        this.cardNumber = cardNumber;
+        this.playerNumber = playerNumber;
+        this.gangNumber = gangNumber;
+    }
 
     //Getters and Setters
 
-    public int getCardNumber() {
-        return cardNumber;
-    }
-
-    public int getPlayerNumber() {
-        return playerNumber;
-    }
-
-    public int getGangNumber() {
-        return gangNumber;
-    }
-
-    //Override
-
-    @Override
-    public String toString() {
-        return "CardGames{" +
-                "cardNumber=" + cardNumber +
-                ", playerNumber=" + playerNumber +
-                ", gangNumber=" + gangNumber +
-                "} " + super.toString();
-    }
-
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer, int cardNumber, int playerNumber, int gangNumber) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasBox, difficultyLevel, isMultiplayer, cardNumber, playerNumber, gangNumber) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasBox, difficultyLevel, isMultiplayer, cardNumber, playerNumber, gangNumber, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -73,9 +56,33 @@ public class CardGames extends ToysAndGames {
             pstmt.setInt(11, cardNumber);
             pstmt.setInt(12, playerNumber);
             pstmt.setInt(13, gangNumber);
+            pstmt.setString(14, "CardGames");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public int getCardNumber() {
+        return cardNumber;
+    }
+
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
+    //Override
+
+    public int getGangNumber() {
+        return gangNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "CardGames{" +
+                "cardNumber=" + cardNumber +
+                ", playerNumber=" + playerNumber +
+                ", gangNumber=" + gangNumber +
+                "} " + super.toString();
     }
 }

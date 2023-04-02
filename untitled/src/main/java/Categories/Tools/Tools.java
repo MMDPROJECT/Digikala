@@ -1,13 +1,7 @@
 package Categories.Tools;
 
 import Categories.Product;
-import Database_Insert.Connect;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -29,6 +23,14 @@ public class Tools extends Product {
         this.brand = brand;
     }
 
+    public Tools(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, double weight, boolean hasBox, boolean isSilent, boolean isChargeable, String brand) {
+        super(comments, id, name, color, price, sellerId, quantity);
+        this.weight = weight;
+        this.hasBox = hasBox;
+        this.isSilent = isSilent;
+        this.isChargeable = isChargeable;
+        this.brand = brand;
+    }
 
     //Getters and Setters
 

@@ -29,6 +29,17 @@ public class SuperMarket extends Product {
         CountryOfOrigin = countryOfOrigin;
     }
 
+    public SuperMarket(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, boolean hasBox, double weight, double salt, double calories, double fat, double sugar, ArrayList<String> ingredientItems, String countryOfOrigin) {
+        super(comments, id, name, color, price, sellerId, quantity);
+        this.hasBox = hasBox;
+        this.weight = weight;
+        this.salt = salt;
+        this.calories = calories;
+        this.fat = fat;
+        this.sugar = sugar;
+        IngredientItems = ingredientItems;
+        CountryOfOrigin = countryOfOrigin;
+    }
 
     //Getters and Setters
 

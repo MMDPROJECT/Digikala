@@ -1,8 +1,10 @@
 package Shopping;
 
-import Accounts.User;
 import Categories.Product;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,23 +12,32 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static Database_Insert.Connect.connect;
+
 public class Order extends ShoppingCart {
     private final LocalDate date;
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("E, MMM dd yyyy");
-    private final User buyer;
-    private final UUID id;
+    private final UUID buyerID;
+    private final UUID orderID;
     private boolean isConfirmed;
 
     //Constructor
 
-    public Order(String name, ArrayList<Product> products, HashMap<UUID, Integer> itemNumber, double totalPrice, User buyer) {
+    public Order(String name, ArrayList<Product> products, HashMap<UUID, Integer> itemNumber, double totalPrice, UUID buyerID) {
         super(name, products, itemNumber, totalPrice);
-        this.buyer = buyer;
-        this.id = UUID.randomUUID();
+        this.buyerID = buyerID;
+        this.orderID = UUID.randomUUID();
         this.date = LocalDate.from(LocalDateTime.now());
         this.isConfirmed = false;
     }
 
+    public Order(ArrayList<Product> products, HashMap<UUID, Integer> itemNumber, UUID cartID, UUID userID, String name, double totalPrice, boolean hasCheckout, LocalDate date, UUID buyerID, UUID orderID, boolean isConfirmed) {
+        super(products, itemNumber, cartID, userID, name, totalPrice, hasCheckout);
+        this.date = date;
+        this.buyerID = buyerID;
+        this.orderID = orderID;
+        this.isConfirmed = isConfirmed;
+    }
 
     //Getters and Setters
 
@@ -39,13 +50,13 @@ public class Order extends ShoppingCart {
         return dateTimeFormatter;
     }
 
-    public User getBuyer() {
-        return buyer;
+    public UUID getBuyer() {
+        return buyerID;
     }
 
 
-    public UUID getId() {
-        return id;
+    public UUID getOrderID() {
+        return orderID;
     }
 
     public boolean isConfirmed() {
@@ -56,14 +67,18 @@ public class Order extends ShoppingCart {
         isConfirmed = confirmed;
     }
 
+    public UUID getBuyerID() {
+        return buyerID;
+    }
+
     //Override
 
     @Override
     public String toString() {
         return "Order{" +
                 "date=" + date +
-                ", buyer=" + buyer.getUsername() +
-                ", Order ID=" + id +
+                ", buyer=" + buyerID +
+                ", Order ID=" + orderID +
                 ", isConfirmed=" + isConfirmed +
                 "} " + super.toString();
     }
@@ -72,24 +87,17 @@ public class Order extends ShoppingCart {
 
     public void updateStocks() {
         for (Product product : getProducts()) {
-            product.decreaseProduct(getItemNumber().get(product.getId()));
+            product.decreaseProduct(getItemNumber().get(product.getProductID()));
         }
         System.out.println("Stocks has been successfully updated!\n");
     }
 
-    public void updateUserPurchasedProducts() {
-        for (Product product : getProducts()) {
-            if (!buyer.isProductPurchased(product.getId())) {
-                buyer.addPurchasedProduct(product);
-            }
-        }
-        System.out.println("User purchased product has been successfully updated!\n");
-    }
+
 
     public double calcBuyerPayOff() {
         double total = 0;
         for (Product product : this.getProducts()) {
-            total += product.getPrice() * getItemNumber().get(product.getId());
+            total += product.getPrice() * getItemNumber().get(product.getProductID());
         }
         return total;
     }
@@ -97,7 +105,7 @@ public class Order extends ShoppingCart {
     public double calcShopCut() {
         double cut = 0;
         for (Product product : this.getProducts()) {
-            cut += 0.1 * (product.getPrice() * this.getItemNumber().get(product.getId()));
+            cut += 0.1 * (product.getPrice() * this.getItemNumber().get(product.getProductID()));
         }
         return cut;
     }
@@ -105,5 +113,23 @@ public class Order extends ShoppingCart {
 
     public void orderConfirm() {
         this.isConfirmed = true;
+    }
+
+
+    public static void insert(LocalDate date, DateTimeFormatter dateTimeFormatter, UUID buyerID, UUID orderID, boolean isConfirmed) {
+        String sql = "INSERT INTO Orders(date, dateTimeFormatter, buyerID, orderID, isConfirmed) VALUES(?,?,?,?,?)";
+
+        try{
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, date.toString());
+            pstmt.setString(2, dateTimeFormatter.toString());
+            pstmt.setString(3, buyerID.toString());
+            pstmt.setString(4, orderID.toString());
+            pstmt.setString(5, Boolean.toString(isConfirmed));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

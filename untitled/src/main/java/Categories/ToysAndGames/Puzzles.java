@@ -23,29 +23,16 @@ public class Puzzles extends ToysAndGames {
         this.finalPicture = finalPicture;
     }
 
+    public Puzzles(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer, int partNumber, String finalPicture) {
+        super(comments, id, name, color, price, sellerId, quantity, hasBox, difficultyLevel, isMultiplayer);
+        this.partNumber = partNumber;
+        this.finalPicture = finalPicture;
+    }
 
     //Getters and Setters
 
-    public int getPartNumber() {
-        return partNumber;
-    }
-
-    public String getFinalPicture() {
-        return finalPicture;
-    }
-
-    //Override
-
-    @Override
-    public String toString() {
-        return "Puzzles{" +
-                "partNumber=" + partNumber +
-                ", finalPicture='" + finalPicture + '\'' +
-                "} " + super.toString();
-    }
-
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer, int partNumber, String finalPicture) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasBox, difficultyLevel, isMultiplayer, partNumber, finalPicture) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasBox, difficultyLevel, isMultiplayer, partNumber, finalPicture, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -65,9 +52,28 @@ public class Puzzles extends ToysAndGames {
             pstmt.setString(10, Boolean.toString(isMultiplayer));
             pstmt.setInt(11, partNumber);
             pstmt.setString(12, finalPicture);
+            pstmt.setString(13, "Puzzles");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public int getPartNumber() {
+        return partNumber;
+    }
+
+    //Override
+
+    public String getFinalPicture() {
+        return finalPicture;
+    }
+
+    @Override
+    public String toString() {
+        return "Puzzles{" +
+                "partNumber=" + partNumber +
+                ", finalPicture='" + finalPicture + '\'' +
+                "} " + super.toString();
     }
 }

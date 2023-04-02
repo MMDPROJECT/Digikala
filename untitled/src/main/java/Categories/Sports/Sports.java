@@ -2,6 +2,7 @@ package Categories.Sports;
 
 import Categories.Product;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Sports extends Product {
@@ -18,6 +19,12 @@ public class Sports extends Product {
         this.brand = brand;
     }
 
+    public Sports(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, double weight, String sportType, String brand) {
+        super(comments, id, name, color, price, sellerId, quantity);
+        this.weight = weight;
+        this.sportType = sportType;
+        this.brand = brand;
+    }
 
     //Getters and Setters
 

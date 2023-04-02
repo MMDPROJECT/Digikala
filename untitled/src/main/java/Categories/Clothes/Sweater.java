@@ -25,10 +25,17 @@ public class Sweater extends Clothes {
         this.buttonNumber = buttonNumber;
         this.design = design;
     }
-//Getter and Setters
+
+    public Sweater(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability, int buttonNumber, String design) {
+        super(comments, id, name, color, price, sellerId, quantity, size, gender, material, brand, durability);
+        this.buttonNumber = buttonNumber;
+        this.design = design;
+    }
+
+    //Getter and Setters
 
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, ClothSize size, ClothGender gender, ClothMaterial material, String brand, ClothDurability durability, int buttonNumber, String design) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ClothSize, ClothGender, ClothMaterial, brand, ClothDurability, buttonNumber, design) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ClothSize, ClothGender, ClothMaterial, brand, ClothDurability, buttonNumber, design, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -50,16 +57,17 @@ public class Sweater extends Clothes {
             pstmt.setString(12, durability.toString());
             pstmt.setInt(13, buttonNumber);
             pstmt.setString(14, design);
+            pstmt.setString(15, "Sweater");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
+    //Override
 
     public int getButtonNumber() {
         return buttonNumber;
     }
-    //Override
 
     public String getDesign() {
         return design;

@@ -2,6 +2,7 @@ package Categories.Vehicles;
 
 import Categories.Product;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Vehicles extends Product {
@@ -18,6 +19,18 @@ public class Vehicles extends Product {
 
     public Vehicles(String name, String color, int quantity, double price, UUID sellerID, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model) {
         super(name, color, quantity, price, sellerID);
+        this.weight = weight;
+        this.horsePower = horsePower;
+        this.engineModel = engineModel;
+        this.wheelNumber = wheelNumber;
+        this.isAutomatic = isAutomatic;
+        this.maxSpeed = maxSpeed;
+        this.brand = brand;
+        this.model = model;
+    }
+
+    public Vehicles(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, double weight, int horsePower, String engineModel, int wheelNumber, boolean isAutomatic, int maxSpeed, String brand, String model) {
+        super(comments, id, name, color, price, sellerId, quantity);
         this.weight = weight;
         this.horsePower = horsePower;
         this.engineModel = engineModel;

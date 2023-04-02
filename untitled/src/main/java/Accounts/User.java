@@ -4,26 +4,35 @@ import Categories.Product;
 import Shopping.Order;
 import Shopping.ShoppingCart;
 import Shopping.WalletReq;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
+
+import static Database_Insert.Connect.connect;
 
 public class User extends Account {
     private final String username;
+    private String password;
+    private String email;
+    private UUID currentCartID;
+    private String phoneNumber;
+    private String address;
+    private double wallet;
     private final HashMap<UUID, ShoppingCart> carts;
     private final HashMap<UUID, Order> orders;
     private final HashMap<UUID, WalletReq> walletRequests;
     private final HashMap<UUID, Product> purchasedProducts;
-    private ShoppingCart currentCart;
-    private String password;
-    private String email;
-    private String phoneNumber;
-    private String address;
-    private double wallet;
 
     //Constructor
 
     public User(String username, String password, String email, String phoneNumber, String address) {
+        super();
         this.username = username;
         this.password = password;
         this.email = email;
@@ -34,7 +43,22 @@ public class User extends Account {
         this.orders = new HashMap<>();
         this.walletRequests = new HashMap<>();
         this.purchasedProducts = new HashMap<>();
-        this.currentCart = null;
+        this.currentCartID = null;
+    }
+
+    public User(UUID id, String username, HashMap<UUID, ShoppingCart> carts, HashMap<UUID, Order> orders, HashMap<UUID, WalletReq> walletRequests, HashMap<UUID, Product> purchasedProducts, UUID currentCartID, String password, String email, String phoneNumber, String address, double wallet) {
+        super(id);
+        this.username = username;
+        this.carts = carts;
+        this.orders = orders;
+        this.walletRequests = walletRequests;
+        this.purchasedProducts = purchasedProducts;
+        this.currentCartID = currentCartID;
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.wallet = wallet;
     }
 
     //Getters and Setters
@@ -99,17 +123,13 @@ public class User extends Account {
         return purchasedProducts;
     }
 
-    public ShoppingCart getCurrentCart() {
-        return currentCart;
-    }
-
-    public void setCurrentCart(ShoppingCart currentCart) {
-        this.currentCart = currentCart;
+    public UUID getCurrentCart() {
+        return currentCartID;
     }
 
     public void setCurrentCart(UUID cartID) {
         if (this.carts.containsKey(cartID)) {
-            this.currentCart = carts.get(cartID);
+            this.currentCartID = cartID;
             System.out.println("Cart has been successfully switched to " + cartID + "\n");
         } else {
             System.out.println("Cart has not been found!\n");
@@ -131,7 +151,7 @@ public class User extends Account {
                 ", orders=" + orders +
                 ", walletRequests=" + walletRequests +
                 ", purchasedProducts=" + purchasedProducts +
-                ", currentCart=" + currentCart +
+                ", currentCartID=" + currentCartID +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
@@ -154,7 +174,7 @@ public class User extends Account {
 
     public Order checkoutCart(UUID cartID) {
         this.getCart(cartID).checkoutCart();
-        Order order = new Order(this.getCart(cartID).getName(), this.getCart(cartID).getProducts(), this.getCart(cartID).getItemNumber(), this.getCart(cartID).getTotalPrice(), this);
+        Order order = new Order(this.getCart(cartID).getName(), this.getCart(cartID).getProducts(), this.getCart(cartID).getItemNumber(), this.getCart(cartID).getTotalPrice(), this.getId());
         this.addOrder(order);
         return order;
     }
@@ -179,12 +199,17 @@ public class User extends Account {
 
     public void addCart(String name) {
         ShoppingCart shoppingCart = new ShoppingCart(name);
-        this.carts.put(shoppingCart.getId(), shoppingCart);
+        this.carts.put(shoppingCart.getOrderID(), shoppingCart);
+        System.out.println("Cart has been successfully added!\n");
+    }
+
+    public void addCart(ShoppingCart cart){
+        this.carts.put(cart.getOrderID(), cart);
         System.out.println("Cart has been successfully added!\n");
     }
 
     public boolean hasSelectedCart() {
-        return this.currentCart != null;
+        return this.currentCartID != null;
     }
 
     //Order - Related Methods
@@ -235,7 +260,7 @@ public class User extends Account {
     }
 
     public void addOrder(Order order) {
-        this.orders.put(order.getId(), order);
+        this.orders.put(order.getOrderID(), order);
     }
 
     //Wallet - Related Methods
@@ -245,7 +270,7 @@ public class User extends Account {
     }
 
     public void submitAWalletRequest(WalletReq walletReq) {
-        this.walletRequests.put(walletReq.getId(), walletReq);
+        this.walletRequests.put(walletReq.getWalletID(), walletReq);
         System.out.println("Wallet request has been successfully sent!\n");
     }
 
@@ -327,6 +352,39 @@ public class User extends Account {
 
     //Product - related Methods
     public void addPurchasedProduct(Product product) {
-        purchasedProducts.put(product.getId(), product);
+        purchasedProducts.put(product.getProductID(), product);
+    }
+
+    public static void insert(UUID AccountID, String username, String password, String email, String phoneNumber, String address, double wallet, Set<UUID> carts, Set<UUID> orders, Set<UUID> walletRequests, Set<UUID> purchasedProducts) {
+        String sql = "INSERT INTO Users(AccountID, username, password, email, currentCartID, phoneNumber, address, wallet, carts, orders, walletRequests, purchasedProducts) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        try{
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, AccountID.toString());
+            pstmt.setString(2, username);
+            pstmt.setString(3, password);
+            pstmt.setString(4, email);
+            pstmt.setString(5, null);
+            pstmt.setString(6, phoneNumber);
+            pstmt.setString(7, address);
+            pstmt.setDouble(8, wallet);
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                String cartsJson = objectMapper.writeValueAsString(carts);
+                String ordersJson = objectMapper.writeValueAsString(orders);
+                String walletRequestsJson = objectMapper.writeValueAsString(walletRequests);
+                String purchasedProductsJson = objectMapper.writeValueAsString(purchasedProducts);
+                pstmt.setString(9, cartsJson);
+                pstmt.setString(10, ordersJson);
+                pstmt.setString(11, walletRequestsJson);
+                pstmt.setString(12, purchasedProductsJson);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

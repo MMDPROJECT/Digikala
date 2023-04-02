@@ -2,6 +2,7 @@ package Categories.Electronics;
 
 import Categories.Product;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public abstract class Electronics extends Product {
@@ -22,6 +23,14 @@ public abstract class Electronics extends Product {
         this.batteryCapacity = batteryCapacity;
     }
 
+    public Electronics(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, String brand, String model, String OS, String screenSize, double batteryCapacity) {
+        super(comments, id, name, color, price, sellerId, quantity);
+        this.brand = brand;
+        this.model = model;
+        this.OS = OS;
+        this.screenSize = screenSize;
+        this.batteryCapacity = batteryCapacity;
+    }
 
     //Getters and Setters
 

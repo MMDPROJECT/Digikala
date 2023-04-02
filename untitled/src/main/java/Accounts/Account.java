@@ -11,6 +11,10 @@ public abstract class Account {
         this.id = UUID.randomUUID();
     }
 
+    public Account(UUID id) {
+        this.id = id;
+    }
+
     //Getters and Setters
 
     public UUID getId() {

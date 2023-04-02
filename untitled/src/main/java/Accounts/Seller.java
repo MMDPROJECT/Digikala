@@ -1,9 +1,17 @@
 package Accounts;
 
 import Categories.Product;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
+
+import static Database_Insert.Connect.connect;
 
 public class Seller extends Account {
     private final String companyName;
@@ -15,6 +23,7 @@ public class Seller extends Account {
     //Constructor
 
     public Seller(String companyName, String password) {
+        super();
         this.companyName = companyName;
         this.password = password;
         this.availableProducts = new HashMap<>();
@@ -22,6 +31,14 @@ public class Seller extends Account {
         this.isAuthorized = false;
     }
 
+    public Seller(UUID id, String companyName, String password, HashMap<UUID, Product> availableProducts, double wallet, boolean isAuthorized) {
+        super(id);
+        this.companyName = companyName;
+        this.password = password;
+        this.availableProducts = availableProducts;
+        this.wallet = wallet;
+        this.isAuthorized = isAuthorized;
+    }
 
     //Getters and Setters
 
@@ -72,7 +89,7 @@ public class Seller extends Account {
     //Seller - Related Methods
 
     public void addProduct(Product product) {
-        this.availableProducts.put(product.getId(), product);
+        this.availableProducts.put(product.getProductID(), product);
         System.out.println("Product has been successfully added!\n");
     }
 
@@ -109,5 +126,26 @@ public class Seller extends Account {
 
     public void addSellerCut(double value) {
         this.wallet += value;
+    }
+
+    public static void insert(UUID accountID, String companyName, String password, Set<UUID> products, double wallet, boolean isAuthorized) {
+        String sql = "INSERT INTO Sellers(AccountID, companyName, password, availableProducts, wallet, isAuthorized) VALUES(?,?,?,?,?,?)";
+
+        try{
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, accountID.toString());
+            pstmt.setString(2, companyName);
+            pstmt.setString(3, password);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("availableProducts", new JSONArray(products));
+            String availableProducts = jsonObject.toString();
+            pstmt.setString(4, availableProducts);
+            pstmt.setDouble(5, wallet);
+            pstmt.setString(6, Boolean.toString(isAuthorized));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

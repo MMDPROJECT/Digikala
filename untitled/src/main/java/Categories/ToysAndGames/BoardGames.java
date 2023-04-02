@@ -25,34 +25,17 @@ public class BoardGames extends ToysAndGames {
         this.timeToFinish = timeToFinish;
     }
 
+    public BoardGames(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer, String size, int playerNumber, int timeToFinish) {
+        super(comments, id, name, color, price, sellerId, quantity, hasBox, difficultyLevel, isMultiplayer);
+        this.size = size;
+        this.playerNumber = playerNumber;
+        this.timeToFinish = timeToFinish;
+    }
 
     //Getters and Setters
 
-    public String getSize() {
-        return size;
-    }
-
-    public int getPlayerNumber() {
-        return playerNumber;
-    }
-
-    public int getTimeToFinish() {
-        return timeToFinish;
-    }
-
-    //Override
-
-    @Override
-    public String toString() {
-        return "BoardGames{" +
-                "size='" + size + '\'' +
-                ", playerNumber='" + playerNumber + '\'' +
-                ", timeToFinish=" + timeToFinish +
-                "} " + super.toString();
-    }
-
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, boolean hasBox, DifficultyLevel difficultyLevel, boolean isMultiplayer, String size, int playerNumber, int timeToFinish) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasBox, difficultyLevel, isMultiplayer, size, playerNumber, timeToFinish) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasBox, difficultyLevel, isMultiplayer, size, playerNumber, timeToFinish, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -73,9 +56,33 @@ public class BoardGames extends ToysAndGames {
             pstmt.setString(11, size);
             pstmt.setInt(12, playerNumber);
             pstmt.setInt(13, timeToFinish);
+            pstmt.setString(14, "BoardGames");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
+    //Override
+
+    public int getTimeToFinish() {
+        return timeToFinish;
+    }
+
+    @Override
+    public String toString() {
+        return "BoardGames{" +
+                "size='" + size + '\'' +
+                ", playerNumber='" + playerNumber + '\'' +
+                ", timeToFinish=" + timeToFinish +
+                "} " + super.toString();
     }
 }

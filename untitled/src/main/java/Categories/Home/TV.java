@@ -26,11 +26,18 @@ public class TV extends Home {
         this.hasStand = hasStand;
     }
 
+    public TV(ArrayList<String> comments, UUID id, String name, String color, double price, UUID sellerId, int quantity, boolean hasController, double height, double width, double weight, int refreshRate, boolean mountableOnWall, boolean has3D, boolean hasStand) {
+        super(comments, id, name, color, price, sellerId, quantity, hasController, height, width, weight);
+        this.refreshRate = refreshRate;
+        this.mountableOnWall = mountableOnWall;
+        this.has3D = has3D;
+        this.hasStand = hasStand;
+    }
 
     //Getters and Setters
 
     public static void insert(UUID productID, String name, String color, double price, UUID sellerID, int quantity, ArrayList<String> comments, boolean hasController, double height, double width, double weight, int refreshRate, boolean mountableOnWall, boolean has3D, boolean hasStand) {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasController, height, width, weight, refreshRate, mountableOnWall, has3D, hasStand) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasController, height, width, weight, refreshRate, mountableOnWall, has3D, hasStand, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -53,6 +60,7 @@ public class TV extends Home {
             pstmt.setString(13, Boolean.toString(mountableOnWall));
             pstmt.setString(14, Boolean.toString(has3D));
             pstmt.setString(15, Boolean.toString(hasStand));
+            pstmt.setString(16, "TV");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -67,11 +75,11 @@ public class TV extends Home {
         return mountableOnWall;
     }
 
+    //Override
+
     public boolean isHas3D() {
         return has3D;
     }
-
-    //Override
 
     public boolean isHasStand() {
         return hasStand;
