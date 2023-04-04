@@ -68,14 +68,10 @@ public class WalletReq {
         return userID;
     }
 
-    //Override
-
     public void setConfirmed() {
         this.isConfirmed = true;
-        confirmWalletReqInDatabase();
+        updateWalletRequestInDatabase();
     }
-
-    //Wallet - Related Methods
 
     @Override
     public String toString() {
@@ -89,7 +85,7 @@ public class WalletReq {
 
     //Database - Related methods
 
-    public void confirmWalletReqInDatabase() {
+    public void updateWalletRequestInDatabase() {
         String sql = "UPDATE WalletRequest SET isConfirmed = ? WHERE WalletRequestID = ?";
 
         try {

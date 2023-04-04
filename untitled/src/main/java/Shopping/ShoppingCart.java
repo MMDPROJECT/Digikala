@@ -41,7 +41,7 @@ public class ShoppingCart {
         this.totalPrice = 0;
         this.cartID = UUID.randomUUID();
         this.userID = UUID.randomUUID();
-        insert();
+        insert();   //Add to database
     }
 
     public ShoppingCart(ArrayList<Product> products, HashMap<UUID, Integer> itemNumber, UUID cartID, UUID userID, String name, double totalPrice, boolean hasCheckout) {
@@ -114,13 +114,68 @@ public class ShoppingCart {
 
     //Cart - Related Methods
 
-    public boolean isHasCheckout() {
-        return hasCheckout;
+    public double updateTotalPrice() {
+        int totalPrice = 0;
+        for (Product product : this.products) {
+            totalPrice += product.getPrice() * this.itemNumber.get(product.getProductID());
+            updateCartInDatabase();
+        }
+        return totalPrice;
     }
 
-    public boolean doesProductExist(Product product) {
-        return this.products.contains(product);
+    public void addProductToCart(Product product, int quantity) {
+        if (product.getQuantity() >= quantity) {
+            this.products.add(product);
+            this.itemNumber.put(product.getProductID(), quantity);
+            this.totalPrice = updateTotalPrice();
+            updateCartInDatabase();
+            System.out.println("Product has been successfully added to the cart!\n");
+        } else {
+            System.out.println("Remaining stock is not enough\n");
+        }
     }
+
+    public void increaseQuantityInCart(UUID id, int amount) {
+        if (getProduct(id).getQuantity() >= amount + this.itemNumber.get(id)) {
+            this.itemNumber.replace(id, this.itemNumber.get(id) + amount);
+            this.totalPrice = updateTotalPrice();
+            updateCartInDatabase();
+            System.out.println("Cart has been successfully updated!\n");
+        } else {
+            System.out.println("Remaining stock is not enough\n");
+        }
+    }
+
+    public void decreaseQuantityInCart(UUID id, int amount) {
+        if (this.itemNumber.get(id) >= amount) {
+            getProduct(id).increaseProduct(amount);
+            this.itemNumber.replace(id, this.itemNumber.get(id) - amount);
+            this.totalPrice = updateTotalPrice();
+            updateCartInDatabase();
+            System.out.println("Cart has been successfully updated!\n");
+        } else {
+            System.out.println("Something went wrong! Please try again\n");
+        }
+    }
+
+    public void removeProduct(UUID id) {
+        if (doesProductExist(id)) {
+            this.products.remove(getProduct(id));
+            this.itemNumber.remove(id);
+            System.out.println("Product has been successfully removed!\n");
+            this.totalPrice = updateTotalPrice();
+            updateCartInDatabase();
+        } else {
+            System.out.println("Product has not been found!\n");
+        }
+    }
+
+    public void checkoutCart() {
+        this.hasCheckout = true;
+        updateCartInDatabase();
+    }
+
+    //Existence - Related methods
 
     public boolean doesProductExist(UUID id) {
         return this.itemNumber.containsKey(id);
@@ -135,41 +190,6 @@ public class ShoppingCart {
         return null;
     }
 
-    public void addProduct(Product product, int amount) {
-        if (product.getQuantity() >= amount) {
-            this.products.add(product);
-            this.itemNumber.put(product.getProductID(), amount);
-            System.out.println("Product has been successfully added to the cart!\n");
-            updateCartInDatabase();
-        } else {
-            System.out.println("Remaining stock is not enough\n");
-        }
-        this.totalPrice = updateTotalPrice();
-    }
-
-    public void increaseAmount(UUID id, int amount) {
-        if (getProduct(id).getQuantity() >= amount + this.itemNumber.get(id)) {
-            this.itemNumber.replace(id, this.itemNumber.get(id) + amount);
-            System.out.println("Cart has been successfully updated!\n");
-            updateCartInDatabase();
-        } else {
-            System.out.println("Remaining stock is not enough\n");
-        }
-        this.totalPrice = updateTotalPrice();
-    }
-
-    public void decreaseAmount(UUID id, int amount) {
-        if (itemNumber.get(id) >= amount) {
-            getProduct(id).increaseProduct(amount);
-            itemNumber.replace(id, itemNumber.get(id) - amount);
-            System.out.println("Cart has been successfully updated!\n");
-            updateCartInDatabase();
-        } else {
-            System.out.println("Something went wrong! Please try again\n");
-        }
-        totalPrice = updateTotalPrice();
-    }
-
     public void viewCart() {
         if (products.size() == 0) {
             System.out.println("Cart is empty!\n");
@@ -180,29 +200,6 @@ public class ShoppingCart {
             System.out.println("Total Price=" + totalPrice + "\n");
         }
     }
-
-    public double updateTotalPrice() {
-        int totalPrice = 0;
-        for (Product product : this.products) {
-            totalPrice += product.getPrice() * this.itemNumber.get(product.getProductID());
-        }
-        return totalPrice;
-    }
-
-    //Database - Related methods
-
-    public void removeProduct(UUID id) {
-        if (doesProductExist(id)) {
-            products.remove(getProduct(id));
-            itemNumber.remove(id);
-            System.out.println("Product has been successfully removed!\n");
-            totalPrice = updateTotalPrice();
-            updateCartInDatabase();
-        } else {
-            System.out.println("Product has not been found!\n");
-        }
-    }
-
 
     @Override
     public String toString() {
@@ -217,23 +214,21 @@ public class ShoppingCart {
                 '}';
     }
 
-    public void checkoutCart() {
-        this.hasCheckout = true;
-    }
-
-    //Database - related methods
+    //Database - Related methods
 
     public void updateCartInDatabase() {
-        String sql = "UPDATE Carts SET itemNumber = ? WHERE cartID = ?";
+        String sql = "UPDATE Carts SET totalPrice = ?, hasCheckout = ?, itemNumber = ? WHERE cartID = ?";
 
         try {
             Connection conn = connect();
             PreparedStatement stmt = conn.prepareStatement(sql);
             try {
+                stmt.setDouble(1, totalPrice);
+                stmt.setString(2, Boolean.toString(hasCheckout));
                 ObjectMapper objectMapper = new ObjectMapper();
                 String json = objectMapper.writeValueAsString(itemNumber);
-                stmt.setString(1, json);
-                stmt.setString(2, cartID.toString());
+                stmt.setString(3, json);
+                stmt.setString(4, cartID.toString());
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }

@@ -71,7 +71,8 @@ public class Main {
         shop.sellerSignUp(seller);
         shop.adminSignUp(admin1);
         shop.userSignUp(user1);
-        shop.addProduct(product);
+        shop.setCurrentAccount(seller);
+        shop.addProductToShop(product);
         runMenu(shop);
     }
 
@@ -92,8 +93,9 @@ public class Main {
             case 1 -> {
                 //Sign up a seller
                 System.out.println("Enter : 1- Company name, 2- Password\n");
-                Seller newSeller = new Seller(input.nextLine(), input.nextLine());
-                shop.sellerSignUp(newSeller);
+                String companyName = input.nextLine();
+                String password = input.nextLine();
+                shop.sellerSignUp(companyName, password);
                 runMenu(shop);
             }
             case 2 -> {
@@ -138,6 +140,7 @@ public class Main {
                 if (shop.adminLogin(username, password)) {
                     adminPage(shop);
                 } else {
+                    System.out.println("Username or password is wrong!\n");
                     runMenu(shop);
                 }
             }
@@ -184,6 +187,7 @@ public class Main {
                 """);
         int optionMenu = input.nextInt();
         input.nextLine();
+        User currentUser = (User) shop.getCurrentAccount();
         switch (optionMenu) {
             case 1 -> {
                 //Search and Show Products
@@ -420,7 +424,7 @@ public class Main {
                             default -> throw new IllegalStateException("Unexpected value: " + optionMenu);
                         }
                     }
-                    case 2 -> ((User) shop.getCurrentAccount()).showPurchasedProducts();
+                    case 2 -> currentUser.showPurchasedProducts();
                     default -> throw new IllegalStateException("Unexpected value: " + optionMenu);
                 }
                 userPage(shop);
@@ -454,16 +458,15 @@ public class Main {
                     case 1 -> {
                         System.out.println("Enter : - Name of the cart\n");
                         String cartName = input.nextLine();
-                        ShoppingCart newShoppingCart = new ShoppingCart(cartName);
-                        ((User) shop.getCurrentAccount()).addCart(newShoppingCart);
+                        currentUser.addCart(cartName);
                     }
                     case 2 -> {
                         System.out.println("Enter : - The ID of the cart you want to switch to\n");
                         String productID = input.nextLine();
-                        ((User) shop.getCurrentAccount()).setCurrentCart(UUID.fromString(productID));
+                        currentUser.setCurrentCart(UUID.fromString(productID));
                     }
                     case 3 -> {
-                        if (((User) shop.getCurrentAccount()).getCarts().size() != 0) {
+                        if (currentUser.hasSelectedCart()) {
                             System.out.println("""
                                     1- Add product to cart by ID
                                     2- Remove product from cart by ID
@@ -472,27 +475,23 @@ public class Main {
                                     """);
                             optionMenu = input.nextInt();
                             input.nextLine();
+                            ShoppingCart currentCart = shop.getCart(currentUser.getCurrentCartID());
                             switch (optionMenu) {
                                 case 1 -> {
                                     System.out.println("Enter : 1- Product ID, 2- Quantity you want to buy\n");
                                     String productID = input.nextLine();
                                     int quantity = input.nextInt();
                                     input.nextLine();
-                                    if (((User) shop.getCurrentAccount()).hasSelectedCart()) {
-                                        if (shop.doesProductExist(UUID.fromString(productID))) {
-                                            ShoppingCart currentCart = shop.getCart(((User) shop.getCurrentAccount()).getCurrentCart());
-                                            currentCart.addProduct(shop.getProduct(UUID.fromString(productID)), quantity);
-                                        } else {
-                                            System.out.println("Product has not been found!\n");
-                                        }
+                                    if (shop.doesProductExist(UUID.fromString(productID))) {
+                                        Product currentProduct = shop.getProduct(UUID.fromString(productID));
+                                        currentCart.addProductToCart(currentProduct, quantity);
                                     } else {
-                                        System.out.println("No cart has been selected yet!\n");
+                                        System.out.println("Product has not been found!\n");
                                     }
                                 }
                                 case 2 -> {
                                     System.out.println("Enter : - Product ID\n");
                                     String productID = input.nextLine();
-                                    ShoppingCart currentCart = shop.getCart(((User) shop.getCurrentAccount()).getCurrentCart());
                                     if (currentCart.doesProductExist(UUID.fromString(productID))) {
                                         currentCart.removeProduct(UUID.fromString(productID));
                                     } else {
@@ -504,13 +503,10 @@ public class Main {
                                     String productID = input.nextLine();
                                     int quantity = input.nextInt();
                                     input.nextLine();
-                                    if (shop.getCurrentAccount() instanceof User) {
-                                        ShoppingCart currentCart = shop.getCart(((User) shop.getCurrentAccount()).getCurrentCart());
-                                        if (currentCart.doesProductExist(UUID.fromString(productID))) {
-                                            currentCart.increaseAmount(UUID.fromString(productID), quantity);
-                                        } else {
-                                            System.out.println("Product has not been found!\n");
-                                        }
+                                    if (currentCart.doesProductExist(UUID.fromString(productID))) {
+                                        currentCart.increaseQuantityInCart(UUID.fromString(productID), quantity);
+                                    } else {
+                                        System.out.println("Product has not been found!\n");
                                     }
                                 }
                                 case 4 -> {
@@ -518,18 +514,15 @@ public class Main {
                                     String productID = input.nextLine();
                                     int quantity = input.nextInt();
                                     input.nextLine();
-                                    if (shop.getCurrentAccount() instanceof User) {
-                                        ShoppingCart currentCart = shop.getCart(((User) shop.getCurrentAccount()).getCurrentCart());
-                                        if (currentCart.doesProductExist(UUID.fromString(productID))) {
-                                            currentCart.decreaseAmount(UUID.fromString(productID), quantity);
-                                        } else {
-                                            System.out.println("Product has not been found!\n");
-                                        }
+                                    if (currentCart.doesProductExist(UUID.fromString(productID))) {
+                                        currentCart.decreaseQuantityInCart(UUID.fromString(productID), quantity);
+                                    } else {
+                                        System.out.println("Product has not been found!\n");
                                     }
                                 }
                             }
                         } else {
-                            System.out.println("You don't have any carts yet, please add one!\n");
+                            System.out.println("No cart has been selected!\n");
                         }
                     }
                     case 4 -> {
@@ -543,11 +536,11 @@ public class Main {
                         optionMenu = input.nextInt();
                         input.nextLine();
                         switch (optionMenu) {
-                            case 1 -> ((User) shop.getCurrentAccount()).viewCarts();
+                            case 1 -> currentUser.viewCarts();
                             case 2 -> {
                                 System.out.println("Enter : - Cart ID\n");
-                                String productID = input.nextLine();
-                                System.out.println(((User) shop.getCurrentAccount()).getCart(UUID.fromString(productID)));
+                                String cartID = input.nextLine();
+                                currentUser.viewCart(UUID.fromString(cartID));
                             }
                             case 3 -> ((User) shop.getCurrentAccount()).showAllOrders();
                             case 4 -> ((User) shop.getCurrentAccount()).showConfirmedOrders();
@@ -557,10 +550,10 @@ public class Main {
                     case 5 -> {
                         System.out.println("Enter : - Cart ID\n");
                         String cartID = input.nextLine();
-                        if (!shop.hasCheckout(UUID.fromString(cartID))) {
-                            ShoppingCart cart = shop.getCart(UUID.fromString(cartID));
+                        ShoppingCart cart = shop.getCart(UUID.fromString(cartID));
+                        if (!cart.hasCheckout()) {
                             Order newOrder = new Order(cart.getName(), cart.getProducts(), cart.getItemNumber(), cart.getTotalPrice(), shop.getCurrentAccount().getAccountID());
-                            shop.checkoutCartInDatabase(cart.getCartID());
+                            currentUser.updateUserInDatabase();
                             shop.addOrder(newOrder);
                         } else {
                             System.out.println("Cart has been checkout earlier!\n");
@@ -590,6 +583,7 @@ public class Main {
                         input.nextLine();
                         WalletReq newWalletReq = new WalletReq(value, shop.getCurrentAccount().getAccountID());
                         shop.submitAWalletRequest(newWalletReq);
+                        currentUser.updateUserInDatabase();
                     }
                     case 2 -> {
                         System.out.println("""
@@ -629,26 +623,25 @@ public class Main {
                     case 1 -> {
                         System.out.println("Enter : - New password\n");
                         String newPassword = input.nextLine();
-                        ((User) shop.getCurrentAccount()).updatePassword(newPassword);
+                        currentUser.updatePassword(newPassword);
                     }
                     case 2 -> {
                         System.out.println("Enter : - New email\n");
                         String newEmail = input.nextLine();
-                        ((User) shop.getCurrentAccount()).updateEmail(newEmail);
+                        currentUser.updateEmail(newEmail);
                     }
                     case 3 -> {
                         System.out.println("Enter : - New phone number\n");
                         String newPhoneNumber = input.nextLine();
-                        ((User) shop.getCurrentAccount()).updatePhoneNumber(newPhoneNumber);
+                        currentUser.updatePhoneNumber(newPhoneNumber);
                     }
                     case 4 -> {
                         System.out.println("Enter : - New email\n");
                         String newAddress = input.nextLine();
-                        ((User) shop.getCurrentAccount()).updateAddress(newAddress);
+                        currentUser.updateAddress(newAddress);
                     }
                     default -> throw new IllegalStateException("Unexpected value: " + optionMenu);
                 }
-
             }
             case 6 -> {
                 //Back to Main Menu
@@ -666,6 +659,7 @@ public class Main {
             System.out.println("Seller has not been authorized yet!\n");
             runMenu(shop);
         } else {
+            Seller currentSeller = (Seller) shop.getCurrentAccount();
             System.out.println("""
                     1- Product Management
                     \t- Add a new Product
@@ -755,7 +749,7 @@ public class Main {
                                             int longevity = input.nextInt();
                                             input.nextLine();
                                             EyeBrowMakeUp eyeBrowMakeUp = new EyeBrowMakeUp(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), MatterState.valueOf(matterState.toUpperCase()), Boolean.parseBoolean(hasBox), PenType.valueOf(penType.toUpperCase()), Boolean.parseBoolean(hasWaterResistance), brand, longevity);
-                                            shop.addProduct(eyeBrowMakeUp);
+                                            shop.addProductToShop(eyeBrowMakeUp);
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -773,7 +767,7 @@ public class Main {
                                             int longevity = input.nextInt();
                                             input.nextLine();
                                             EyeBrowMakeUp eyeMakeUp = new EyeBrowMakeUp(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), MatterState.valueOf(matterState.toUpperCase()), Boolean.parseBoolean(hasBox), PenType.valueOf(penType.toUpperCase()), Boolean.parseBoolean(hasWaterResistance), brand, longevity);
-                                            shop.addProduct(eyeMakeUp);
+                                            shop.addProductToShop(eyeMakeUp);
                                         }
                                     }
                                 }
@@ -817,7 +811,7 @@ public class Main {
                                                 }
                                             }
                                             Fiction_Book fiction_book = new Fiction_Book(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), ISBN, pageNumber, author, language, characters, tone);
-                                            shop.addProduct(fiction_book);
+                                            shop.addProductToShop(fiction_book);
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -827,7 +821,7 @@ public class Main {
                                             String readingLevel = input.nextLine();
                                             String theme = input.nextLine();
                                             Children_Book children_book = new Children_Book(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), ISBN, pageNumber, author, language, readingLevel, theme);
-                                            shop.addProduct(children_book);
+                                            shop.addProductToShop(children_book);
                                         }
                                         case 3 -> {
                                             System.out.println("""
@@ -838,7 +832,7 @@ public class Main {
                                             int verseNumber = input.nextInt();
                                             input.nextLine();
                                             Poetry_Book poetry_book = new Poetry_Book(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), ISBN, pageNumber, author, language, poeticForm, verseNumber);
-                                            shop.addProduct(poetry_book);
+                                            shop.addProductToShop(poetry_book);
                                         }
                                     }
                                 }
@@ -882,7 +876,7 @@ public class Main {
                                             input.nextLine();
                                             String hasCap = input.nextLine();
                                             Coat coat = new Coat(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), ClothSize.valueOf(size.toUpperCase()), ClothGender.valueOf(clothGender.toUpperCase()), ClothMaterial.valueOf(clothMaterial.toUpperCase()), brand, ClothDurability.valueOf(durability.toUpperCase()), buttonNumber, Boolean.parseBoolean(hasCap));
-                                            shop.addProduct(coat);
+                                            shop.addProductToShop(coat);
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -898,7 +892,7 @@ public class Main {
                                             input.nextLine();
                                             String hasZipper = input.nextLine();
                                             Jean jean = new Jean(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), ClothSize.valueOf(size.toUpperCase()), ClothGender.valueOf(clothGender.toUpperCase()), ClothMaterial.valueOf(clothMaterial.toUpperCase()), brand, ClothDurability.valueOf(durability.toUpperCase()), height, pocketNumber, Boolean.parseBoolean(hasZipper));
-                                            shop.addProduct(jean);
+                                            shop.addProductToShop(jean);
                                         }
                                         case 3 -> {
                                             System.out.println("""
@@ -910,7 +904,7 @@ public class Main {
                                             input.nextLine();
                                             String design = input.nextLine();
                                             Sweater sweater = new Sweater(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), ClothSize.valueOf(size.toUpperCase()), ClothGender.valueOf(clothGender.toUpperCase()), ClothMaterial.valueOf(clothMaterial.toUpperCase()), brand, ClothDurability.valueOf(durability.toUpperCase()), buttonNumber, design);
-                                            shop.addProduct(sweater);
+                                            shop.addProductToShop(sweater);
                                         }
                                     }
                                 }
@@ -964,7 +958,7 @@ public class Main {
                                             int portNumber = input.nextInt();
                                             input.nextLine();
                                             Laptop laptop = new Laptop(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), brand, model, OS, screenSize, batteryCapacity, webcamModel, CPU, GPU, fanNumber, Boolean.parseBoolean(hasKeyboardLight), Boolean.parseBoolean(hasFingerPrint), keyboardLanguage, portNumber);
-                                            shop.addProduct(laptop);
+                                            shop.addProductToShop(laptop);
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -992,7 +986,7 @@ public class Main {
                                             String ringTone = input.nextLine();
                                             String CPU = input.nextLine();
                                             SmartPhone smartPhone = new SmartPhone(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), brand, model, OS, screenSize, batteryCapacity, rearCameraQuality, selfieCameraQuality, cameraNumber, storage, OSVersion, displayResolution, ringTone, CPU);
-                                            shop.addProduct(smartPhone);
+                                            shop.addProductToShop(smartPhone);
                                         }
                                         case 3 -> {
                                             System.out.println("""
@@ -1010,7 +1004,7 @@ public class Main {
                                             String hasStepTracker = input.nextLine();
                                             String hasCaloricTracker = input.nextLine();
                                             SmartWatch smartWatch = new SmartWatch(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), brand, model, OS, screenSize, batteryCapacity, processor, Boolean.parseBoolean(hasHeartRateTracker), Boolean.parseBoolean(hasStepTracker), Boolean.parseBoolean(hasCaloricTracker));
-                                            shop.addProduct(smartWatch);
+                                            shop.addProductToShop(smartWatch);
                                         }
                                     }
                                 }
@@ -1062,7 +1056,7 @@ public class Main {
                                             String hasRemoteControl = input.nextLine();
                                             String hasTimer = input.nextLine();
                                             AirConditioner airConditioner = new AirConditioner(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasController), height, width, weight, coolingCapacity, energyEfficiency, airFilter, fanNumber, Boolean.parseBoolean(hasRemoteControl), Boolean.parseBoolean(hasTimer));
-                                            shop.addProduct(airConditioner);
+                                            shop.addProductToShop(airConditioner);
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -1081,7 +1075,7 @@ public class Main {
                                             String Refrigerator_type = input.nextLine();
                                             String hasDigitalController = input.nextLine();
                                             Refrigerator refrigerator = new Refrigerator(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasController), height, width, height, floorNumber, Boolean.parseBoolean(hasFridge), RefrigeratorType.valueOf(Refrigerator_type.toUpperCase()), Boolean.parseBoolean(hasDigitalController));
-                                            shop.addProduct(refrigerator);
+                                            shop.addProductToShop(refrigerator);
                                         }
                                         case 3 -> {
                                             System.out.println("""
@@ -1100,7 +1094,7 @@ public class Main {
                                             String has3D = input.nextLine();
                                             String hasStand = input.nextLine();
                                             TV tv = new TV(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasController), height, width, weight, refreshRate, Boolean.parseBoolean(mountableOnWall), Boolean.parseBoolean(has3D), Boolean.parseBoolean(hasStand));
-                                            shop.addProduct(tv);
+                                            shop.addProductToShop(tv);
                                         }
                                     }
                                 }
@@ -1139,7 +1133,7 @@ public class Main {
                                             String ball_material = input.nextLine();
                                             String isRightHandOriented = input.nextLine();
                                             Ball ball = new Ball(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, sportType, brand, BallSize.valueOf(ball_size.toUpperCase()), BallMaterial.valueOf(ball_material.toUpperCase()), Boolean.parseBoolean(isRightHandOriented));
-                                            shop.addProduct(ball);
+                                            shop.addProductToShop(ball);
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -1158,7 +1152,7 @@ public class Main {
                                             String gloveUser = input.nextLine();
                                             String gloveStyle = input.nextLine();
                                             Gloves glove = new Gloves(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, sportType, brand, GloveMaterial.valueOf(gloveMaterial.toUpperCase()), GloveSize.valueOf(gloveSize.toUpperCase()), GloveUser.valueOf(gloveUser.toUpperCase()), GloveStyle.valueOf(gloveStyle.toUpperCase()));
-                                            shop.addProduct(glove);
+                                            shop.addProductToShop(glove);
                                         }
                                         case 3 -> {
                                             System.out.println("""
@@ -1176,7 +1170,7 @@ public class Main {
                                             String racketDurability = input.nextLine();
                                             String shape = input.nextLine();
                                             Rackets racket = new Rackets(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, sportType, brand, length, width, RacketDurability.valueOf(racketDurability.toUpperCase()), shape);
-                                            shop.addProduct(racket);
+                                            shop.addProductToShop(racket);
                                         }
                                     }
                                 }
@@ -1235,7 +1229,7 @@ public class Main {
                                             String isDomestic = input.nextLine();
                                             String dairyGroup = input.nextLine();
                                             Dairy dairyProduct = new Dairy(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, Boolean.parseBoolean(isDomestic), DairyGroups.valueOf(dairyGroup.toUpperCase()));
-                                            shop.addProduct(dairyProduct);
+                                            shop.addProductToShop(dairyProduct);
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -1253,7 +1247,7 @@ public class Main {
                                             input.nextLine();
                                             String size = input.nextLine();
                                             Drinks drink = new Drinks(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, taste, Boolean.parseBoolean(isSoftDrink), litters, DrinkSize.valueOf(size.toUpperCase()));
-                                            shop.addProduct(drink);
+                                            shop.addProductToShop(drink);
                                         }
                                         case 3 -> {
                                             System.out.println("""
@@ -1268,7 +1262,7 @@ public class Main {
                                             input.nextLine();
                                             String productType = input.nextLine();
                                             Proteins protein = new Proteins(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, brand, proteinAmount, ProteinProductType.valueOf(productType.toUpperCase()));
-                                            shop.addProduct(protein);
+                                            shop.addProductToShop(protein);
                                         }
                                     }
                                 }
@@ -1317,7 +1311,7 @@ public class Main {
                                             int maxSpinSpeed = input.nextInt();
                                             input.nextLine();
                                             Drill drill = new Drill(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, voltage, PowerSource.valueOf(powerSource.toUpperCase()), minSpinSpeed, maxSpinSpeed);
-                                            shop.addProduct(drill);
+                                            shop.addProductToShop(drill);
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -1333,7 +1327,7 @@ public class Main {
                                             String powerSource = input.nextLine();
                                             String usageLevel = input.nextLine();
                                             SolderingSystem solderingSystem = new SolderingSystem(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, voltage, PowerSource.valueOf(powerSource.toUpperCase()), UsageLevel.valueOf(usageLevel.toUpperCase()));
-                                            shop.addProduct(solderingSystem);
+                                            shop.addProductToShop(solderingSystem);
                                         }
                                         case 3 -> {
                                             System.out.println("""
@@ -1348,7 +1342,7 @@ public class Main {
                                             String style = input.nextLine();
                                             String material = input.nextLine();
                                             Spanner spanner = new Spanner(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, size, style, SpannerMaterial.valueOf(material.toUpperCase()));
-                                            shop.addProduct(spanner);
+                                            shop.addProductToShop(spanner);
                                         }
                                     }
                                 }
@@ -1388,7 +1382,7 @@ public class Main {
                                             int timeToFinish = input.nextInt();
                                             input.nextLine();
                                             BoardGames boardGame = new BoardGames(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer), size, playerNumber, timeToFinish);
-                                            shop.addProduct(boardGame);
+                                            shop.addProductToShop(boardGame);
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -1404,7 +1398,7 @@ public class Main {
                                             int gangNumber = input.nextInt();
                                             input.nextLine();
                                             CardGames cardGame = new CardGames(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer), cardNumber, playerNumber, gangNumber);
-                                            shop.addProduct(cardGame);
+                                            shop.addProductToShop(cardGame);
                                         }
                                         case 3 -> {
                                             System.out.println("""
@@ -1416,7 +1410,7 @@ public class Main {
                                             input.nextLine();
                                             String finalPicture = input.nextLine();
                                             Puzzles puzzle = new Puzzles(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer.toUpperCase()), partNumber, finalPicture);
-                                            shop.addProduct(puzzle);
+                                            shop.addProductToShop(puzzle);
                                         }
                                     }
                                 }
@@ -1468,7 +1462,7 @@ public class Main {
                                             int seatNumber = input.nextInt();
                                             input.nextLine();
                                             Car car = new Car(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic.toUpperCase()), maxSpeed, brand, model, Boolean.parseBoolean(isRightSteering), speakerModel, seatNumber);
-                                            shop.addProduct(car);
+                                            shop.addProductToShop(car);
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -1484,7 +1478,7 @@ public class Main {
                                             String hasWingMirror = input.nextLine();
                                             String noiseLevel = input.nextLine();
                                             Motorcycle motorcycle = new Motorcycle(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic), maxSpeed, brand, model, seatNumber, Boolean.parseBoolean(hasWingMirror), NoiseLevel.valueOf(noiseLevel.toUpperCase()));
-                                            shop.addProduct(motorcycle);
+                                            shop.addProductToShop(motorcycle);
                                         }
                                         case 3 -> {
                                             System.out.println("""
@@ -1497,7 +1491,7 @@ public class Main {
                                             String truckType = input.nextLine();
                                             String hasBed = input.nextLine();
                                             Truck truck = new Truck(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic), maxSpeed, brand, model, TruckType.valueOf(truckType.toUpperCase()), Boolean.parseBoolean(hasBed));
-                                            shop.addProduct(truck);
+                                            shop.addProductToShop(truck);
                                         }
                                     }
                                 }
@@ -1576,7 +1570,7 @@ public class Main {
                     case 4 -> {
                         System.out.println("Enter : - Wallet ID\n");
                         String productID = input.nextLine();
-                        shop.walletConfirm(UUID.fromString(productID));
+//                        shop.walletConfirm(UUID.fromString(productID));
                     }
                     default -> throw new IllegalStateException("Unexpected value: " + optionMenu);
                 }
@@ -1607,8 +1601,7 @@ public class Main {
                 String username = input.nextLine();
                 String password = input.nextLine();
                 String email = input.nextLine();
-                Admin newAdmin = new Admin(username, password, email);
-                shop.adminSignUp(newAdmin);
+                shop.adminSignUp(username, password, email);
             }
             case 4 -> {
                 System.out.println("""
@@ -1675,7 +1668,7 @@ public class Main {
                     case 2 -> {
                         System.out.println("Enter : - Seller ID");
                         String productID = input.nextLine();
-                        shop.sellerAuthorization(UUID.fromString(productID));
+//                        shop.sellerAuthorization(UUID.fromString(productID));
                     }
                     default -> throw new IllegalStateException("Unexpected value: " + optionMenu);
                 }

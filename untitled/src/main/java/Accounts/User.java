@@ -6,6 +6,7 @@ import Shopping.ShoppingCart;
 import Shopping.WalletReq;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -156,22 +157,19 @@ public class User extends Account {
         return purchasedProducts;
     }
 
-    public UUID getCurrentCart() {
+    public UUID getCurrentCartID() {
         return currentCartID;
     }
 
     public void setCurrentCart(UUID cartID) {
-        if (this.carts.containsKey(cartID)) {
+        if (doesCartExist(cartID)) {
             this.currentCartID = cartID;
             System.out.println("Cart has been successfully switched to " + cartID + "\n");
-            this.switchCartDatabase(cartID);
+            updateUserInDatabase();
         } else {
             System.out.println("Cart has not been found!\n");
         }
     }
-
-    //Override
-
     public ShoppingCart getCart(UUID id) {
         return carts.get(id);
     }
@@ -193,23 +191,24 @@ public class User extends Account {
                 "} " + super.toString();
     }
 
+    //Login - Related methods
+
+
     @Override
     public boolean accountLogin(String username, String password) {
         return this.username.equalsIgnoreCase(username) && this.password.equals(password);
     }
 
-    //Cart - Related Methods
+    //Search & Show - Related methods
 
-    @Override
-    public boolean doesAccountExist(String username) {
-        return this.username.equalsIgnoreCase(username);
-    }
-
-    public Order checkoutCart(UUID cartID) {
-        this.getCart(cartID).checkoutCart();
-        Order order = new Order(this.getCart(cartID).getName(), this.getCart(cartID).getProducts(), this.getCart(cartID).getItemNumber(), this.getCart(cartID).getTotalPrice(), this.getAccountID());
-        this.addOrder(order);
-        return order;
+    public void showPurchasedProducts() {
+        if (this.purchasedProducts.size() == 0) {
+            System.out.println("You haven't purchased any product yet!\n");
+        } else {
+            for (Product product : this.purchasedProducts.values()) {
+                System.out.println(product);
+            }
+        }
     }
 
     public void viewCarts() {
@@ -222,23 +221,12 @@ public class User extends Account {
         }
     }
 
-    public void viewCart(UUID id) {
-        if (this.carts.containsKey(id)) {
-            System.out.println(this.carts.get(id));
+    public void viewCart(UUID cartID) {
+        if (doesCartExist(cartID)) {
+            System.out.println(getCart(cartID));
         } else {
             System.out.println("Cart has not been found!\n");
         }
-    }
-
-    public void addCart(ShoppingCart cart) {
-        this.carts.put(cart.getOrderID(), cart);
-        System.out.println("Cart has been successfully added!\n");
-    }
-
-    //Order - Related Methods
-
-    public boolean hasSelectedCart() {
-        return this.currentCartID != null;
     }
 
     public void showAllOrders() {
@@ -277,31 +265,6 @@ public class User extends Account {
         }
     }
 
-    public boolean checkBuyerPocket(double value) {
-        return this.wallet >= value;
-    }
-
-    public void buyerPayOff(double value) {
-        System.out.println("Money has been successfully paid off!\n");
-        this.wallet -= value;
-        updateUserWalletInDatabase();
-    }
-
-    //Wallet - Related Methods
-
-    public void addOrder(Order order) {
-        this.orders.put(order.getOrderID(), order);
-    }
-
-    public void viewWallet() {
-        System.out.println("Current wallet: " + this.getWallet() + "\n");
-    }
-
-    public void submitAWalletRequest(WalletReq walletReq) {
-        this.walletRequests.put(walletReq.getWalletID(), walletReq);
-        System.out.println("Wallet request has been successfully sent!\n");
-    }
-
     public void showAllWalletRequests() {
         if (walletRequests.size() == 0) {
             System.out.println("No wallet request has been submitted!\n");
@@ -310,6 +273,10 @@ public class User extends Account {
                 System.out.println(walletRequest);
             }
         }
+    }
+
+    public void viewWallet() {
+        System.out.println("Current wallet: " + this.getWallet() + "\n");
     }
 
     public void showConfirmedWalletRequests() {
@@ -338,6 +305,71 @@ public class User extends Account {
         }
     }
 
+    //Cart - Related methods
+
+    public void addCart(String  cartName) {
+        ShoppingCart shoppingCart = new ShoppingCart(cartName);
+        this.carts.put(shoppingCart.getCartID(), shoppingCart);
+        System.out.println("Cart has been successfully added!\n");
+        updateUserInDatabase();
+    }
+
+    //Existence - Related methods
+
+    public boolean doesCartExist(UUID cartID){
+        return this.carts.containsKey(cartID);
+    }
+
+    public boolean hasSelectedCart() {
+        return this.currentCartID != null;
+    }
+
+    @Override
+    public boolean doesAccountExist(String username) {
+        return this.username.equalsIgnoreCase(username);
+    }
+
+    public boolean isProductPurchased(UUID id) {
+        return this.purchasedProducts.containsKey(id);
+    }
+
+    //Cart - Related methods
+
+    public Order checkoutCart(UUID cartID) {
+        this.getCart(cartID).checkoutCart();
+        Order order = new Order(this.getCart(cartID).getName(), this.getCart(cartID).getProducts(), this.getCart(cartID).getItemNumber(), this.getCart(cartID).getTotalPrice(), this.getAccountID());
+        this.addOrder(order);
+        return order;
+    }
+
+    //Order - Related Methods
+
+    public void addOrder(Order order) {
+        this.orders.put(order.getOrderID(), order);
+        updateUserInDatabase();
+    }
+
+    public boolean checkBuyerPocket(double value) {
+        return this.wallet >= value;
+    }
+
+    public void buyerPayOff(double value) {
+        System.out.println("Money has been successfully paid off!\n");
+        this.wallet -= value;
+        updateUserInDatabase();
+    }
+
+    public void addPurchasedProduct(Product product) {
+        purchasedProducts.put(product.getProductID(), product);
+    }
+
+    //Wallet - Related Methods
+
+    public void submitAWalletRequest(WalletReq walletReq) {
+        this.walletRequests.put(walletReq.getWalletID(), walletReq);
+        System.out.println("Wallet request has been successfully sent!\n");
+    }
+
     //User - Related Methods
 
     public void addWallet(double wallet) {
@@ -346,72 +378,64 @@ public class User extends Account {
 
     public void updatePassword(String newPassword) {
         this.setPassword(newPassword);
+        updateUserInDatabase();
         System.out.println("Password has been successfully edited!\n");
     }
 
     public void updateEmail(String newEmail) {
         this.setEmail(newEmail);
+        updateUserInDatabase();
         System.out.println("Email has been successfully edited!\n");
     }
 
     public void updatePhoneNumber(String newPhoneNumber) {
         this.setPhoneNumber(newPhoneNumber);
+        updateUserInDatabase();
         System.out.println("Phone Number has been successfully edited!\n");
     }
 
     public void updateAddress(String newAddress) {
         this.setAddress(newAddress);
+        updateUserInDatabase();
         System.out.println("Address has been successfully edited!\n");
-    }
-
-    public void showPurchasedProducts() {
-        if (this.purchasedProducts.size() == 0) {
-            System.out.println("You haven't purchased any product yet!\n");
-        } else {
-            for (Product product : this.purchasedProducts.values()) {
-                System.out.println(product);
-            }
-        }
-    }
-
-    public boolean isProductPurchased(UUID id) {
-        return this.purchasedProducts.containsKey(id);
-    }
-
-    //Product - related Methods
-    public void addPurchasedProduct(Product product) {
-        purchasedProducts.put(product.getProductID(), product);
     }
 
     //Database - Related methods
 
-    public void switchCartDatabase(UUID cartID) {
-        String sql = "UPDATE Users SET currentCartID = ? WHERE AccountID = ?";
+    public void updateUserInDatabase(){
+        String sql = "UPDATE Users SET password = ?, email = ?, currentCartID = ?, phoneNumber = ?, address = ?, wallet = ?, carts = ?, orders = ?, walletRequests = ?, purchasedProducts = ? WHERE AccountID = ?";
 
         try {
             Connection conn = connect();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, cartID.toString());
-            stmt.setString(2, getAccountID().toString());
-            stmt.executeUpdate();
-            System.out.println("Current cart has been successfully updated in DataBase!\n");
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, password);
+            pstmt.setString(2, email);
+            if (currentCartID != null){
+                pstmt.setString(3, currentCartID.toString());
+            }
+            else {
+                pstmt.setString(3, null);
+            }
+            pstmt.setString(4, phoneNumber);
+            pstmt.setString(5, address);
+            pstmt.setDouble(6, wallet);
+            JSONObject cartsJson = new JSONObject();
+            JSONObject ordersJson = new JSONObject();
+            JSONObject walletRequestJson = new JSONObject();
+            JSONObject purchasedProductsJson = new JSONObject();
+            cartsJson.put("carts", carts.keySet());
+            ordersJson.put("orders", orders.keySet());
+            walletRequestJson.put("walletRequests", walletRequests.keySet());
+            purchasedProductsJson.put("purchasedProducts", purchasedProducts.keySet());
+            pstmt.setString(7, cartsJson.toString());
+            pstmt.setString(8, ordersJson.toString());
+            pstmt.setString(9, walletRequestJson.toString());
+            pstmt.setString(10, purchasedProductsJson.toString());
+            pstmt.setString(11, getAccountID().toString());
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-    }
 
-    public void updateUserWalletInDatabase() {
-        String sql = "UPDATE Users SET wallet = ? WHERE AccountID = ?";
-
-        try {
-            Connection conn = connect();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setDouble(1, this.getWallet());
-            stmt.setString(2, getAccountID().toString());
-            stmt.executeUpdate();
-            System.out.println("User's wallet has been successfully updated in Database!\n");
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
     }
 }

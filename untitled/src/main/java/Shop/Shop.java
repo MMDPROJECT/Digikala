@@ -47,6 +47,7 @@ import Categories.Vehicles.Vehicles;
 import Shopping.Order;
 import Shopping.ShoppingCart;
 import Shopping.WalletReq;
+import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -144,7 +145,95 @@ public class Shop {
         return (User) this.accounts.get(id);
     }
 
-    //Admin - Related Methods
+
+    //SignUp & Login - Related methods
+
+    public void sellerSignUp(String companyName, String password) {
+        if (this.doesAccountExist(companyName)) {
+            System.out.println("This Seller already exist!\n");
+        } else {
+            Seller newSeller = new Seller(companyName, password);
+            this.accounts.put(newSeller.getAccountID(), newSeller);
+            System.out.println("Seller has been successfully added!\n");
+        }
+    }
+
+    public void sellerSignUp(Seller newSeller) {
+        this.accounts.put(newSeller.getAccountID(), newSeller);
+        System.out.println("Seller has been successfully added!\n");
+    }
+
+    public boolean sellerLogin(String companyName, String password) {
+        for (Account account : this.accounts.values()) {
+            if (account instanceof Seller) {
+                if (account.accountLogin(companyName, password)) {
+                    System.out.println("Seller has been successfully logged in!\n");
+                    this.setCurrentAccount(account);
+                    return true;
+                }
+            }
+        }
+        System.out.println("Company name or password is wrong!\n");
+        return false;
+    }
+
+    public void userSignUp(String username, String password, String email, String phoneNumber, String address) {
+        if (this.doesAccountExist(username)) {
+            System.out.println("This user already exist!\n");
+        } else {
+            User newUser = new User(username, password, email, phoneNumber, address);
+            this.accounts.put(newUser.getAccountID(), newUser);
+            System.out.println("User has been successfully added!\n");
+        }
+    }
+
+    public void userSignUp(User newUser) {
+        this.accounts.put(newUser.getAccountID(), newUser);
+        System.out.println("User has been successfully added!\n");
+    }
+
+    public boolean userLogin(String username, String password) {
+        for (Account account : this.accounts.values()) {
+            if (account instanceof User) {
+                if (account.accountLogin(username, password)) {
+                    this.setCurrentAccount(account);
+                    System.out.println("User has been successfully logged in!\n");
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void adminSignUp(String username, String password, String email) {
+        if (!doesAccountExist(username)) {
+            Admin newAdmin = new Admin(username, password, email);
+            this.accounts.put(newAdmin.getAccountID(), newAdmin);
+            System.out.println("Admin has been successfully added!\n");
+        } else {
+            System.out.println("This admin already exists!\n");
+        }
+    }
+
+    public void adminSignUp(Admin newAdmin) {
+        this.accounts.put(newAdmin.getAccountID(), newAdmin);
+        System.out.println("Admin has been successfully added!\n");
+    }
+
+    public boolean adminLogin(String username, String password) {
+        for (Account account : this.accounts.values()) {
+            if (account instanceof Admin) {
+                if (account.accountLogin(username, password)) {
+                    System.out.println("Admin has been successfully logged in!\n");
+                    this.setCurrentAccount(account);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //Existence - Related methods
 
     public boolean doesAccountExist(UUID id) {
         return !this.accounts.containsKey(id);
@@ -159,377 +248,9 @@ public class Shop {
         return false;
     }
 
-    public boolean adminLogin(String username, String password) {
-        for (Account account : accounts.values()) {
-            if (account instanceof Admin && account.accountLogin(username, password)) {
-                System.out.println("Admin has been successfully logged in!\n");
-                this.currentAccount = account;
-                return true;
-            }
-        }
-        System.out.println("Username or password is wrong!\n");
-        return false;
+    public boolean doesProductExist(UUID id) {
+        return products.containsKey(id);
     }
-
-    public void adminSignUp(String username, String password, String email) {
-        if (!doesAccountExist(username)) {
-            Admin newAdmin = new Admin(username, password, email);
-            accounts.put(newAdmin.getAccountID(), newAdmin);
-            System.out.println("Admin has been successfully added!\n");
-        } else {
-            System.out.println("This admin already exists!\n");
-        }
-    }
-
-    public void adminSignUp(Admin admin) {
-        accounts.put(admin.getAccountID(), admin);
-        System.out.println("Admin has been successfully added!\n");
-    }
-
-    public void showAllWalletRequests() {
-        if (this.walletRequests.size() == 0) {
-            System.out.println("No wallet request has been found!\n");
-        } else {
-            for (WalletReq walletRequest : this.walletRequests.values()) {
-                System.out.println(walletRequest);
-            }
-        }
-    }
-
-    public void showAllConfirmedWalletRequests() {
-        boolean hasFoundAny = false;
-        for (WalletReq walletReq : this.walletRequests.values()) {
-            if (walletReq.isConfirmed()) {
-                hasFoundAny = true;
-                System.out.println(walletReq);
-            }
-        }
-        if (!hasFoundAny) {
-            System.out.println("No wallet request has been found!\n");
-        }
-    }
-
-    public void showAllUnconfirmedWalletRequests() {
-        boolean hasFoundAny = false;
-        for (WalletReq walletReq : this.walletRequests.values()) {
-            if (!walletReq.isConfirmed()) {
-                hasFoundAny = true;
-                System.out.println(walletReq);
-            }
-        }
-        if (!hasFoundAny) {
-            System.out.println("No wallet request has been found!\n");
-        }
-    }
-
-    public void showAllOrders() {
-        if (this.orders.size() == 0) {
-            System.out.println("No order has been submitted yet!\n");
-        } else {
-            for (Order order : this.orders.values()) {
-                System.out.println(order);
-            }
-        }
-    }
-
-    public void showAllConfirmedOrders() {
-        boolean hasFoundAny = false;
-        for (Order order : this.orders.values()) {
-            if (order.isConfirmed()) {
-                hasFoundAny = true;
-                System.out.println(order);
-            }
-        }
-        if (!hasFoundAny) {
-            System.out.println("No order has been found!\n");
-        }
-    }
-
-    public void showAllUnconfirmedOrders() {
-        boolean hasFoundAny = false;
-        for (Order order : this.orders.values()) {
-            hasFoundAny = true;
-            if (!order.isConfirmed()) {
-                System.out.println(order);
-            }
-        }
-        if (!hasFoundAny) {
-            System.out.println("No order has been found!\n");
-        }
-    }
-
-    public void orderConfirm(UUID orderID) {
-        if (!doesOrderExist(orderID)) {
-            System.out.println("Order has not been found!\n");
-        } else {
-            Order order = getOrder(orderID);
-            User buyer = ((User) this.accounts.get(order.getBuyerID()));
-            if (buyer.checkBuyerPocket(order.calcBuyerPayOff())) {
-                order.orderConfirm();
-                buyer.buyerPayOff(order.calcBuyerPayOff());
-                addShopCut(order.calcShopCut());
-                calcSellerCut(orderID);
-                order.updateStocks();
-                updateUserPurchasedProducts(orderID);
-            } else {
-                System.out.println("Order can't be done, due to lack of money\n");
-            }
-        }
-    }
-
-
-    public void showAllUserWalletRequests(UUID userId) {
-        if (doesAccountExist(userId)) {
-            System.out.println("User has not been found!\n");
-        } else {
-            if (this.accounts.get(userId) instanceof User) {
-                ((User) this.accounts.get(userId)).showAllWalletRequests();
-            }
-        }
-    }
-
-    public void showUserConfirmedWalletRequests(UUID userId) {
-        if (doesAccountExist(userId)) {
-            System.out.println("User has not been found!\n");
-        } else {
-            if (this.accounts.get(userId) instanceof User) {
-                ((User) this.accounts.get(userId)).showConfirmedWalletRequests();
-            }
-        }
-    }
-
-    public void showUserUnconfirmedWalletRequests(UUID userId) {
-        if (doesAccountExist(userId)) {
-            System.out.println("User has not been found!\n");
-        } else {
-            if (this.accounts.get(userId) instanceof User) {
-                ((User) this.accounts.get(userId)).showUnconfirmedWalletRequests();
-            }
-        }
-    }
-
-    public void showUserAllOrders(UUID userId) {
-        if (doesAccountExist(userId)) {
-            System.out.println("User has not been found!\n");
-        } else {
-            if (this.accounts.get(userId) instanceof User) {
-                ((User) this.accounts.get(userId)).showAllOrders();
-            }
-        }
-    }
-
-    public void showUserConfirmedOrders(UUID userId) {
-        if (doesAccountExist(userId)) {
-            System.out.println("User has not been found!\n");
-        } else {
-            if (this.accounts.get(userId) instanceof User) {
-                ((User) this.accounts.get(userId)).showConfirmedOrders();
-            }
-        }
-    }
-
-    public void showUserUnconfirmedOrders(UUID userId) {
-        if (doesAccountExist(userId)) {
-            System.out.println("User has not been found!\n");
-        } else {
-            if (this.accounts.get(userId) instanceof User) {
-                ((User) this.accounts.get(userId)).showUnconfirmedOrders();
-            }
-        }
-    }
-
-    public void userProfileScreens() {
-        boolean hasFoundAny = false;
-        for (Account account : this.accounts.values()) {
-            if (account instanceof User) {
-                hasFoundAny = true;
-                System.out.println(account);
-            }
-        }
-        if (!hasFoundAny) {
-            System.out.println("No profile screen has been found!\n");
-        }
-    }
-
-    public void userProfileScreen(UUID id) {
-        if (this.accounts.get(id) instanceof User) {
-            System.out.println(this.accounts.get(id));
-        } else {
-            System.out.println("User has not been found!\n");
-        }
-    }
-
-    public void showUnauthorizedSellers() {
-        boolean hasFoundAny = false;
-        for (Account account : accounts.values()) {
-            if (account instanceof Seller) {
-                if (!((Seller) account).isAuthorized()) {
-                    System.out.println(account);
-                    hasFoundAny = true;
-                }
-            }
-        }
-        if (!hasFoundAny) {
-            System.out.println("No Unauthorized Seller has been found!\n");
-        }
-    }
-
-    public void sellerAuthorization(UUID sellerID) {
-        if (accounts.get(sellerID) instanceof Seller) {
-            if (((Seller) accounts.get(sellerID)).isAuthorized()) {
-                System.out.println("This Seller has been authorized earlier!\n");
-            } else {
-                ((Seller) accounts.get(sellerID)).authorizeSeller();
-                this.sellerAuthorizeInDatabase(sellerID);
-                System.out.println("Seller has been successfully authorized!\n");
-            }
-        }
-    }
-
-    //User - Related Methods
-
-    public boolean userLogin(String username, String password) {
-        for (Account account : accounts.values()) {
-            if (account instanceof User) {
-                if (account.accountLogin(username, password)) {
-                    setCurrentAccount(account);
-                    System.out.println("User has been successfully logged in!\n");
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public void userSignUp(String username, String password, String email, String phoneNumber, String address) {
-        if (this.doesAccountExist(username)) {
-            System.out.println("This user already exist!\n");
-        } else {
-            User newUser = new User(username, password, email, phoneNumber, address);
-            accounts.put(newUser.getAccountID(), newUser);
-            System.out.println("User has been successfully added!\n");
-        }
-    }
-
-    public void userSignUp(User newUser) {
-        if (this.doesAccountExist(newUser.getUsername())) {
-            System.out.println("This user already exist!\n");
-        } else {
-            accounts.put(newUser.getAccountID(), newUser);
-            System.out.println("User has been successfully added!\n");
-        }
-    }
-
-    public void addPurchasedProduct(UUID id, User user) {
-        user.addPurchasedProduct(products.get(id));
-    }
-
-    public void submitComment(UUID id, String comment) {
-        if (this.products.containsKey(id)) {
-            this.products.get(id).submitComment(comment);
-            System.out.println("Comment has been successfully submitted!\n");
-        } else {
-            System.out.println("Product has not been found!\n");
-        }
-    }
-
-    public void submitAWalletRequest(double value) {
-        WalletReq newWalletReq = new WalletReq(value, this.getCurrentAccount().getAccountID());
-        ((User) this.getCurrentAccount()).submitAWalletRequest(newWalletReq);
-        this.walletRequests.put(newWalletReq.getWalletID(), newWalletReq);
-        System.out.println("Wallet request has been successfully submitted!\n");
-    }
-
-    public void submitAWalletRequest(WalletReq walletReq) {
-        this.walletRequests.put(walletReq.getWalletID(), walletReq);
-        ((User) this.getCurrentAccount()).submitAWalletRequest(walletReq);
-        System.out.println("Wallet request has been successfully submitted!\n");
-    }
-
-    //Seller - Related Methods
-
-    public void sellerSignUp(String companyName, String password) {
-        if (this.doesAccountExist(companyName)) {
-            System.out.println("This Seller already exist!\n");
-        } else {
-            Seller newSeller = new Seller(companyName, password);
-            this.accounts.put(newSeller.getAccountID(), newSeller);
-            System.out.println("Seller has been successfully added!\n");
-        }
-    }
-
-    public void sellerSignUp(Seller seller) {
-        if (!doesAccountExist(seller.getCompanyName())) {
-            this.accounts.put(seller.getAccountID(), seller);
-            System.out.println("Seller has been successfully added!\n");
-        } else {
-            System.out.println("This seller already exists!\n");
-        }
-    }
-
-    public boolean sellerLogin(String companyName, String password) {
-        for (Account account : accounts.values()) {
-            if (account instanceof Seller) {
-                if (account.accountLogin(companyName, password)) {
-                    System.out.println("Seller has been successfully logged in!\n");
-                    this.currentAccount = account;
-                    return true;
-                }
-            }
-        }
-        System.out.println("Company name or password is wrong!\n");
-        return false;
-    }
-
-    public void addProduct(Product product) {
-        this.products.put(product.getProductID(), product);
-        ((Seller) this.accounts.get(this.products.get(product.getProductID()).getSellerId())).addProduct(product);
-    }
-
-    public void removeProduct(UUID productID) {
-        if (doesProductExist(productID)) {
-            this.products.remove(productID);
-            ((Seller) this.getCurrentAccount()).removeProduct(productID);
-            System.out.println("Product has been successfully removed!\n");
-            removeProductFromDB(productID);
-        } else {
-            System.out.println("Product doesn't exists\n");
-        }
-    }
-
-    public void removeProductFromDB(UUID productID) {
-        String sql = "DELETE FROM Products WHERE ProductID = ?";
-
-        try {
-            Connection conn = connect();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, productID.toString());
-            stmt.executeUpdate();
-            System.out.println("Product has been successfully removed from DataBase!\n");
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    //Shop - Related Methods
-
-    public void logOut() {
-        if (this.currentAccount == null) {
-            System.out.println("Can't logout!\n");
-        } else {
-            this.currentAccount = null;
-            System.out.println("Successfully logged out!\n");
-        }
-    }
-
-    public void addShopCut(double value) {
-        System.out.println("Shop's cut has been deposited!\n");
-        this.totalGained += value;
-
-    }
-
-
-    //Cart - Related Methods
 
     public boolean doesCartExist(UUID cartID) {
         for (Account account : accounts.values()) {
@@ -542,86 +263,15 @@ public class Shop {
         return false;
     }
 
-    public void addOrder(Order order) {
-        this.orders.put(order.getOrderID(), order);
-        this.getUser(order.getBuyer()).addOrder(order);
-        System.out.println("Order has been successfully requested!\n");
-    }
-
-    public Order getOrderRequest(Order order) {
-        return order;
-    }
-
-    public boolean hasCheckout(UUID cartID) {
-        for (Account account : this.accounts.values()) {
-            if (account instanceof User) {
-                return ((User) account).getCart(cartID).hasCheckout();
-            }
-        }
-        return false;
-    }
-
-    public ShoppingCart getCart(UUID cartID) {
-        for (Account account : this.accounts.values()) {
-            if (account instanceof User) {
-                if (((User) account).getCarts().containsKey(cartID)) {
-                    return ((User) account).getCart(cartID);
-                }
-            }
-        }
-        return null;
-    }
-
-    //Wallet - Related Methods
-
     public boolean doesWalletRequestExist(UUID id) {
         return this.walletRequests.containsKey(id);
-    }
-
-    public void walletConfirm(UUID walletID) {
-        if (this.walletRequests.containsKey(walletID)) {
-            if (!this.getWalletRequest(walletID).isConfirmed()) {
-                User user = getUser(this.getWalletRequest(walletID).getUser());
-                WalletReq walletReq = getWalletRequest(walletID);
-                walletReq.setConfirmed();
-                user.addWallet(walletReq.getValue());
-                this.updateUserWalletInDatabase(user.getAccountID());
-            } else {
-                System.out.println("This wallet request has been confirmed earlier");
-            }
-        } else {
-            System.out.println("Wallet request has not been found");
-        }
-    }
-
-    //Order - Related Methods
-
-    public void updateUserPurchasedProducts(UUID orderID) {
-        for (Product product : getOrder(orderID).getProducts()) {
-            if (!((User) accounts.get(getOrder(orderID).getBuyer())).isProductPurchased(product.getProductID())) {
-                ((User) accounts.get(getOrder(orderID).getBuyer())).addPurchasedProduct(product);
-            }
-        }
-        System.out.println("User purchased product has been successfully updated!\n");
     }
 
     public boolean doesOrderExist(UUID id) {
         return this.orders.containsKey(id);
     }
 
-    public void calcSellerCut(UUID orderID) {
-        Order order = getOrder(orderID);
-        for (Product product : order.getProducts()) {
-            ((Seller) this.accounts.get(product.getSellerId())).addSellerCut(0.9 * product.getPrice() * order.getItemNumber().get(product.getProductID()));
-        }
-        System.out.println("Sellers cut has been deposited!\n");
-    }
-
-    //Product - Related Methods
-
-    public boolean doesProductExist(UUID id) {
-        return products.containsKey(id);
-    }
+    //Search & Show - Related methods
 
     public void searchBeauty() {
         boolean hasFoundAny = false;
@@ -1132,48 +782,348 @@ public class Shop {
         }
     }
 
+    public void showAllWalletRequests() {
+        if (this.walletRequests.size() == 0) {
+            System.out.println("No wallet request has been found!\n");
+        } else {
+            for (WalletReq walletRequest : this.walletRequests.values()) {
+                System.out.println(walletRequest);
+            }
+        }
+    }
+
+    public void showAllConfirmedWalletRequests() {
+        boolean hasFoundAny = false;
+        for (WalletReq walletReq : this.walletRequests.values()) {
+            if (walletReq.isConfirmed()) {
+                hasFoundAny = true;
+                System.out.println(walletReq);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No wallet request has been found!\n");
+        }
+    }
+
+    public void showAllUnconfirmedWalletRequests() {
+        boolean hasFoundAny = false;
+        for (WalletReq walletReq : this.walletRequests.values()) {
+            if (!walletReq.isConfirmed()) {
+                hasFoundAny = true;
+                System.out.println(walletReq);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No wallet request has been found!\n");
+        }
+    }
+
+    public void showAllOrders() {
+        if (this.orders.size() == 0) {
+            System.out.println("No order has been submitted yet!\n");
+        } else {
+            for (Order order : this.orders.values()) {
+                System.out.println(order);
+            }
+        }
+    }
+
+    public void showAllConfirmedOrders() {
+        boolean hasFoundAny = false;
+        for (Order order : this.orders.values()) {
+            if (order.isConfirmed()) {
+                hasFoundAny = true;
+                System.out.println(order);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No order has been found!\n");
+        }
+    }
+
+    public void showAllUnconfirmedOrders() {
+        boolean hasFoundAny = false;
+        for (Order order : this.orders.values()) {
+            hasFoundAny = true;
+            if (!order.isConfirmed()) {
+                System.out.println(order);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No order has been found!\n");
+        }
+    }
+
+    public void showAllUserWalletRequests(UUID userId) {
+        if (doesAccountExist(userId)) {
+            System.out.println("User has not been found!\n");
+        } else {
+            if (this.accounts.get(userId) instanceof User) {
+                ((User) this.accounts.get(userId)).showAllWalletRequests();
+            }
+        }
+    }
+
+    public void showUserConfirmedWalletRequests(UUID userId) {
+        if (doesAccountExist(userId)) {
+            System.out.println("User has not been found!\n");
+        } else {
+            if (this.accounts.get(userId) instanceof User) {
+                ((User) this.accounts.get(userId)).showConfirmedWalletRequests();
+            }
+        }
+    }
+
+    public void showUserUnconfirmedWalletRequests(UUID userId) {
+        if (doesAccountExist(userId)) {
+            System.out.println("User has not been found!\n");
+        } else {
+            if (this.accounts.get(userId) instanceof User) {
+                ((User) this.accounts.get(userId)).showUnconfirmedWalletRequests();
+            }
+        }
+    }
+
+    public void showUserAllOrders(UUID userId) {
+        if (doesAccountExist(userId)) {
+            System.out.println("User has not been found!\n");
+        } else {
+            if (this.accounts.get(userId) instanceof User) {
+                ((User) this.accounts.get(userId)).showAllOrders();
+            }
+        }
+    }
+
+    public void showUserConfirmedOrders(UUID userId) {
+        if (doesAccountExist(userId)) {
+            System.out.println("User has not been found!\n");
+        } else {
+            if (this.accounts.get(userId) instanceof User) {
+                ((User) this.accounts.get(userId)).showConfirmedOrders();
+            }
+        }
+    }
+
+    public void showUserUnconfirmedOrders(UUID userId) {
+        if (doesAccountExist(userId)) {
+            System.out.println("User has not been found!\n");
+        } else {
+            if (this.accounts.get(userId) instanceof User) {
+                ((User) this.accounts.get(userId)).showUnconfirmedOrders();
+            }
+        }
+    }
+
+    public void userProfileScreens() {
+        boolean hasFoundAny = false;
+        for (Account account : this.accounts.values()) {
+            if (account instanceof User) {
+                hasFoundAny = true;
+                System.out.println(account);
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No profile screen has been found!\n");
+        }
+    }
+
+    public void userProfileScreen(UUID id) {
+        if (this.accounts.get(id) instanceof User) {
+            System.out.println(this.accounts.get(id));
+        } else {
+            System.out.println("User has not been found!\n");
+        }
+    }
+
+    public void showUnauthorizedSellers() {
+        boolean hasFoundAny = false;
+        for (Account account : accounts.values()) {
+            if (account instanceof Seller) {
+                if (!((Seller) account).isAuthorized()) {
+                    System.out.println(account);
+                    hasFoundAny = true;
+                }
+            }
+        }
+        if (!hasFoundAny) {
+            System.out.println("No Unauthorized Seller has been found!\n");
+        }
+    }
+
+    //Admin - Related Methods
+
+    public void orderConfirm(UUID orderID) {
+        if (!doesOrderExist(orderID)) {
+            System.out.println("Order has not been found!\n");
+        } else {
+            Order order = getOrder(orderID);
+            User buyer = ((User) this.accounts.get(order.getBuyerID()));
+            if (buyer.checkBuyerPocket(order.calcBuyerPayOff())) {
+                order.orderConfirm();
+                buyer.buyerPayOff(order.calcBuyerPayOff());
+                addShopCut(order.calcShopCut());
+                calcSellerCut(orderID);
+                order.updateStocks();
+                updateUserPurchasedProducts(orderID);
+            } else {
+                System.out.println("Order can't be done, due to lack of money\n");
+            }
+        }
+    }
+
+//    public void sellerAuthorization(UUID sellerID) {
+//        if (this.accounts.get(sellerID) instanceof Seller) {
+//            if (((Seller) this.accounts.get(sellerID)).isAuthorized()) {
+//                System.out.println("This Seller has been authorized earlier!\n");
+//            } else {
+//                ((Seller) this.accounts.get(sellerID)).authorizeSeller();
+//                this.sellerAuthorizeInDatabase(sellerID);
+//                System.out.println("Seller has been successfully authorized!\n");
+//            }
+//        }
+//    }
+
+//    public void walletConfirm(UUID walletID) {
+//        if (this.walletRequests.containsKey(walletID)) {
+//            if (!this.getWalletRequest(walletID).isConfirmed()) {
+//                User user = getUser(this.getWalletRequest(walletID).getUser());
+//                WalletReq walletReq = getWalletRequest(walletID);
+//                walletReq.setConfirmed();
+//                user.addWallet(walletReq.getValue());
+//                this.updateUserWalletInDatabase(user.getAccountID());
+//            } else {
+//                System.out.println("This wallet request has been confirmed earlier");
+//            }
+//        } else {
+//            System.out.println("Wallet request has not been found");
+//        }
+//    }
+
+    //User - Related Methods
+
+    public void addPurchasedProduct(UUID id, User user) {
+        user.addPurchasedProduct(products.get(id));
+    }
+
+    public void submitComment(UUID id, String comment) {
+        if (this.products.containsKey(id)) {
+            this.products.get(id).submitComment(comment);
+            System.out.println("Comment has been successfully submitted!\n");
+        } else {
+            System.out.println("Product has not been found!\n");
+        }
+    }
+
+    public void submitAWalletRequest(double value) {
+        WalletReq newWalletReq = new WalletReq(value, this.getCurrentAccount().getAccountID());
+        ((User) this.getCurrentAccount()).submitAWalletRequest(newWalletReq);
+        this.walletRequests.put(newWalletReq.getWalletID(), newWalletReq);
+        System.out.println("Wallet request has been successfully submitted!\n");
+    }
+
+    public void submitAWalletRequest(WalletReq walletReq) {
+        this.walletRequests.put(walletReq.getWalletID(), walletReq);
+        ((User) this.getCurrentAccount()).submitAWalletRequest(walletReq);
+        System.out.println("Wallet request has been successfully submitted!\n");
+    }
+
+
+    //Seller - Related Methods
+
+    public void addProductToShop(Product product) {
+        this.products.put(product.getProductID(), product);
+        Seller currentSeller = (Seller) this.getCurrentAccount();
+        currentSeller.addProductToSellerProducts(product);
+        currentSeller.updateSellerInDatabase();
+    }
+
+    public void removeProduct(UUID productID) {
+        Seller currentSeller = (Seller) this.getCurrentAccount();
+        if (currentSeller.isProductAvailable(productID)) {
+            this.products.remove(productID);
+            currentSeller.removeProduct(productID);
+            removeProductFromProductsTable(productID);
+            System.out.println("Product has been successfully removed!\n");
+        } else {
+            System.out.println("Product doesn't exists\n");
+        }
+    }
+
+    //Shop - Related Methods
+
+    public void logOut() {
+        if (this.currentAccount == null) {
+            System.out.println("Can't logout!\n");
+        } else {
+            this.currentAccount = null;
+            System.out.println("Successfully logged out!\n");
+        }
+    }
+
+    //Cart - Related Methods
+
+    public void addOrder(Order order) {
+        User user = ((User) this.getCurrentAccount());
+        this.orders.put(order.getOrderID(), order);
+        user.addOrder(order);
+        System.out.println("Order has been successfully requested!\n");
+    }
+
+    public Order getOrderRequest(Order order) {
+        return order;
+    }
+
+
+    public ShoppingCart getCart(UUID cartID) {
+        for (Account account : this.accounts.values()) {
+            if (account instanceof User) {
+                if (((User) account).getCarts().containsKey(cartID)) {
+                    return ((User) account).getCart(cartID);
+                }
+            }
+        }
+        return null;
+    }
+
+    //Wallet - Related Methods
+
+    //Order - Related Methods
+
+    public void updateUserPurchasedProducts(UUID orderID) {
+        for (Product product : getOrder(orderID).getProducts()) {
+            if (!((User) accounts.get(getOrder(orderID).getBuyer())).isProductPurchased(product.getProductID())) {
+                ((User) accounts.get(getOrder(orderID).getBuyer())).addPurchasedProduct(product);
+            }
+        }
+        System.out.println("User purchased product has been successfully updated!\n");
+    }
+
+    public void calcSellerCut(UUID orderID) {
+        Order order = getOrder(orderID);
+        for (Product product : order.getProducts()) {
+            ((Seller) this.accounts.get(product.getSellerId())).addSellerCut(0.9 * product.getPrice() * order.getItemNumber().get(product.getProductID()));
+        }
+        System.out.println("Sellers cut has been deposited!\n");
+    }
+
+    public void addShopCut(double value) {
+        System.out.println("Shop's cut has been deposited!\n");
+        this.totalGained += value;
+    }
+
+    //Product - Related Methods
+
     //Database - Related methods
 
-    public void updateUserWalletInDatabase(UUID userID) {
-        String sql = "UPDATE Users SET wallet = ? WHERE AccountID = ?";
+    public void removeProductFromProductsTable(UUID productID){
+        String sql = "DELETE FROM Products WHERE ProductID = ?";
 
         try {
             Connection conn = connect();
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setDouble(1, this.getUser(userID).getWallet());
-            stmt.setString(2, userID.toString());
+            stmt.setString(1, productID.toString());
             stmt.executeUpdate();
-            System.out.println("User's wallet has been successfully updated in database!\n");
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void sellerAuthorizeInDatabase(UUID sellerID) {
-        String sql = "UPDATE Sellers SET isAuthorized = ? WHERE AccountID = ?";
-
-        try {
-            Connection conn = connect();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, Boolean.toString(true));
-            stmt.setString(2, sellerID.toString());
-            stmt.executeUpdate();
-            System.out.println("Seller has been authorized in Database!\n");
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void checkoutCartInDatabase(UUID cartID) {
-        String sql = "UPDATE Carts SET hasCheckout = ? WHERE cartID = ?";
-
-        try {
-            Connection conn = connect();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, Boolean.toString(true));
-            stmt.setString(2, cartID.toString());
-            stmt.executeUpdate();
-            System.out.println("cart has been successfully checkout in Database!\n");
+            System.out.println("Product has been successfully removed from Products table!\n");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

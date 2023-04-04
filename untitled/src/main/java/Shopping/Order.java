@@ -1,6 +1,8 @@
 package Shopping;
 
 import Categories.Product;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,7 +45,7 @@ public class Order extends ShoppingCart {
     //Getters and Setters
 
     public void insert() {
-        String sql = "INSERT INTO Orders(date, dateTimeFormatter, buyerID, orderID, isConfirmed) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO Orders(date, dateTimeFormatter, buyerID, orderID, isConfirmed, itemNumber, totalPrice) VALUES(?,?,?,?,?,?,?)";
 
         try {
             Connection conn = connect();
@@ -53,9 +55,15 @@ public class Order extends ShoppingCart {
             pstmt.setString(3, buyerID.toString());
             pstmt.setString(4, orderID.toString());
             pstmt.setString(5, Boolean.toString(isConfirmed));
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(getItemNumber());
+            pstmt.setString(6, json);
+            pstmt.setDouble(7, getTotalPrice());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -102,6 +110,8 @@ public class Order extends ShoppingCart {
                 "} " + super.toString();
     }
 
+    //Order - Related methods
+
     public void updateStocks() {
         for (Product product : getProducts()) {
             product.decreaseProduct(getItemNumber().get(product.getProductID()));
@@ -126,23 +136,29 @@ public class Order extends ShoppingCart {
 
     public void orderConfirm() {
         this.isConfirmed = true;
-        confirmOrderInDatabase();
+        updateOrderInDatabase();
     }
 
     //Database - Related methods
 
-    public void confirmOrderInDatabase() {
-        String sql = "UPDATE Orders SET isConfirmed = ? WHERE orderID = ?";
+    public void updateOrderInDatabase() {
+        String sql = "UPDATE Orders SET isConfirmed = ?, itemNumber = ?, totalPrice = ? WHERE orderID = ?";
 
         try {
             Connection conn = connect();
             PreparedStatement stmt = conn.prepareStatement(sql);
+            ObjectMapper objectMapper = new ObjectMapper();
+            String itemNumberJson = objectMapper.writeValueAsString(getItemNumber());
             stmt.setString(1, Boolean.toString(true));
-            stmt.setString(2, orderID.toString());
+            stmt.setString(2, itemNumberJson);
+            stmt.setDouble(3, getTotalPrice());
+            stmt.setString(4, orderID.toString());
             stmt.executeUpdate();
-            System.out.println("Order has been successfully confirmed in Database!\n");
+            System.out.println("Order has been successfully updated in Database!\n");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -97,34 +97,34 @@ public class Seller extends Account {
                 "} " + super.toString();
     }
 
+    //Login - Related methods
+
     @Override
     public boolean accountLogin(String username, String password) {
         return this.companyName.equalsIgnoreCase(username) && this.password.equals(password);
     }
 
-    //Seller - Related Methods
+    //Existence - Related methods
 
     @Override
     public boolean doesAccountExist(String username) {
         return this.companyName.equalsIgnoreCase(username);
     }
 
-    public void addProduct(Product product) {
+    public boolean isProductAvailable(UUID productID){
+        return this.availableProducts.containsKey(productID);
+    }
+
+    //Seller - Related Methods
+
+    public void addProductToSellerProducts(Product product) {
         this.availableProducts.put(product.getProductID(), product);
         System.out.println("Product has been successfully added!\n");
     }
 
     public void removeProduct(UUID id) {
         this.availableProducts.remove(id);
-    }
-
-    public boolean doesProductExist(Product product) {
-        for (UUID id : availableProducts.keySet()) {
-            if (availableProducts.get(id).equals(product)) {
-                return true;
-            }
-        }
-        return false;
+        updateSellerInDatabase();
     }
 
     public void viewAvailableProducts() {
@@ -147,19 +147,24 @@ public class Seller extends Account {
 
     public void addSellerCut(double value) {
         this.wallet += value;
-        updateSellerWalletInDatabase();
+        updateSellerInDatabase();
     }
 
     //Database - Related methods
 
-    public void updateSellerWalletInDatabase() {
-        String sql = "UPDATE Sellers SET wallet = ? WHERE AccountID = ?";
+    public void updateSellerInDatabase() {
+        String sql = "UPDATE Sellers SET availableProducts = ?, wallet = ?, isAuthorized = ? WHERE AccountID = ?";
 
         try {
             Connection conn = connect();
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setDouble(1, wallet);
-            stmt.setString(2, getAccountID().toString());
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("availableProducts", availableProducts);
+            String availableProductsJson = jsonObject.toString();
+            stmt.setString(1, availableProductsJson);
+            stmt.setDouble(2, wallet);
+            stmt.setString(3, Boolean.toString(isAuthorized));
+            stmt.setString(4, getAccountID().toString());
             stmt.executeUpdate();
             System.out.println("Seller's wallet has been successfully updated in Database!\n");
         } catch (SQLException e) {
