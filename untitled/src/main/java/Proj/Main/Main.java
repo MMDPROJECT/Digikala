@@ -1570,7 +1570,7 @@ public class Main {
                     case 4 -> {
                         System.out.println("Enter : - Wallet ID\n");
                         String productID = input.nextLine();
-//                        shop.walletConfirm(UUID.fromString(productID));
+                        shop.walletConfirm(UUID.fromString(productID));
                     }
                     default -> throw new IllegalStateException("Unexpected value: " + optionMenu);
                 }
@@ -1667,8 +1667,8 @@ public class Main {
                     case 1 -> shop.showUnauthorizedSellers();
                     case 2 -> {
                         System.out.println("Enter : - Seller ID");
-                        String productID = input.nextLine();
-//                        shop.sellerAuthorization(UUID.fromString(productID));
+                        String sellerID = input.nextLine();
+                        shop.sellerAuthorization(UUID.fromString(sellerID));
                     }
                     default -> throw new IllegalStateException("Unexpected value: " + optionMenu);
                 }

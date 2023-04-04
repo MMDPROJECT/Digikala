@@ -139,6 +139,7 @@ public class Seller extends Account {
 
     public void authorizeSeller() {
         this.isAuthorized = true;
+        updateSellerInDatabase();
     }
 
     public void viewWallet() {

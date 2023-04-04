@@ -971,33 +971,35 @@ public class Shop {
         }
     }
 
-//    public void sellerAuthorization(UUID sellerID) {
-//        if (this.accounts.get(sellerID) instanceof Seller) {
-//            if (((Seller) this.accounts.get(sellerID)).isAuthorized()) {
-//                System.out.println("This Seller has been authorized earlier!\n");
-//            } else {
-//                ((Seller) this.accounts.get(sellerID)).authorizeSeller();
-//                this.sellerAuthorizeInDatabase(sellerID);
-//                System.out.println("Seller has been successfully authorized!\n");
-//            }
-//        }
-//    }
+    public void sellerAuthorization(UUID sellerID) {
+        if (this.accounts.get(sellerID) instanceof Seller) {
+            Seller seller = (Seller) this.accounts.get(sellerID);
+            if (seller.isAuthorized()) {
+                System.out.println("This Seller has been authorized earlier!\n");
+            } else {
+                seller.authorizeSeller();
+                System.out.println("Seller has been successfully authorized!\n");
+            }
+        }
+        else {
+            System.out.println("No seller has been found!\n");
+        }
+    }
 
-//    public void walletConfirm(UUID walletID) {
-//        if (this.walletRequests.containsKey(walletID)) {
-//            if (!this.getWalletRequest(walletID).isConfirmed()) {
-//                User user = getUser(this.getWalletRequest(walletID).getUser());
-//                WalletReq walletReq = getWalletRequest(walletID);
-//                walletReq.setConfirmed();
-//                user.addWallet(walletReq.getValue());
-//                this.updateUserWalletInDatabase(user.getAccountID());
-//            } else {
-//                System.out.println("This wallet request has been confirmed earlier");
-//            }
-//        } else {
-//            System.out.println("Wallet request has not been found");
-//        }
-//    }
+    public void walletConfirm(UUID walletID) {
+        if (this.walletRequests.containsKey(walletID)) {
+            if (!this.getWalletRequest(walletID).isConfirmed()) {
+                User user = getUser(this.getWalletRequest(walletID).getUser());
+                WalletReq walletReq = getWalletRequest(walletID);
+                walletReq.setConfirmed();
+                user.addWallet(walletReq.getValue());
+            } else {
+                System.out.println("This wallet request has been confirmed earlier");
+            }
+        } else {
+            System.out.println("Wallet request has not been found");
+        }
+    }
 
     //User - Related Methods
 
@@ -1090,9 +1092,11 @@ public class Shop {
     //Order - Related Methods
 
     public void updateUserPurchasedProducts(UUID orderID) {
-        for (Product product : getOrder(orderID).getProducts()) {
-            if (!((User) accounts.get(getOrder(orderID).getBuyer())).isProductPurchased(product.getProductID())) {
-                ((User) accounts.get(getOrder(orderID).getBuyer())).addPurchasedProduct(product);
+        Order order = getOrder(orderID);
+        User buyer = ((User) accounts.get(getOrder(orderID).getBuyer()));
+        for (Product product : order.getProducts()) {
+            if (!buyer.isProductPurchased(product.getProductID())) {
+                buyer.addPurchasedProduct(product);
             }
         }
         System.out.println("User purchased product has been successfully updated!\n");
@@ -1101,7 +1105,8 @@ public class Shop {
     public void calcSellerCut(UUID orderID) {
         Order order = getOrder(orderID);
         for (Product product : order.getProducts()) {
-            ((Seller) this.accounts.get(product.getSellerId())).addSellerCut(0.9 * product.getPrice() * order.getItemNumber().get(product.getProductID()));
+            Seller seller = (Seller) this.accounts.get(product.getSellerId());
+            seller.addSellerCut(0.9 * product.getPrice() * order.getItemNumber().get(product.getProductID()));
         }
         System.out.println("Sellers cut has been deposited!\n");
     }

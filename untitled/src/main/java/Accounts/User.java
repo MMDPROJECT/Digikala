@@ -361,6 +361,7 @@ public class User extends Account {
 
     public void addPurchasedProduct(Product product) {
         purchasedProducts.put(product.getProductID(), product);
+        updateUserInDatabase();
     }
 
     //Wallet - Related Methods
@@ -374,6 +375,7 @@ public class User extends Account {
 
     public void addWallet(double wallet) {
         this.wallet += wallet;
+        updateUserInDatabase();
     }
 
     public void updatePassword(String newPassword) {
