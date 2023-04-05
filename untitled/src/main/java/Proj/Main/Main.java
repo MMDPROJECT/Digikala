@@ -64,15 +64,22 @@ public class Main {
     public static void main(String[] args) {
 
         Shop shop = new Shop("Digikala", "Digikala.com", "34250955");
-        Admin admin1 = new Admin("MMDPROJECT", "1382", "MMDPROJECT@gmail.com");
-        Seller seller = new Seller("Apple", "1900");
-        User user1 = new User("Hossein", "1381", "hossein.com", "09170861077", "Bushehr");
-        Product product = new Ball("Nike Premier League Academy Ball 2023", "white and red-blue combined", 2, 100.5, seller.getAccountID(), 0.5, "Ball", "Nike", BallSize.ADULT, BallMaterial.PU, true);
-        shop.sellerSignUp(seller);
-        shop.adminSignUp(admin1);
-        shop.userSignUp(user1);
-        shop.setCurrentAccount(seller);
-        shop.addProductToShop(product);
+//        Admin admin1 = new Admin("MMDPROJECT", "1382", "MMDPROJECT@gmail.com");
+//        Seller seller = new Seller("Apple", "1900");
+//        User user1 = new User("Hossein", "1381", "hossein.com", "09170861077", "Bushehr");
+//        Product product = new Ball("Nike Premier League Academy Ball 2023", "white and red-blue combined", 2, 100.5, seller.getAccountID(), 0.5, "Ball", "Nike", BallSize.ADULT, BallMaterial.PU, true);
+//        shop.sellerSignUp(seller);
+//        shop.adminSignUp(admin1);
+//        shop.userSignUp(user1);
+//        shop.setCurrentAccount(seller);
+//        shop.addProductToShop(product);
+        Product.loadProductsFromDatabase(shop);
+        WalletReq.loadWalletRequestsFromDatabase(shop);
+        Admin.loadAdminsFromDatabase(shop);
+        Seller.loadSellersFromDatabase(shop);
+        ShoppingCart.loadShoppingCartsFromDatabase(shop);
+        Order.loadOrdersFromDatabase(shop);
+        User.loadUsersFromDatabase(shop);
         runMenu(shop);
     }
 
@@ -552,6 +559,7 @@ public class Main {
                         String cartID = input.nextLine();
                         ShoppingCart cart = shop.getCart(UUID.fromString(cartID));
                         if (!cart.hasCheckout()) {
+                            cart.checkoutCart();
                             Order newOrder = new Order(cart.getName(), cart.getProducts(), cart.getItemNumber(), cart.getTotalPrice(), shop.getCurrentAccount().getAccountID());
                             currentUser.updateUserInDatabase();
                             shop.addOrder(newOrder);

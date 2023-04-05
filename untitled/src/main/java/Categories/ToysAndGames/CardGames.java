@@ -2,11 +2,13 @@ package Categories.ToysAndGames;
 
 import Categories.ToysAndGames.Enums.DifficultyLevel;
 import Connection.Connect;
+import Shop.Shop;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -86,4 +88,33 @@ public class CardGames extends ToysAndGames {
                 ", gangNumber=" + gangNumber +
                 "} " + super.toString();
     }
+
+    public static void loadCardGamesFromDatabase(ResultSet rs, Shop shop){
+        try {
+            // loop through the result set
+            UUID productID = UUID.fromString(rs.getString("ProductID"));
+            UUID sellerID = UUID.fromString(rs.getString("sellerID"));
+            String name = rs.getString("name");
+            String color = rs.getString("color");
+            double price = rs.getDouble("price");
+            int quantity = rs.getInt("quantity");
+            JSONObject jsonComments = new JSONObject(rs.getString("comments"));
+            JSONArray jsonArray = jsonComments.getJSONArray("comments");
+            ArrayList<String> comments = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                comments.add(jsonArray.getString(i));
+            }
+            boolean hasBox = Boolean.parseBoolean(rs.getString("hasBox"));
+            DifficultyLevel difficultyLevel = DifficultyLevel.valueOf(rs.getString("difficultyLevel").toUpperCase());
+            boolean isMultiplayer = Boolean.parseBoolean(rs.getString("isMultiplayer"));
+            int cardNumber = rs.getInt("cardNumber");
+            int playerNumber = rs.getInt("playerNumber");
+            int gangNumber = rs.getInt("gangNumber");     //for example a game could have 4 gangs.
+            CardGames newCardGame = new CardGames(comments, productID, name, color, price, sellerID, quantity, hasBox, difficultyLevel, isMultiplayer, cardNumber, playerNumber, gangNumber);
+            shop.addProductToShopOnly(newCardGame);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }

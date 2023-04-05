@@ -1,12 +1,14 @@
 package Accounts;
 
 import Categories.Product;
+import Shop.Shop;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -63,22 +65,6 @@ public class Seller extends Account {
         }
     }
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public HashMap<UUID, Product> getAvailableProducts() {
-        return availableProducts;
-    }
-
-    public double getWallet() {
-        return wallet;
-    }
-
     @Override
     public String getUsername() {
         return this.companyName;
@@ -111,7 +97,7 @@ public class Seller extends Account {
         return this.companyName.equalsIgnoreCase(username);
     }
 
-    public boolean isProductAvailable(UUID productID){
+    public boolean isProductAvailable(UUID productID) {
         return this.availableProducts.containsKey(productID);
     }
 
@@ -160,7 +146,7 @@ public class Seller extends Account {
             Connection conn = connect();
             PreparedStatement stmt = conn.prepareStatement(sql);
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("availableProducts", availableProducts);
+            jsonObject.put("availableProducts", availableProducts.keySet());
             String availableProductsJson = jsonObject.toString();
             stmt.setString(1, availableProductsJson);
             stmt.setDouble(2, wallet);
@@ -168,6 +154,35 @@ public class Seller extends Account {
             stmt.setString(4, getAccountID().toString());
             stmt.executeUpdate();
             System.out.println("Seller's wallet has been successfully updated in Database!\n");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void loadSellersFromDatabase(Shop shop) {
+        String sql = "SELECT * FROM Sellers";
+
+        try {
+            Connection conn = connect();
+            Statement stmt  = conn.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
+            // loop through the result set
+            while (rs.next()) {
+                UUID accountID = UUID.fromString(rs.getString("AccountID"));
+                String companyName = rs.getString("companyName");
+                String password = rs.getString("password");
+                double wallet = rs.getDouble("wallet");
+                boolean isAuthorized = Boolean.parseBoolean(rs.getString("isAuthorized"));
+                JSONObject jsonAvailableProducts = new JSONObject(rs.getString("availableProducts"));
+                JSONArray jsonArray = jsonAvailableProducts.getJSONArray("availableProducts");
+                HashMap<UUID, Product> availableProducts = new HashMap<>();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    UUID productID = UUID.fromString(jsonArray.getString(i));
+                    availableProducts.put(productID, shop.getProduct(productID));
+                }
+                Seller newSeller = new Seller(accountID, companyName, password, availableProducts, wallet, isAuthorized);
+                shop.sellerSignUp(newSeller);
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

@@ -1,11 +1,13 @@
 package Categories.Electronics;
 
 import Connection.Connect;
+import Shop.Shop;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -132,4 +134,40 @@ public class Laptop extends Electronics {
             System.out.println(e.getMessage());
         }
     }
+
+    public static void loadLaptopFromDatabase(ResultSet rs, Shop shop){
+        try {
+            // loop through the result set
+            UUID productID = UUID.fromString(rs.getString("ProductID"));
+            UUID sellerID = UUID.fromString(rs.getString("sellerID"));
+            String name = rs.getString("name");
+            String color = rs.getString("color");
+            double price = rs.getDouble("price");
+            int quantity = rs.getInt("quantity");
+            JSONObject jsonComments = new JSONObject(rs.getString("comments"));
+            JSONArray jsonArray = jsonComments.getJSONArray("comments");
+            ArrayList<String> comments = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                comments.add(jsonArray.getString(i));
+            }
+            String brand = rs.getString("brand");
+            String model = rs.getString("model");
+            String OS = rs.getString("OS");
+            String screenSize = rs.getString("screenSize");
+            double batteryCapacity = rs.getDouble("batteryCapacity");
+            String webcamModel = rs.getString("webcamModel");
+            String CPU = rs.getString("CPU");
+            String GPU = rs.getString("GPU");
+            int fanNumber = rs.getInt("fanNumber");
+            boolean hasKeyboardLight = Boolean.parseBoolean(rs.getString("hasKeyboardLight"));
+            boolean hasFingerPrint = Boolean.parseBoolean(rs.getString("hasFingerPrint"));
+            String keyboardLanguage = rs.getString("keyboardLanguage");
+            int portNumber = rs.getInt("portNumber");
+            Laptop newLaptop = new Laptop(comments, productID, name, color, price, sellerID, quantity, brand, model, OS, screenSize, batteryCapacity, webcamModel, CPU, GPU, fanNumber, hasKeyboardLight, hasFingerPrint, keyboardLanguage, portNumber);
+            shop.addProductToShopOnly(newLaptop);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }

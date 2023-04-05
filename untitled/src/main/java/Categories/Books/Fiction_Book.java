@@ -1,11 +1,13 @@
 package Categories.Books;
 
 import Connection.Connect;
+import Shop.Shop;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -91,6 +93,39 @@ public class Fiction_Book extends Books {
             pstmt.setString(13, strCharacters);
             pstmt.setString(14, "Fiction_Book");
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void loadFictionBookFromDatabase(ResultSet rs, Shop shop){
+        try {
+            // loop through the result set
+            UUID productID = UUID.fromString(rs.getString("ProductID"));
+            UUID sellerID = UUID.fromString(rs.getString("sellerID"));
+            String name = rs.getString("name");
+            String color = rs.getString("color");
+            double price = rs.getDouble("price");
+            int quantity = rs.getInt("quantity");
+            JSONObject jsonComments = new JSONObject(rs.getString("comments"));
+            JSONArray jsonArray1 = jsonComments.getJSONArray("comments");
+            ArrayList<String> comments = new ArrayList<>();
+            for (int i = 0; i < jsonArray1.length(); i++) {
+                comments.add(jsonArray1.getString(i));
+            }
+            String ISBN = rs.getString("ISBN");
+            int pageNumbers = rs.getInt("pageNumbers");
+            String author = rs.getString("author");
+            String language = rs.getString("language");
+            String tone = rs.getString("tone");
+            JSONObject jsonCharacters = new JSONObject(rs.getString("characters"));
+            JSONArray jsonArray2 = jsonCharacters.getJSONArray("characters");
+            ArrayList<String> characters = new ArrayList<>();
+            for (int i = 0; i < jsonArray2.length(); i++) {
+                characters.add(jsonArray2.getString(i));
+            }
+            Fiction_Book newFictionBook = new Fiction_Book(comments, productID, name, color, price, sellerID, quantity, ISBN, pageNumbers, author, language, tone, characters);
+            shop.addProductToShopOnly(newFictionBook);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

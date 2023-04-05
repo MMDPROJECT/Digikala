@@ -1,15 +1,14 @@
 package Categories.Sports;
 
-import Categories.Sports.Enums.GloveMaterial;
-import Categories.Sports.Enums.GloveSize;
-import Categories.Sports.Enums.GloveStyle;
-import Categories.Sports.Enums.GloveUser;
+import Categories.Sports.Enums.*;
 import Connection.Connect;
+import Shop.Shop;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -97,5 +96,34 @@ public class Gloves extends Sports {
                 ", suggestedUser=" + suggestedUser +
                 ", style=" + style +
                 "} " + super.toString();
+    }
+
+    public static void loadGlovesFromDatabase(ResultSet rs, Shop shop){
+        try {
+            // loop through the result set
+            UUID productID = UUID.fromString(rs.getString("ProductID"));
+            UUID sellerID = UUID.fromString(rs.getString("sellerID"));
+            String name = rs.getString("name");
+            String color = rs.getString("color");
+            double price = rs.getDouble("price");
+            int quantity = rs.getInt("quantity");
+            JSONObject jsonComments = new JSONObject(rs.getString("comments"));
+            JSONArray jsonArray = jsonComments.getJSONArray("comments");
+            ArrayList<String> comments = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                comments.add(jsonArray.getString(i));
+            }
+            double weight = rs.getDouble("weight");
+            String sportType = rs.getString("sportType");
+            String brand = rs.getString("brand");
+            GloveMaterial material = GloveMaterial.valueOf(rs.getString("material").toUpperCase());
+            GloveSize size = GloveSize.valueOf(rs.getString("size").toUpperCase());
+            GloveUser suggestedUser = GloveUser.valueOf(rs.getString("suggestedUser"));
+            GloveStyle style = GloveStyle.valueOf(rs.getString("style"));
+            Gloves newGloves = new Gloves(comments, productID, name, color, price, sellerID, quantity, weight, sportType, brand, material, size, suggestedUser, style);
+            shop.addProductToShopOnly(newGloves);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

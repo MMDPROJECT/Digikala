@@ -2,11 +2,13 @@ package Categories.Tools;
 
 import Categories.Tools.Enums.SpannerMaterial;
 import Connection.Connect;
+import Shop.Shop;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -87,5 +89,35 @@ public class Spanner extends Tools {
                 ", style='" + style + '\'' +
                 ", material=" + material +
                 "} " + super.toString();
+    }
+
+    public static void loadSpannerFromDatabase(ResultSet rs, Shop shop){
+        try {
+            // loop through the result set
+            UUID productID = UUID.fromString(rs.getString("ProductID"));
+            UUID sellerID = UUID.fromString(rs.getString("sellerID"));
+            String name = rs.getString("name");
+            String color = rs.getString("color");
+            double price = rs.getDouble("price");
+            int quantity = rs.getInt("quantity");
+            JSONObject jsonComments = new JSONObject(rs.getString("comments"));
+            JSONArray jsonArray = jsonComments.getJSONArray("comments");
+            ArrayList<String> comments = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                comments.add(jsonArray.getString(i));
+            }
+            double weight = rs.getDouble("weight");
+            boolean hasBox = Boolean.parseBoolean(rs.getString("hasBox"));
+            boolean isSilent = Boolean.parseBoolean(rs.getString("isSilent"));
+            boolean isChargeable = Boolean.parseBoolean(rs.getString("isChargeable"));
+            String brand = rs.getString("brand");
+            int size = rs.getInt("size");
+            String style = rs.getString("style");   //Example: Combination open end / 12 point / 15° / Offset ring end
+            SpannerMaterial material = SpannerMaterial.valueOf(rs.getString("material").toUpperCase());
+            Spanner newSpanner = new Spanner(comments, productID, name, color, price, sellerID, quantity, weight, hasBox, isSilent, isChargeable, brand, size, style, material);
+            shop.addProductToShopOnly(newSpanner);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

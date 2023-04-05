@@ -1,12 +1,11 @@
 package Shopping;
 
 import Categories.Product;
+import Shop.Shop;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -67,14 +66,6 @@ public class Order extends ShoppingCart {
         }
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public DateTimeFormatter getDateTimeFormatter() {
-        return dateTimeFormatter;
-    }
-
     public UUID getBuyer() {
         return buyerID;
     }
@@ -85,10 +76,6 @@ public class Order extends ShoppingCart {
 
     public boolean isConfirmed() {
         return isConfirmed;
-    }
-
-    public void setConfirmed(boolean confirmed) {
-        isConfirmed = confirmed;
     }
 
     //Override
@@ -109,6 +96,7 @@ public class Order extends ShoppingCart {
                 ", isConfirmed=" + isConfirmed +
                 "} " + super.toString();
     }
+
 
     //Order - Related methods
 
@@ -159,6 +147,40 @@ public class Order extends ShoppingCart {
             System.out.println(e.getMessage());
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void loadOrdersFromDatabase(Shop shop) {
+        String sql = "SELECT * FROM Orders";
+
+        try {
+            Connection conn = connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            // loop through the result set
+            while (rs.next()) {
+                LocalDate date = LocalDate.parse(rs.getString("date"));
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("E, MMM dd yyyy");
+                UUID buyerID = UUID.fromString(rs.getString("buyerID"));
+                UUID orderID = UUID.fromString(rs.getString("orderID"));
+                boolean isConfirmed = Boolean.parseBoolean(rs.getString("isConfirmed"));
+                ObjectMapper objectMapper = new ObjectMapper();
+                HashMap<UUID, Integer> itemNumber = new HashMap<>();
+                try {
+                    itemNumber = objectMapper.readValue(rs.getString("itemNumber"), HashMap.class) ; //A hashmap to store amount of each product that we have in the cart
+                } catch (JsonProcessingException jsonProcessingException){
+                    jsonProcessingException.getMessage();
+                }
+                ArrayList<Product> products = new ArrayList<>();
+                for (UUID productID : itemNumber.keySet()){
+                    products.add(shop.getProduct(productID));
+                }
+                double totalPrice = rs.getDouble("totalPrice");
+                Order newOrder = new Order(products, itemNumber, orderID, buyerID, "order", totalPrice, false, date, buyerID, orderID, isConfirmed);
+                shop.addOrderToShopOnly(newOrder);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 }

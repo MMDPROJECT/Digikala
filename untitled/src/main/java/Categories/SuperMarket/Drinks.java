@@ -2,11 +2,13 @@ package Categories.SuperMarket;
 
 import Categories.SuperMarket.Enums.DrinkSize;
 import Connection.Connect;
+import Shop.Shop;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -101,5 +103,44 @@ public class Drinks extends SuperMarket {
                 ", litters=" + litters +
                 ", size=" + size +
                 "} " + super.toString();
+    }
+
+    public static void loadDairyFromDatabase(ResultSet rs, Shop shop){
+        try {
+            // loop through the result set
+            UUID productID = UUID.fromString(rs.getString("ProductID"));
+            UUID sellerID = UUID.fromString(rs.getString("sellerID"));
+            String name = rs.getString("name");
+            String color = rs.getString("color");
+            double price = rs.getDouble("price");
+            int quantity = rs.getInt("quantity");
+            JSONObject jsonComments = new JSONObject(rs.getString("comments"));
+            JSONArray jsonArray = jsonComments.getJSONArray("comments");
+            ArrayList<String> comments = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                comments.add(jsonArray.getString(i));
+            }
+            boolean hasBox = Boolean.parseBoolean(rs.getString("hasBox"));
+            double weight = rs.getDouble("weight");
+            double salt = rs.getDouble("salt");
+            double calories = rs.getDouble("calories");
+            double fat = rs.getDouble("fat");
+            double sugar = rs.getDouble("sugar");
+            JSONObject jsonIngredientItems = new JSONObject(rs.getString("IngredientItems"));
+            JSONArray jsonArray2 = jsonComments.getJSONArray("IngredientItems");
+            ArrayList<String> IngredientItems = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                IngredientItems.add(jsonArray.getString(i));
+            }
+            String CountryOfOrigin = rs.getString("CountryOfOrigin");
+            String taste = rs.getString("taste");
+            boolean isSoftDrink = Boolean.parseBoolean(rs.getString("isSoftDrink"));
+            double litters = rs.getDouble("litters");
+            DrinkSize size = DrinkSize.valueOf(rs.getString("size"));
+            Drinks newDrinks = new Drinks(comments, productID, name, color, price, sellerID, quantity, hasBox, weight, salt, calories, fat, sugar, IngredientItems, CountryOfOrigin, taste, isSoftDrink, litters, size);
+            shop.addProductToShopOnly(newDrinks);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

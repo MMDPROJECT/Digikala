@@ -1,12 +1,16 @@
 package Categories.Sports;
 
+import Categories.Sports.Enums.BallMaterial;
+import Categories.Sports.Enums.BallSize;
 import Categories.Sports.Enums.RacketDurability;
 import Connection.Connect;
+import Shop.Shop;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -91,6 +95,35 @@ public class Rackets extends Sports {
             pstmt.setString(14, Shape);
             pstmt.setString(15, "Rackets");
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void loadRacketsFromDatabase(ResultSet rs, Shop shop){
+        try {
+            // loop through the result set
+            UUID productID = UUID.fromString(rs.getString("ProductID"));
+            UUID sellerID = UUID.fromString(rs.getString("sellerID"));
+            String name = rs.getString("name");
+            String color = rs.getString("color");
+            double price = rs.getDouble("price");
+            int quantity = rs.getInt("quantity");
+            JSONObject jsonComments = new JSONObject(rs.getString("comments"));
+            JSONArray jsonArray = jsonComments.getJSONArray("comments");
+            ArrayList<String> comments = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                comments.add(jsonArray.getString(i));
+            }
+            double weight = rs.getDouble("weight");
+            String sportType = rs.getString("sportType");
+            String brand = rs.getString("brand");
+            double length = rs.getDouble("length");
+            double width = rs.getDouble("width");
+            RacketDurability durability = RacketDurability.valueOf(rs.getString("durability").toUpperCase());
+            String Shape = rs.getString("Shape");
+            Rackets newRacket = new Rackets(comments, productID, name, color, price, sellerID, quantity, weight, sportType, brand, length, width, durability, Shape);
+            shop.addProductToShopOnly(newRacket);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

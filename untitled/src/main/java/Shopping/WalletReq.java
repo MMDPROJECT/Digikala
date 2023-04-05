@@ -1,8 +1,40 @@
 package Shopping;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import Categories.Beauty.EyeBrowMakeUp;
+import Categories.Beauty.EyeMakeUp;
+import Categories.Books.Children_Book;
+import Categories.Books.Fiction_Book;
+import Categories.Books.Poetry_Book;
+import Categories.Clothes.Coat;
+import Categories.Clothes.Jean;
+import Categories.Clothes.Sweater;
+import Categories.Electronics.Laptop;
+import Categories.Electronics.SmartPhone;
+import Categories.Electronics.SmartWatch;
+import Categories.Home.AirConditioner;
+import Categories.Home.Refrigerator;
+import Categories.Home.TV;
+import Categories.Sports.Ball;
+import Categories.Sports.Gloves;
+import Categories.Sports.Rackets;
+import Categories.SuperMarket.Dairy;
+import Categories.SuperMarket.Drinks;
+import Categories.SuperMarket.Proteins;
+import Categories.Tools.Drill;
+import Categories.Tools.SolderingSystem;
+import Categories.Tools.Spanner;
+import Categories.ToysAndGames.BoardGames;
+import Categories.ToysAndGames.CardGames;
+import Categories.ToysAndGames.Puzzles;
+import Categories.Vehicles.Car;
+import Categories.Vehicles.Motorcycle;
+import Categories.Vehicles.Truck;
+import Shop.Shop;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import static Connection.Connect.connect;
@@ -64,10 +96,6 @@ public class WalletReq {
         return walletID;
     }
 
-    public UUID getUserID() {
-        return userID;
-    }
-
     public void setConfirmed() {
         this.isConfirmed = true;
         updateWalletRequestInDatabase();
@@ -99,4 +127,26 @@ public class WalletReq {
             System.out.println(e.getMessage());
         }
     }
+
+    public static void loadWalletRequestsFromDatabase(Shop shop){
+        String sql = "SELECT * FROM WalletRequest";
+
+        try {
+            Connection conn = connect();
+            Statement stmt  = conn.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
+            // loop through the result set
+            while (rs.next()) {
+                double value = rs.getDouble("value");
+                UUID userID = UUID.fromString(rs.getString("userID"));
+                UUID walletID = UUID.fromString(rs.getString("WalletRequestID"));
+                boolean isConfirmed = Boolean.parseBoolean(rs.getString("isConfirmed"));
+                WalletReq newWalletReq = new WalletReq(value, userID, walletID, isConfirmed);
+                shop.submitAWalletRequestInShopOnly(newWalletReq);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }

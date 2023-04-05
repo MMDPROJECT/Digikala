@@ -1,11 +1,13 @@
 package Categories.Books;
 
 import Connection.Connect;
+import Shop.Shop;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -72,6 +74,34 @@ public class Poetry_Book extends Books {
             pstmt.setInt(13, verseNumber);
             pstmt.setString(14, "Poetry_Book");
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void loadPoetryBookFromDatabase(ResultSet rs, Shop shop){
+        try {
+            // loop through the result set
+            UUID productID = UUID.fromString(rs.getString("ProductID"));
+            UUID sellerID = UUID.fromString(rs.getString("sellerID"));
+            String name = rs.getString("name");
+            String color = rs.getString("color");
+            double price = rs.getDouble("price");
+            int quantity = rs.getInt("quantity");
+            JSONObject jsonComments = new JSONObject(rs.getString("comments"));
+            JSONArray jsonArray = jsonComments.getJSONArray("comments");
+            ArrayList<String> comments = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                comments.add(jsonArray.getString(i));
+            }
+            String ISBN = rs.getString("ISBN");
+            int pageNumbers = rs.getInt("pageNumbers");
+            String author = rs.getString("author");
+            String language = rs.getString("language");
+            String poeticForm = rs.getString("poeticForm");
+            int verseNumber = rs.getInt("verseNumber");
+            Poetry_Book newPoetryBook = new Poetry_Book(comments, productID, name, color, price, sellerID, quantity, ISBN, pageNumbers, author, language, poeticForm, verseNumber);
+            shop.addProductToShopOnly(newPoetryBook);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

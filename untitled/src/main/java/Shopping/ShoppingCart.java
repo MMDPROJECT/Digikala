@@ -1,12 +1,11 @@
 package Shopping;
 
 import Categories.Product;
+import Shop.Shop;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -234,6 +233,40 @@ public class ShoppingCart {
             }
             stmt.executeUpdate();
             System.out.println("Cart has been successfully updated in Database!\n");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void loadShoppingCartsFromDatabase(Shop shop) {
+        String sql = "SELECT * FROM Carts";
+
+        try {
+            Connection conn = connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            // loop through the result set
+            while (rs.next()) {
+                String name = rs.getString("name");
+                UUID cartID = UUID.fromString(rs.getString("cartID"));
+                UUID userID = UUID.fromString(rs.getString("userID"));
+                ObjectMapper objectMapper = new ObjectMapper();
+                HashMap<UUID, Integer> itemNumber = new HashMap<>();
+                try {
+                    itemNumber = objectMapper.readValue(rs.getString("itemNumber"), HashMap.class) ; //A hashmap to store amount of each product that we have in the cart
+                } catch (JsonProcessingException jsonProcessingException){
+                    jsonProcessingException.getMessage();
+                }
+                ArrayList<Product> products = new ArrayList<>();
+                for (UUID productID : itemNumber.keySet()){
+                    Product product = shop.getProduct(productID);
+                    products.add(product);
+                }
+                double totalPrice = rs.getDouble("totalPrice");
+                boolean hasCheckout = Boolean.parseBoolean(rs.getString("hasCheckout"));
+                ShoppingCart newShoppingCart = new ShoppingCart(products, itemNumber, cartID, userID, name, totalPrice, hasCheckout);
+                shop.addCart(newShoppingCart);
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

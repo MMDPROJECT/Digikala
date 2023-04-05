@@ -1,8 +1,9 @@
 package Accounts;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import Shop.Shop;
+import com.beust.ah.A;
+
+import java.sql.*;
 import java.util.UUID;
 
 import static Connection.Connect.connect;
@@ -79,4 +80,26 @@ public class Admin extends Account {
     public boolean doesAccountExist(String username) {
         return this.username.equalsIgnoreCase(username);
     }
+
+    public static void loadAdminsFromDatabase(Shop shop){
+        String sql = "SELECT * FROM Admins";
+
+        try {
+            Connection conn = connect();
+            Statement stmt  = conn.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
+            // loop through the result set
+            while (rs.next()) {
+                UUID accountID = UUID.fromString(rs.getString("AccountID"));
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String email = rs.getString("email");
+                Admin newAdmin = new Admin(accountID, username, password, email);
+                shop.adminSignUp(newAdmin);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }

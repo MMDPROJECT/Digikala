@@ -1,11 +1,13 @@
 package Categories.Home;
 
 import Connection.Connect;
+import Shop.Shop;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -94,5 +96,35 @@ public class TV extends Home {
                 ", has3D=" + has3D +
                 ", hasStand=" + hasStand +
                 "} " + super.toString();
+    }
+
+    public static void loadTVFromDatabase(ResultSet rs, Shop shop){
+        try {
+            // loop through the result set
+            UUID productID = UUID.fromString(rs.getString("ProductID"));
+            UUID sellerID = UUID.fromString(rs.getString("sellerID"));
+            String name = rs.getString("name");
+            String color = rs.getString("color");
+            double price = rs.getDouble("price");
+            int quantity = rs.getInt("quantity");
+            JSONObject jsonComments = new JSONObject(rs.getString("comments"));
+            JSONArray jsonArray = jsonComments.getJSONArray("comments");
+            ArrayList<String> comments = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                comments.add(jsonArray.getString(i));
+            }
+            boolean hasController = Boolean.parseBoolean(rs.getString("hasController"));
+            double height = rs.getDouble("height");
+            double width = rs.getDouble("width");
+            double weight = rs.getDouble("weight");
+            int refreshRate = rs.getInt("refreshRate");
+            boolean mountableOnWall = Boolean.parseBoolean(rs.getString("mountableOnWall"));
+            boolean has3D = Boolean.parseBoolean(rs.getString("has3D"));
+            boolean hasStand = Boolean.parseBoolean(rs.getString("hasStand"));
+            TV newTV = new TV(comments, productID, name, color, price, sellerID, quantity, hasController, height, width, weight, refreshRate, mountableOnWall, has3D, hasStand);
+            shop.addProductToShopOnly(newTV);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

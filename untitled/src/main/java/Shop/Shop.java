@@ -47,7 +47,6 @@ import Categories.Vehicles.Vehicles;
 import Shopping.Order;
 import Shopping.ShoppingCart;
 import Shopping.WalletReq;
-import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -64,6 +63,7 @@ public class Shop {
     private final HashMap<UUID, Account> accounts;
     private final HashMap<UUID, Product> products;
     private final HashMap<UUID, Order> orders;
+    private final HashMap<UUID, ShoppingCart> carts;
     private final HashMap<UUID, WalletReq> walletRequests;
     private double totalGained;
     private Account currentAccount;
@@ -78,6 +78,7 @@ public class Shop {
         this.accounts = new HashMap<>();
         this.products = new HashMap<>();
         this.orders = new HashMap<>();
+        this.carts = new HashMap<>();
         this.walletRequests = new HashMap<>();
         this.currentAccount = null;
     }
@@ -97,36 +98,16 @@ public class Shop {
         return null;
     }
 
-    public String getWebAddress() {
-        return this.webAddress;
-    }
-
-    public String getSupportPhoneNumber() {
-        return this.supportPhoneNumber;
-    }
-
-    public HashMap<UUID, Account> getAccounts() {
-        return this.accounts;
+    public HashMap<UUID, ShoppingCart> getCarts() {
+        return carts;
     }
 
     public HashMap<UUID, Product> getProducts() {
         return this.products;
     }
 
-    public HashMap<UUID, Order> getOrders() {
-        return this.orders;
-    }
-
     public Order getOrder(UUID id) {
         return this.orders.get(id);
-    }
-
-    public double getTotalGained() {
-        return this.totalGained;
-    }
-
-    public HashMap<UUID, WalletReq> getWalletRequests() {
-        return this.walletRequests;
     }
 
     public Account getCurrentAccount() {
@@ -143,6 +124,15 @@ public class Shop {
 
     public User getUser(UUID id) {
         return (User) this.accounts.get(id);
+    }
+
+    public Seller getSeller(UUID sellerID){
+        if (this.accounts.containsKey(sellerID)){
+            if (this.accounts.get(sellerID) instanceof Seller){
+                return (Seller) this.accounts.get(sellerID);
+            }
+        }
+        return null;
     }
 
 
@@ -250,21 +240,6 @@ public class Shop {
 
     public boolean doesProductExist(UUID id) {
         return products.containsKey(id);
-    }
-
-    public boolean doesCartExist(UUID cartID) {
-        for (Account account : accounts.values()) {
-            if (account instanceof User) {
-                if (((User) account).getCarts().containsKey(cartID)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public boolean doesWalletRequestExist(UUID id) {
-        return this.walletRequests.containsKey(id);
     }
 
     public boolean doesOrderExist(UUID id) {
@@ -972,16 +947,14 @@ public class Shop {
     }
 
     public void sellerAuthorization(UUID sellerID) {
-        if (this.accounts.get(sellerID) instanceof Seller) {
-            Seller seller = (Seller) this.accounts.get(sellerID);
+        if (this.accounts.get(sellerID) instanceof Seller seller) {
             if (seller.isAuthorized()) {
                 System.out.println("This Seller has been authorized earlier!\n");
             } else {
                 seller.authorizeSeller();
                 System.out.println("Seller has been successfully authorized!\n");
             }
-        }
-        else {
+        } else {
             System.out.println("No seller has been found!\n");
         }
     }
@@ -1003,10 +976,6 @@ public class Shop {
 
     //User - Related Methods
 
-    public void addPurchasedProduct(UUID id, User user) {
-        user.addPurchasedProduct(products.get(id));
-    }
-
     public void submitComment(UUID id, String comment) {
         if (this.products.containsKey(id)) {
             this.products.get(id).submitComment(comment);
@@ -1016,19 +985,15 @@ public class Shop {
         }
     }
 
-    public void submitAWalletRequest(double value) {
-        WalletReq newWalletReq = new WalletReq(value, this.getCurrentAccount().getAccountID());
-        ((User) this.getCurrentAccount()).submitAWalletRequest(newWalletReq);
-        this.walletRequests.put(newWalletReq.getWalletID(), newWalletReq);
-        System.out.println("Wallet request has been successfully submitted!\n");
-    }
-
     public void submitAWalletRequest(WalletReq walletReq) {
         this.walletRequests.put(walletReq.getWalletID(), walletReq);
         ((User) this.getCurrentAccount()).submitAWalletRequest(walletReq);
         System.out.println("Wallet request has been successfully submitted!\n");
     }
 
+    public void submitAWalletRequestInShopOnly(WalletReq walletReq){
+        this.walletRequests.put(walletReq.getWalletID(), walletReq);
+    }
 
     //Seller - Related Methods
 
@@ -1037,6 +1002,10 @@ public class Shop {
         Seller currentSeller = (Seller) this.getCurrentAccount();
         currentSeller.addProductToSellerProducts(product);
         currentSeller.updateSellerInDatabase();
+    }
+
+    public void addProductToShopOnly(Product product){
+        this.products.put(product.getProductID(), product);
     }
 
     public void removeProduct(UUID productID) {
@@ -1071,23 +1040,18 @@ public class Shop {
         System.out.println("Order has been successfully requested!\n");
     }
 
-    public Order getOrderRequest(Order order) {
-        return order;
+    public void addOrderToShopOnly(Order order){
+        this.orders.put(order.getOrderID(), order);
+        System.out.println("Order has been successfully requested!\n");
     }
-
 
     public ShoppingCart getCart(UUID cartID) {
-        for (Account account : this.accounts.values()) {
-            if (account instanceof User) {
-                if (((User) account).getCarts().containsKey(cartID)) {
-                    return ((User) account).getCart(cartID);
-                }
-            }
-        }
-        return null;
+        return this.carts.get(cartID);
     }
 
-    //Wallet - Related Methods
+    public void addCart(ShoppingCart cart){
+        this.carts.put(cart.getCartID(), cart);
+    }
 
     //Order - Related Methods
 
@@ -1116,11 +1080,9 @@ public class Shop {
         this.totalGained += value;
     }
 
-    //Product - Related Methods
-
     //Database - Related methods
 
-    public void removeProductFromProductsTable(UUID productID){
+    public void removeProductFromProductsTable(UUID productID) {
         String sql = "DELETE FROM Products WHERE ProductID = ?";
 
         try {

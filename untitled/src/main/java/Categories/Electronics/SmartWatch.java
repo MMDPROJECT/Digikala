@@ -1,11 +1,13 @@
 package Categories.Electronics;
 
 import Connection.Connect;
+import Shop.Shop;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -91,6 +93,37 @@ public class SmartWatch extends Electronics {
             pstmt.setString(15, Boolean.toString(hasCaloricTracker));
             pstmt.setString(16, "SmartWatch");
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void loadSmartWatchFromDatabase(ResultSet rs, Shop shop){
+        try {
+            // loop through the result set
+            UUID productID = UUID.fromString(rs.getString("ProductID"));
+            UUID sellerID = UUID.fromString(rs.getString("sellerID"));
+            String name = rs.getString("name");
+            String color = rs.getString("color");
+            double price = rs.getDouble("price");
+            int quantity = rs.getInt("quantity");
+            JSONObject jsonComments = new JSONObject(rs.getString("comments"));
+            JSONArray jsonArray = jsonComments.getJSONArray("comments");
+            ArrayList<String> comments = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                comments.add(jsonArray.getString(i));
+            }
+            String brand = rs.getString("brand");
+            String model = rs.getString("model");
+            String OS = rs.getString("OS");
+            String screenSize = rs.getString("screenSize");
+            double batteryCapacity = rs.getDouble("batteryCapacity");
+            String processor = rs.getString("processor");
+            boolean hasHeartRateTracker = Boolean.parseBoolean(rs.getString("hasHeartRateTracker"));
+            boolean hasStepTracker = Boolean.parseBoolean(rs.getString("hasStepTracker"));
+            boolean hasCaloricTracker = Boolean.parseBoolean(rs.getString("hasCaloricTracker"));
+            SmartWatch newSmartWatch = new SmartWatch(comments, productID, name, color, price, sellerID, quantity, brand, model, OS, screenSize, batteryCapacity, processor, hasHeartRateTracker, hasStepTracker, hasCaloricTracker);
+            shop.addProductToShopOnly(newSmartWatch);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

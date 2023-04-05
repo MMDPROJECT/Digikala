@@ -1,11 +1,15 @@
 package Categories.Books;
 
+import Categories.Beauty.Enums.MatterState;
+import Categories.Beauty.Enums.PenType;
 import Connection.Connect;
+import Shop.Shop;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -73,6 +77,34 @@ public class Children_Book extends Books {
             pstmt.setString(13, theme);
             pstmt.setString(14, "Children_Book");
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void loadChildrenBookFromDatabase(ResultSet rs, Shop shop){
+        try {
+            // loop through the result set
+            UUID productID = UUID.fromString(rs.getString("ProductID"));
+            UUID sellerID = UUID.fromString(rs.getString("sellerID"));
+            String name = rs.getString("name");
+            String color = rs.getString("color");
+            double price = rs.getDouble("price");
+            int quantity = rs.getInt("quantity");
+            JSONObject jsonComments = new JSONObject(rs.getString("comments"));
+            JSONArray jsonArray = jsonComments.getJSONArray("comments");
+            ArrayList<String> comments = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                comments.add(jsonArray.getString(i));
+            }
+            String ISBN = rs.getString("ISBN");
+            int pageNumbers = rs.getInt("pageNumbers");
+            String author = rs.getString("author");
+            String language = rs.getString("language");
+            String readingLevel = rs.getString("readingLevel");
+            String theme = rs.getString("theme");
+            Children_Book newChildrenBook = new Children_Book(comments, productID, name, color, price, sellerID, quantity, ISBN, pageNumbers, author, language, readingLevel, theme);
+            shop.addProductToShopOnly(newChildrenBook);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

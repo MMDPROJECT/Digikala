@@ -2,11 +2,13 @@ package Categories.Beauty;
 
 import Categories.Beauty.Enums.MatterState;
 import Categories.Beauty.Enums.PenType;
+import Shop.Shop;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -92,6 +94,34 @@ public class EyeMakeUp extends Beauty {
             pstmt.setInt(13, getLongevity());
             pstmt.setString(14, "EyeMakeUp");
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void loadEyeMakeUpFromDatabase(ResultSet rs, Shop shop){
+        try {
+            // loop through the result set
+            UUID productID = UUID.fromString(rs.getString("ProductID"));
+            UUID sellerID = UUID.fromString(rs.getString("sellerID"));
+            String name = rs.getString("name");
+            String color = rs.getString("color");
+            double price = rs.getDouble("price");
+            int quantity = rs.getInt("quantity");
+            JSONObject jsonComments = new JSONObject(rs.getString("comments"));
+            JSONArray jsonArray = jsonComments.getJSONArray("comments");
+            ArrayList<String> comments = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                comments.add(jsonArray.getString(i));
+            }
+            MatterState materialState = MatterState.valueOf(rs.getString("MatterState"));
+            boolean hasBox = Boolean.parseBoolean(rs.getString("hasBox"));
+            PenType penType = PenType.valueOf(rs.getString("penType"));
+            boolean hasWaterResistance = Boolean.parseBoolean(rs.getString("hasWaterResistance"));
+            String brand = rs.getString("brand");
+            int longevity = rs.getInt("longevity");
+            EyeMakeUp newEyeMakeUp = new EyeMakeUp(comments, productID, name, color, price, sellerID, quantity, materialState, hasBox, penType, hasWaterResistance, brand, longevity);
+            shop.addProductToShopOnly(newEyeMakeUp);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

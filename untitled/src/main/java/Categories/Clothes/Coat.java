@@ -1,15 +1,18 @@
 package Categories.Clothes;
 
+import Categories.Books.Poetry_Book;
 import Categories.Clothes.Enums.ClothDurability;
 import Categories.Clothes.Enums.ClothGender;
 import Categories.Clothes.Enums.ClothMaterial;
 import Categories.Clothes.Enums.ClothSize;
 import Connection.Connect;
+import Shop.Shop;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -76,6 +79,35 @@ public class Coat extends Clothes {
             pstmt.setString(14, Boolean.toString(hasCap));
             pstmt.setString(15, "Coat");
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void loadCoatFromDatabase(ResultSet rs, Shop shop){
+        try {
+            // loop through the result set
+            UUID productID = UUID.fromString(rs.getString("ProductID"));
+            UUID sellerID = UUID.fromString(rs.getString("sellerID"));
+            String name = rs.getString("name");
+            String color = rs.getString("color");
+            double price = rs.getDouble("price");
+            int quantity = rs.getInt("quantity");
+            JSONObject jsonComments = new JSONObject(rs.getString("comments"));
+            JSONArray jsonArray = jsonComments.getJSONArray("comments");
+            ArrayList<String> comments = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                comments.add(jsonArray.getString(i));
+            }
+            ClothSize size = ClothSize.valueOf(rs.getString("size").toUpperCase());
+            ClothGender gender = ClothGender.valueOf(rs.getString("gender").toUpperCase());
+            ClothMaterial material = ClothMaterial.valueOf(rs.getString("material").toUpperCase());
+            String brand = rs.getString("brand");
+            ClothDurability durability = ClothDurability.valueOf(rs.getString("durability").toUpperCase());
+            int buttonNumber = rs.getInt("buttonNumber");
+            boolean hasCap = Boolean.parseBoolean(rs.getString("hasCap"));
+            Coat newCoat = new Coat(comments, productID, name, color, price, sellerID, quantity, size, gender, material, brand, durability, buttonNumber, hasCap);
+            shop.addProductToShopOnly(newCoat);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

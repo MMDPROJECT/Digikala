@@ -2,11 +2,13 @@ package Categories.Home;
 
 import Categories.Home.Enums.RefrigeratorType;
 import Connection.Connect;
+import Shop.Shop;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -92,6 +94,36 @@ public class Refrigerator extends Home {
             pstmt.setString(15, Boolean.toString(hasDigitalControllingSystem));
             pstmt.setString(16, "Refrigerator");
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void loadRefrigeratorFromDatabase(ResultSet rs, Shop shop){
+        try {
+            // loop through the result set
+            UUID productID = UUID.fromString(rs.getString("ProductID"));
+            UUID sellerID = UUID.fromString(rs.getString("sellerID"));
+            String name = rs.getString("name");
+            String color = rs.getString("color");
+            double price = rs.getDouble("price");
+            int quantity = rs.getInt("quantity");
+            JSONObject jsonComments = new JSONObject(rs.getString("comments"));
+            JSONArray jsonArray = jsonComments.getJSONArray("comments");
+            ArrayList<String> comments = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                comments.add(jsonArray.getString(i));
+            }
+            boolean hasController = Boolean.parseBoolean(rs.getString("hasController"));
+            double height = rs.getDouble("height");
+            double width = rs.getDouble("width");
+            double weight = rs.getDouble("weight");
+            int floorNumber = rs.getInt("floorNumber");
+            boolean hasFridge = Boolean.parseBoolean(rs.getString("hasFridge"));
+            RefrigeratorType refrigeratorType = RefrigeratorType.valueOf(rs.getString("refrigeratorType"));
+            boolean hasDigitalControllingSystem = Boolean.parseBoolean(rs.getString("hasDigitalControllingSystem"));
+            Refrigerator newRefrigerator = new Refrigerator(comments, productID, name, color, price, sellerID, quantity, hasController, height, width, weight, floorNumber, hasFridge, refrigeratorType, hasDigitalControllingSystem);
+            shop.addProductToShopOnly(newRefrigerator);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

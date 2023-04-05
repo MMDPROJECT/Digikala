@@ -2,11 +2,13 @@ package Categories.Vehicles;
 
 import Categories.Vehicles.Enums.NoiseLevel;
 import Connection.Connect;
+import Shop.Shop;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -90,5 +92,38 @@ public class Motorcycle extends Vehicles {
                 ", hasWingMirror=" + hasWingMirror +
                 ", noiseLevel=" + noiseLevel +
                 "} " + super.toString();
+    }
+
+    public static void loadCarFromDatabase(ResultSet rs, Shop shop){
+        try {
+            // loop through the result set
+            UUID productID = UUID.fromString(rs.getString("ProductID"));
+            UUID sellerID = UUID.fromString(rs.getString("sellerID"));
+            String name = rs.getString("name");
+            String color = rs.getString("color");
+            double price = rs.getDouble("price");
+            int quantity = rs.getInt("quantity");
+            JSONObject jsonComments = new JSONObject(rs.getString("comments"));
+            JSONArray jsonArray = jsonComments.getJSONArray("comments");
+            ArrayList<String> comments = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                comments.add(jsonArray.getString(i));
+            }
+            double weight = rs.getDouble("weight");
+            int horsePower = rs.getInt("horsePower");
+            String engineModel = rs.getString("engineModel");
+            int wheelNumber = rs.getInt("wheelNumber");
+            boolean isAutomatic = Boolean.parseBoolean(rs.getString("isAutomatic"));
+            int maxSpeed = rs.getInt("maxSpeed");
+            String brand = rs.getString("brand");
+            String model = rs.getString("model");
+            int seatNumber = rs.getInt("seatNumber");
+            boolean hasWingMirror = Boolean.parseBoolean(rs.getString("hasWingMirror"));
+            NoiseLevel noiseLevel = NoiseLevel.valueOf(rs.getString("noiseLevel").toUpperCase());
+            Motorcycle newMotorcycle = new Motorcycle(comments, productID, name, color, price, sellerID, quantity, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model, seatNumber, hasWingMirror, noiseLevel);
+            shop.addProductToShopOnly(newMotorcycle);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

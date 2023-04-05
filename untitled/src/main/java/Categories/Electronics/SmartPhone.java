@@ -1,11 +1,13 @@
 package Categories.Electronics;
 
 import Connection.Connect;
+import Shop.Shop;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -128,6 +130,41 @@ public class SmartPhone extends Electronics {
             pstmt.setString(20, CPU);
             pstmt.setString(21, "SmartPhone");
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void loadSmartPhoneFromDatabase(ResultSet rs, Shop shop){
+        try {
+            // loop through the result set
+            UUID productID = UUID.fromString(rs.getString("ProductID"));
+            UUID sellerID = UUID.fromString(rs.getString("sellerID"));
+            String name = rs.getString("name");
+            String color = rs.getString("color");
+            double price = rs.getDouble("price");
+            int quantity = rs.getInt("quantity");
+            JSONObject jsonComments = new JSONObject(rs.getString("comments"));
+            JSONArray jsonArray = jsonComments.getJSONArray("comments");
+            ArrayList<String> comments = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                comments.add(jsonArray.getString(i));
+            }
+            String brand = rs.getString("brand");
+            String model = rs.getString("model");
+            String OS = rs.getString("OS");
+            String screenSize = rs.getString("screenSize");
+            double batteryCapacity = rs.getDouble("batteryCapacity");
+            int rearCameraQuality = rs.getInt("rearCameraQuality");       //Quality of the main camera in megapixels
+            int selfieCameraQuality = rs.getInt("selfieCameraQuality");      //Quality of the selfie camera in megapixels
+            int cameraNumber = rs.getInt("cameraNumber");
+            int storage = rs.getInt("storage");
+            double OSVersion = rs.getDouble("OSVersion");
+            String displayResolution = rs.getString("displayResolution");
+            String ringTone = rs.getString("ringTone");
+            String CPU = rs.getString("CPU");
+            SmartPhone newSmartPhone = new SmartPhone(comments, productID, name, color, price, sellerID, quantity, brand, model, OS, screenSize, batteryCapacity, rearCameraQuality, selfieCameraQuality, cameraNumber, storage, OSVersion, displayResolution, ringTone, CPU);
+            shop.addProductToShopOnly(newSmartPhone);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

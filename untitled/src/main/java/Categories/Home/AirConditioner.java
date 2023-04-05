@@ -1,11 +1,14 @@
 package Categories.Home;
 
 import Connection.Connect;
+import Shop.Shop;
+import com.beust.ah.A;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -109,6 +112,38 @@ public class AirConditioner extends Home {
             pstmt.setString(17, Boolean.toString(hasTimer));
             pstmt.setString(18, "AirConditioner");
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void loadAirConditionerFromDatabase(ResultSet rs, Shop shop){
+        try {
+            // loop through the result set
+            UUID productID = UUID.fromString(rs.getString("ProductID"));
+            UUID sellerID = UUID.fromString(rs.getString("sellerID"));
+            String name = rs.getString("name");
+            String color = rs.getString("color");
+            double price = rs.getDouble("price");
+            int quantity = rs.getInt("quantity");
+            JSONObject jsonComments = new JSONObject(rs.getString("comments"));
+            JSONArray jsonArray = jsonComments.getJSONArray("comments");
+            ArrayList<String> comments = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                comments.add(jsonArray.getString(i));
+            }
+            boolean hasController = Boolean.parseBoolean(rs.getString("hasController"));
+            double height = rs.getDouble("height");
+            double width = rs.getDouble("width");
+            double weight = rs.getDouble("weight");
+            double coolingCapacity = rs.getDouble("coolingCapacity");
+            double energyEfficiency = rs.getDouble("energyEfficiency");
+            String airFilter = rs.getString("airFilter");
+            int fanNumber = rs.getInt("fanNumber");
+            boolean hasRemoteControl = Boolean.parseBoolean(rs.getString("hasRemoteControl"));
+            boolean hasTimer = Boolean.parseBoolean(rs.getString("hasTimer"));
+            AirConditioner newAirConditioner = new AirConditioner(comments, productID, name, color, price, sellerID, quantity, hasController, height, width, weight, coolingCapacity, energyEfficiency, airFilter, fanNumber, hasRemoteControl, hasTimer);
+            shop.addProductToShopOnly(newAirConditioner);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

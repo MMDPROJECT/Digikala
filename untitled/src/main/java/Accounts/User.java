@@ -1,16 +1,17 @@
 package Accounts;
 
 import Categories.Product;
+import Shop.Shop;
 import Shopping.Order;
 import Shopping.ShoppingCart;
 import Shopping.WalletReq;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -47,16 +48,16 @@ public class User extends Account {
         insert();
     }
 
-    public User(UUID id, String username, HashMap<UUID, ShoppingCart> carts, HashMap<UUID, Order> orders, HashMap<UUID, WalletReq> walletRequests, HashMap<UUID, Product> purchasedProducts, UUID currentCartID, String password, String email, String phoneNumber, String address, double wallet) {
-        super(id);
+    public User(UUID accountID, String username, HashMap<UUID, ShoppingCart> carts, HashMap<UUID, Order> orders, HashMap<UUID, WalletReq> walletRequests, HashMap<UUID, Product> purchasedProducts, String password, String email, UUID currentCartID, String phoneNumber, String address, double wallet) {
+        super(accountID);
         this.username = username;
         this.carts = carts;
         this.orders = orders;
         this.walletRequests = walletRequests;
         this.purchasedProducts = purchasedProducts;
-        this.currentCartID = currentCartID;
         this.password = password;
         this.email = email;
+        this.currentCartID = currentCartID;
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.wallet = wallet;
@@ -78,19 +79,18 @@ public class User extends Account {
             pstmt.setString(6, phoneNumber);
             pstmt.setString(7, address);
             pstmt.setDouble(8, wallet);
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                String cartsJson = objectMapper.writeValueAsString(this.carts.keySet());
-                String ordersJson = objectMapper.writeValueAsString(this.orders.keySet());
-                String walletRequestsJson = objectMapper.writeValueAsString(this.walletRequests.keySet());
-                String purchasedProductsJson = objectMapper.writeValueAsString(this.purchasedProducts.keySet());
-                pstmt.setString(9, cartsJson);
-                pstmt.setString(10, ordersJson);
-                pstmt.setString(11, walletRequestsJson);
-                pstmt.setString(12, purchasedProductsJson);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
+            JSONObject cartsJson = new JSONObject();
+            JSONObject ordersJson = new JSONObject();
+            JSONObject walletRequestJson = new JSONObject();
+            JSONObject purchasedProductsJson = new JSONObject();
+            cartsJson.put("carts", carts.keySet());
+            ordersJson.put("orders", orders.keySet());
+            walletRequestJson.put("walletRequests", walletRequests.keySet());
+            purchasedProductsJson.put("purchasedProducts", purchasedProducts.keySet());
+            pstmt.setString(9, cartsJson.toString());
+            pstmt.setString(10, ordersJson.toString());
+            pstmt.setString(11, walletRequestJson.toString());
+            pstmt.setString(12, purchasedProductsJson.toString());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -101,32 +101,16 @@ public class User extends Account {
         return username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getAddress() {
-        return address;
     }
 
     public void setAddress(String address) {
@@ -137,24 +121,8 @@ public class User extends Account {
         return wallet;
     }
 
-    public void setWallet(double wallet) {
-        this.wallet = wallet;
-    }
-
     public HashMap<UUID, ShoppingCart> getCarts() {
         return carts;
-    }
-
-    public HashMap<UUID, Order> getOrders() {
-        return orders;
-    }
-
-    public HashMap<UUID, WalletReq> getWalletRequests() {
-        return walletRequests;
-    }
-
-    public HashMap<UUID, Product> getPurchasedProducts() {
-        return purchasedProducts;
     }
 
     public UUID getCurrentCartID() {
@@ -170,6 +138,7 @@ public class User extends Account {
             System.out.println("Cart has not been found!\n");
         }
     }
+
     public ShoppingCart getCart(UUID id) {
         return carts.get(id);
     }
@@ -307,7 +276,7 @@ public class User extends Account {
 
     //Cart - Related methods
 
-    public void addCart(String  cartName) {
+    public void addCart(String cartName) {
         ShoppingCart shoppingCart = new ShoppingCart(cartName);
         this.carts.put(shoppingCart.getCartID(), shoppingCart);
         System.out.println("Cart has been successfully added!\n");
@@ -316,7 +285,7 @@ public class User extends Account {
 
     //Existence - Related methods
 
-    public boolean doesCartExist(UUID cartID){
+    public boolean doesCartExist(UUID cartID) {
         return this.carts.containsKey(cartID);
     }
 
@@ -331,15 +300,6 @@ public class User extends Account {
 
     public boolean isProductPurchased(UUID id) {
         return this.purchasedProducts.containsKey(id);
-    }
-
-    //Cart - Related methods
-
-    public Order checkoutCart(UUID cartID) {
-        this.getCart(cartID).checkoutCart();
-        Order order = new Order(this.getCart(cartID).getName(), this.getCart(cartID).getProducts(), this.getCart(cartID).getItemNumber(), this.getCart(cartID).getTotalPrice(), this.getAccountID());
-        this.addOrder(order);
-        return order;
     }
 
     //Order - Related Methods
@@ -404,7 +364,7 @@ public class User extends Account {
 
     //Database - Related methods
 
-    public void updateUserInDatabase(){
+    public void updateUserInDatabase() {
         String sql = "UPDATE Users SET password = ?, email = ?, currentCartID = ?, phoneNumber = ?, address = ?, wallet = ?, carts = ?, orders = ?, walletRequests = ?, purchasedProducts = ? WHERE AccountID = ?";
 
         try {
@@ -412,10 +372,9 @@ public class User extends Account {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, password);
             pstmt.setString(2, email);
-            if (currentCartID != null){
+            if (currentCartID != null) {
                 pstmt.setString(3, currentCartID.toString());
-            }
-            else {
+            } else {
                 pstmt.setString(3, null);
             }
             pstmt.setString(4, phoneNumber);
@@ -438,6 +397,58 @@ public class User extends Account {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
 
+    public static void loadUsersFromDatabase(Shop shop) {
+        String sql = "SELECT * FROM Users";
+
+        try {
+            Connection conn = connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            // loop through the result set
+            while (rs.next()) {
+                UUID accountID = UUID.fromString(rs.getString("AccountID"));
+                String username = rs.getString("username");
+                HashMap<UUID, ShoppingCart> carts = new HashMap<>();
+                HashMap<UUID, Order> orders = new HashMap<>();
+                HashMap<UUID, WalletReq> walletRequests = new HashMap<>();
+                HashMap<UUID, Product> purchasedProducts = new HashMap<>();
+                String password = rs.getString("password");
+                String email = rs.getString("email");
+                UUID currentCartID = UUID.fromString(rs.getString("currentCartID"));
+                String phoneNumber = rs.getString("phoneNumber");
+                String address = rs.getString("address");
+                double wallet = rs.getDouble("wallet");
+                JSONObject jsonCarts = new JSONObject(rs.getString("carts"));
+                JSONObject jsonOrders = new JSONObject(rs.getString("orders"));
+                JSONObject jsonWalletRequests = new JSONObject(rs.getString("walletRequests"));
+                JSONObject jsonPurchasedProducts = new JSONObject(rs.getString("purchasedProducts"));
+                JSONArray jsonArrayCarts = jsonCarts.getJSONArray("carts");
+                JSONArray jsonArrayOrders = jsonOrders.getJSONArray("orders");
+                JSONArray jsonArrayWalletRequests = jsonWalletRequests.getJSONArray("walletRequests");
+                JSONArray jsonArrayPurchasedProducts = jsonPurchasedProducts.getJSONArray("purchasedProducts");
+                for (int i = 0; i < jsonArrayCarts.length(); i++) {
+                    ShoppingCart cart = shop.getCart(UUID.fromString(jsonArrayCarts.getString(i)));
+                    carts.put(cart.getCartID(), cart);
+                }
+                for (int i = 0; i < jsonArrayOrders.length(); i++) {
+                    Order order = shop.getOrder(UUID.fromString(jsonArrayOrders.getString(i)));
+                    orders.put(order.getOrderID(), order);
+                }
+                for (int i = 0; i < jsonArrayWalletRequests.length(); i++) {
+                    WalletReq walletReq = shop.getWalletRequest(UUID.fromString(jsonArrayWalletRequests.getString(i)));
+                    walletRequests.put(walletReq.getWalletID(), walletReq);
+                }
+                for (int i = 0; i < jsonArrayPurchasedProducts.length(); i++) {
+                    Product product = shop.getProduct(UUID.fromString(jsonArrayPurchasedProducts.getString(i)));
+                    purchasedProducts.put(product.getProductID(), product);
+                }
+                User newUser = new User(accountID, username, carts, orders, walletRequests, purchasedProducts, password, email, currentCartID, phoneNumber, address, wallet);
+                shop.userSignUp(newUser);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
