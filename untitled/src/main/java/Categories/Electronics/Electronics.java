@@ -53,7 +53,6 @@ public abstract class Electronics extends Product {
     public double getBatteryCapacity() {
         return batteryCapacity;
     }
-
     //Override
 
     @Override

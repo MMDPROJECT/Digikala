@@ -37,31 +37,6 @@ public class BoardGames extends ToysAndGames {
 
     //Getters and Setters
 
-    public String getSize() {
-        return size;
-    }
-
-    public int getPlayerNumber() {
-        return playerNumber;
-    }
-
-    public int getTimeToFinish() {
-        return timeToFinish;
-    }
-
-    //Override
-
-    @Override
-    public String toString() {
-        return "BoardGames{" +
-                "size='" + size + '\'' +
-                ", playerNumber='" + playerNumber + '\'' +
-                ", timeToFinish=" + timeToFinish +
-                "} " + super.toString();
-    }
-
-    //Database - Related methods
-
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasBox, difficultyLevel, isMultiplayer, size, playerNumber, timeToFinish, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -91,6 +66,29 @@ public class BoardGames extends ToysAndGames {
         }
     }
 
+    public String getSize() {
+        return size;
+    }
+
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
+    //Override
+
+    public int getTimeToFinish() {
+        return timeToFinish;
+    }
+
+    @Override
+    public String toString() {
+        return "BoardGames{" +
+                "size='" + size + '\'' +
+                ", playerNumber='" + playerNumber + '\'' +
+                ", timeToFinish=" + timeToFinish +
+                "} " + super.toString();
+    }
+
     public static void loadBoardGamesFromDatabase(ResultSet rs, Shop shop){
         try {
             // loop through the result set
@@ -118,4 +116,5 @@ public class BoardGames extends ToysAndGames {
             System.out.println(e.getMessage());
         }
     }
+
 }

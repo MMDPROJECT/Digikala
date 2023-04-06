@@ -1,6 +1,7 @@
 package Accounts;
 
 import Shop.Shop;
+import com.beust.ah.A;
 
 import java.sql.*;
 import java.util.UUID;
@@ -31,6 +32,22 @@ public class Admin extends Account {
 
     //Getters and Setters
 
+    public void insert() {
+        String sql = "INSERT INTO Admins(AccountID, username, password, email) VALUES(?,?,?,?)";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, getAccountID().toString());
+            pstmt.setString(2, username);
+            pstmt.setString(3, password);
+            pstmt.setString(4, email);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public String getUsername() {
         return username;
     }
@@ -39,11 +56,11 @@ public class Admin extends Account {
         return password;
     }
 
+    //Override
+
     public String getEmail() {
         return email;
     }
-
-    //Override
 
     @Override
     public String toString() {
@@ -62,24 +79,6 @@ public class Admin extends Account {
     @Override
     public boolean doesAccountExist(String username) {
         return this.username.equalsIgnoreCase(username);
-    }
-
-    //Database - Related methods
-
-    public void insert() {
-        String sql = "INSERT INTO Admins(AccountID, username, password, email) VALUES(?,?,?,?)";
-
-        try {
-            Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, getAccountID().toString());
-            pstmt.setString(2, username);
-            pstmt.setString(3, password);
-            pstmt.setString(4, email);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
     }
 
     public static void loadAdminsFromDatabase(Shop shop){
@@ -102,4 +101,5 @@ public class Admin extends Account {
             System.out.println(e.getMessage());
         }
     }
+
 }

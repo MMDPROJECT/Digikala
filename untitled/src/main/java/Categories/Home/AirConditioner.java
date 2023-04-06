@@ -2,6 +2,7 @@ package Categories.Home;
 
 import Connection.Connect;
 import Shop.Shop;
+import com.beust.ah.A;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -61,6 +62,8 @@ public class AirConditioner extends Home {
         return fanNumber;
     }
 
+    //Override
+
     public boolean isHasRemoteControl() {
         return hasRemoteControl;
     }
@@ -68,8 +71,6 @@ public class AirConditioner extends Home {
     public boolean isHasTimer() {
         return hasTimer;
     }
-
-    //Override
 
     @Override
     public String toString() {
@@ -82,8 +83,6 @@ public class AirConditioner extends Home {
                 ", hasTimer=" + hasTimer +
                 "} " + super.toString();
     }
-
-    //Database - Related methods
 
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasController, height, width, weight, coolingCapacity, energyEfficiency, airFilter, fanNumber, hasRemoteControl, hasTimer, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";

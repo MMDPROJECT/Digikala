@@ -75,6 +75,8 @@ public class SmartPhone extends Electronics {
         return displayResolution;
     }
 
+    //Override
+
     public String getRingTone() {
         return ringTone;
     }
@@ -82,8 +84,6 @@ public class SmartPhone extends Electronics {
     public String getCPU() {
         return CPU;
     }
-
-    //Override
 
     @Override
     public String toString() {

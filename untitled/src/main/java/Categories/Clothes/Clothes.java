@@ -58,8 +58,7 @@ public abstract class Clothes extends Product {
     public ClothSize getSize() {
         return size;
     }
-
-    //Override
+    //Overrides
 
     @Override
     public String toString() {

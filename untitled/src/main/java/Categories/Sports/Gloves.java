@@ -40,36 +40,6 @@ public class Gloves extends Sports {
 
     //Getters and Setters
 
-    public GloveMaterial getMaterial() {
-        return material;
-    }
-
-    public GloveSize getSize() {
-        return size;
-    }
-
-    public GloveUser getSuggestedUser() {
-        return suggestedUser;
-    }
-
-    public GloveStyle getStyle() {
-        return style;
-    }
-
-    //Override
-
-    @Override
-    public String toString() {
-        return "Gloves{" +
-                "material=" + material +
-                ", size=" + size +
-                ", suggestedUser=" + suggestedUser +
-                ", style=" + style +
-                "} " + super.toString();
-    }
-
-    //Database - Related methods
-
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, sportType, brand, material, size, suggestedUser, style, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -98,6 +68,34 @@ public class Gloves extends Sports {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public GloveMaterial getMaterial() {
+        return material;
+    }
+
+    public GloveSize getSize() {
+        return size;
+    }
+
+    public GloveUser getSuggestedUser() {
+        return suggestedUser;
+    }
+
+    //Override
+
+    public GloveStyle getStyle() {
+        return style;
+    }
+
+    @Override
+    public String toString() {
+        return "Gloves{" +
+                "material=" + material +
+                ", size=" + size +
+                ", suggestedUser=" + suggestedUser +
+                ", style=" + style +
+                "} " + super.toString();
     }
 
     public static void loadGlovesFromDatabase(ResultSet rs, Shop shop){

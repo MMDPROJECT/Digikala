@@ -37,31 +37,6 @@ public class CardGames extends ToysAndGames {
 
     //Getters and Setters
 
-    public int getCardNumber() {
-        return cardNumber;
-    }
-
-    public int getPlayerNumber() {
-        return playerNumber;
-    }
-
-    public int getGangNumber() {
-        return gangNumber;
-    }
-
-    //Override
-
-    @Override
-    public String toString() {
-        return "CardGames{" +
-                "cardNumber=" + cardNumber +
-                ", playerNumber=" + playerNumber +
-                ", gangNumber=" + gangNumber +
-                "} " + super.toString();
-    }
-
-    //Database - Related methods
-
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasBox, difficultyLevel, isMultiplayer, cardNumber, playerNumber, gangNumber, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -91,6 +66,29 @@ public class CardGames extends ToysAndGames {
         }
     }
 
+    public int getCardNumber() {
+        return cardNumber;
+    }
+
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
+    //Override
+
+    public int getGangNumber() {
+        return gangNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "CardGames{" +
+                "cardNumber=" + cardNumber +
+                ", playerNumber=" + playerNumber +
+                ", gangNumber=" + gangNumber +
+                "} " + super.toString();
+    }
+
     public static void loadCardGamesFromDatabase(ResultSet rs, Shop shop){
         try {
             // loop through the result set
@@ -118,4 +116,5 @@ public class CardGames extends ToysAndGames {
             System.out.println(e.getMessage());
         }
     }
+
 }

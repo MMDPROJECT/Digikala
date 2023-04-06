@@ -34,26 +34,6 @@ public class Puzzles extends ToysAndGames {
 
     //Getters and Setters
 
-    public int getPartNumber() {
-        return partNumber;
-    }
-
-    public String getFinalPicture() {
-        return finalPicture;
-    }
-
-    //Override
-
-    @Override
-    public String toString() {
-        return "Puzzles{" +
-                "partNumber=" + partNumber +
-                ", finalPicture='" + finalPicture + '\'' +
-                "} " + super.toString();
-    }
-
-    //Database - Related methods
-
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasBox, difficultyLevel, isMultiplayer, partNumber, finalPicture, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -80,6 +60,24 @@ public class Puzzles extends ToysAndGames {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public int getPartNumber() {
+        return partNumber;
+    }
+
+    //Override
+
+    public String getFinalPicture() {
+        return finalPicture;
+    }
+
+    @Override
+    public String toString() {
+        return "Puzzles{" +
+                "partNumber=" + partNumber +
+                ", finalPicture='" + finalPicture + '\'' +
+                "} " + super.toString();
     }
 
     public static void loadPuzzlesFromDatabase(ResultSet rs, Shop shop){

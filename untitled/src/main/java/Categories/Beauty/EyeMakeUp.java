@@ -70,8 +70,6 @@ public class EyeMakeUp extends Beauty {
                 "} " + super.toString();
     }
 
-    //Database - Related methods
-
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, MatterState, hasBox, penType, hasWaterResistance, brand, longevity, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 

@@ -40,36 +40,6 @@ public class Drill extends Tools {
 
     //Getters ana Setters
 
-    public int getVoltage() {
-        return voltage;
-    }
-
-    public PowerSource getPowerSource() {
-        return powerSource;
-    }
-
-    public int getMinSpinSpeed() {
-        return minSpinSpeed;
-    }
-
-    public int getMaxSpinSpeed() {
-        return maxSpinSpeed;
-    }
-
-    //Override
-
-    @Override
-    public String toString() {
-        return "Drill{" +
-                "voltage=" + voltage +
-                ", powerSource=" + powerSource +
-                ", minSpinSpeed=" + minSpinSpeed +
-                ", maxSpinSpeed=" + maxSpinSpeed +
-                "} " + super.toString();
-    }
-
-    //Database - Related methods
-
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, hasBox, isSilent, isChargeable, brand, voltage, powerSource, minSpinSpeed, maxSpinSpeed, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -100,6 +70,34 @@ public class Drill extends Tools {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public int getVoltage() {
+        return voltage;
+    }
+
+    public PowerSource getPowerSource() {
+        return powerSource;
+    }
+
+    public int getMinSpinSpeed() {
+        return minSpinSpeed;
+    }
+
+    //Override
+
+    public int getMaxSpinSpeed() {
+        return maxSpinSpeed;
+    }
+
+    @Override
+    public String toString() {
+        return "Drill{" +
+                "voltage=" + voltage +
+                ", powerSource=" + powerSource +
+                ", minSpinSpeed=" + minSpinSpeed +
+                ", maxSpinSpeed=" + maxSpinSpeed +
+                "} " + super.toString();
     }
 
     public static void loadDrillFromDatabase(ResultSet rs, Shop shop){

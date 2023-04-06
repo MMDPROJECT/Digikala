@@ -40,36 +40,6 @@ public class Drinks extends SuperMarket {
 
     //Getters and Setters
 
-    public String getTaste() {
-        return taste;
-    }
-
-    public boolean isSoftDrink() {
-        return isSoftDrink;
-    }
-
-    public double getLitters() {
-        return litters;
-    }
-
-    public DrinkSize getSize() {
-        return size;
-    }
-
-    //Override
-
-    @Override
-    public String toString() {
-        return "Drinks{" +
-                "taste='" + taste + '\'' +
-                ", isSoftDrink=" + isSoftDrink +
-                ", litters=" + litters +
-                ", size=" + size +
-                "} " + super.toString();
-    }
-
-    //Database - Related methods
-
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasBox, weight, salt, calories, fat, sugar, IngredientItems, CountryOfOrigin, isSoftDrink, litters, size, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -107,6 +77,34 @@ public class Drinks extends SuperMarket {
         }
     }
 
+    public String getTaste() {
+        return taste;
+    }
+
+    public boolean isSoftDrink() {
+        return isSoftDrink;
+    }
+
+    public double getLitters() {
+        return litters;
+    }
+
+    //Override
+
+    public DrinkSize getSize() {
+        return size;
+    }
+
+    @Override
+    public String toString() {
+        return "Drinks{" +
+                "taste='" + taste + '\'' +
+                ", isSoftDrink=" + isSoftDrink +
+                ", litters=" + litters +
+                ", size=" + size +
+                "} " + super.toString();
+    }
+
     public static void loadDairyFromDatabase(ResultSet rs, Shop shop){
         try {
             // loop through the result set
@@ -128,6 +126,8 @@ public class Drinks extends SuperMarket {
             double calories = rs.getDouble("calories");
             double fat = rs.getDouble("fat");
             double sugar = rs.getDouble("sugar");
+            JSONObject jsonIngredientItems = new JSONObject(rs.getString("IngredientItems"));
+            JSONArray jsonArray2 = jsonComments.getJSONArray("IngredientItems");
             ArrayList<String> IngredientItems = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); i++) {
                 IngredientItems.add(jsonArray.getString(i));

@@ -5,7 +5,10 @@ import Shop.Shop;
 import Shopping.Order;
 import Shopping.ShoppingCart;
 import Shopping.WalletReq;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.*;
@@ -62,6 +65,38 @@ public class User extends Account {
 
     //Getters and Setters
 
+    public void insert() {
+        String sql = "INSERT INTO Users(AccountID, username, password, email, currentCartID, phoneNumber, address, wallet, carts, orders, walletRequests, purchasedProducts) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, getAccountID().toString());
+            pstmt.setString(2, username);
+            pstmt.setString(3, password);
+            pstmt.setString(4, email);
+            pstmt.setString(5, null);
+            pstmt.setString(6, phoneNumber);
+            pstmt.setString(7, address);
+            pstmt.setDouble(8, wallet);
+            JSONObject cartsJson = new JSONObject();
+            JSONObject ordersJson = new JSONObject();
+            JSONObject walletRequestJson = new JSONObject();
+            JSONObject purchasedProductsJson = new JSONObject();
+            cartsJson.put("carts", carts.keySet());
+            ordersJson.put("orders", orders.keySet());
+            walletRequestJson.put("walletRequests", walletRequests.keySet());
+            purchasedProductsJson.put("purchasedProducts", purchasedProducts.keySet());
+            pstmt.setString(9, cartsJson.toString());
+            pstmt.setString(10, ordersJson.toString());
+            pstmt.setString(11, walletRequestJson.toString());
+            pstmt.setString(12, purchasedProductsJson.toString());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public String getUsername() {
         return username;
     }
@@ -108,8 +143,6 @@ public class User extends Account {
         return carts.get(id);
     }
 
-    //Override
-
     @Override
     public String toString() {
         return "User{" +
@@ -128,6 +161,7 @@ public class User extends Account {
     }
 
     //Login - Related methods
+
 
     @Override
     public boolean accountLogin(String username, String password) {
@@ -329,38 +363,6 @@ public class User extends Account {
     }
 
     //Database - Related methods
-
-    public void insert() {
-        String sql = "INSERT INTO Users(AccountID, username, password, email, currentCartID, phoneNumber, address, wallet, carts, orders, walletRequests, purchasedProducts) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
-
-        try {
-            Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, getAccountID().toString());
-            pstmt.setString(2, username);
-            pstmt.setString(3, password);
-            pstmt.setString(4, email);
-            pstmt.setString(5, null);
-            pstmt.setString(6, phoneNumber);
-            pstmt.setString(7, address);
-            pstmt.setDouble(8, wallet);
-            JSONObject cartsJson = new JSONObject();
-            JSONObject ordersJson = new JSONObject();
-            JSONObject walletRequestJson = new JSONObject();
-            JSONObject purchasedProductsJson = new JSONObject();
-            cartsJson.put("carts", carts.keySet());
-            ordersJson.put("orders", orders.keySet());
-            walletRequestJson.put("walletRequests", walletRequests.keySet());
-            purchasedProductsJson.put("purchasedProducts", purchasedProducts.keySet());
-            pstmt.setString(9, cartsJson.toString());
-            pstmt.setString(10, ordersJson.toString());
-            pstmt.setString(11, walletRequestJson.toString());
-            pstmt.setString(12, purchasedProductsJson.toString());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
 
     public void updateUserInDatabase() {
         String sql = "UPDATE Users SET password = ?, email = ?, currentCartID = ?, phoneNumber = ?, address = ?, wallet = ?, carts = ?, orders = ?, walletRequests = ?, purchasedProducts = ? WHERE AccountID = ?";
