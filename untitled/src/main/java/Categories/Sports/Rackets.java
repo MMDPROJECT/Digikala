@@ -1,7 +1,5 @@
 package Categories.Sports;
 
-import Categories.Sports.Enums.BallMaterial;
-import Categories.Sports.Enums.BallSize;
 import Categories.Sports.Enums.RacketDurability;
 import Connection.Connect;
 import Shop.Shop;
@@ -54,11 +52,11 @@ public class Rackets extends Sports {
         return durability;
     }
 
-    //Override
-
     public String getShape() {
         return Shape;
     }
+
+    //Override
 
     @Override
     public String toString() {
@@ -69,6 +67,8 @@ public class Rackets extends Sports {
                 ", Shape='" + Shape + '\'' +
                 "} " + super.toString();
     }
+
+    //Database - Related methods
 
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, sportType, brand, length, width, durability, Shape, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";

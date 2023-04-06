@@ -2,13 +2,10 @@ package Accounts;
 
 import Categories.Product;
 import Shop.Shop;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -44,36 +41,16 @@ public class Seller extends Account {
 
     //Getters and Setters
 
-    public void insert() {
-        String sql = "INSERT INTO Sellers(AccountID, companyName, password, availableProducts, wallet, isAuthorized) VALUES(?,?,?,?,?,?)";
-
-        try {
-            Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, getAccountID().toString());
-            pstmt.setString(2, companyName);
-            pstmt.setString(3, password);
-            JSONObject jsonProducts = new JSONObject();
-            jsonProducts.put("availableProducts", new JSONArray(this.availableProducts.keySet()));
-            String availableProducts = jsonProducts.toString();
-            pstmt.setString(4, availableProducts);
-            pstmt.setDouble(5, wallet);
-            pstmt.setString(6, Boolean.toString(isAuthorized));
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     @Override
     public String getUsername() {
         return this.companyName;
     }
-    //Override
 
     public boolean isAuthorized() {
         return isAuthorized;
     }
+
+    //Override
 
     @Override
     public String toString() {
@@ -138,6 +115,27 @@ public class Seller extends Account {
     }
 
     //Database - Related methods
+
+    public void insert() {
+        String sql = "INSERT INTO Sellers(AccountID, companyName, password, availableProducts, wallet, isAuthorized) VALUES(?,?,?,?,?,?)";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, getAccountID().toString());
+            pstmt.setString(2, companyName);
+            pstmt.setString(3, password);
+            JSONObject jsonProducts = new JSONObject();
+            jsonProducts.put("availableProducts", new JSONArray(this.availableProducts.keySet()));
+            String availableProducts = jsonProducts.toString();
+            pstmt.setString(4, availableProducts);
+            pstmt.setDouble(5, wallet);
+            pstmt.setString(6, Boolean.toString(isAuthorized));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     public void updateSellerInDatabase() {
         String sql = "UPDATE Sellers SET availableProducts = ?, wallet = ?, isAuthorized = ? WHERE AccountID = ?";

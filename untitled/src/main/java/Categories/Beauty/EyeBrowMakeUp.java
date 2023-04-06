@@ -2,9 +2,6 @@ package Categories.Beauty;
 
 import Categories.Beauty.Enums.MatterState;
 import Categories.Beauty.Enums.PenType;
-import Categories.Sports.Ball;
-import Categories.Sports.Enums.BallMaterial;
-import Categories.Sports.Enums.BallSize;
 import Shop.Shop;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -72,6 +69,8 @@ public class EyeBrowMakeUp extends Beauty {
                 ", longevity=" + longevity +
                 "} " + super.toString();
     }
+
+    //Database - Related methods
 
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, MatterState, hasBox, penType, hasWaterResistance, brand, longevity, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";

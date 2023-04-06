@@ -43,29 +43,6 @@ public class Order extends ShoppingCart {
 
     //Getters and Setters
 
-    public void insert() {
-        String sql = "INSERT INTO Orders(date, dateTimeFormatter, buyerID, orderID, isConfirmed, itemNumber, totalPrice) VALUES(?,?,?,?,?,?,?)";
-
-        try {
-            Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, date.toString());
-            pstmt.setString(2, dateTimeFormatter.toString());
-            pstmt.setString(3, buyerID.toString());
-            pstmt.setString(4, orderID.toString());
-            pstmt.setString(5, Boolean.toString(isConfirmed));
-            ObjectMapper objectMapper = new ObjectMapper();
-            String json = objectMapper.writeValueAsString(getItemNumber());
-            pstmt.setString(6, json);
-            pstmt.setDouble(7, getTotalPrice());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public UUID getBuyer() {
         return buyerID;
     }
@@ -78,13 +55,11 @@ public class Order extends ShoppingCart {
         return isConfirmed;
     }
 
-    //Override
-
     public UUID getBuyerID() {
         return buyerID;
     }
 
-    //Order - Related Methods
+    //Override
 
     @Override
     public String toString() {
@@ -96,7 +71,6 @@ public class Order extends ShoppingCart {
                 ", isConfirmed=" + isConfirmed +
                 "} " + super.toString();
     }
-
 
     //Order - Related methods
 
@@ -129,6 +103,30 @@ public class Order extends ShoppingCart {
 
     //Database - Related methods
 
+    public void insert() {
+        String sql = "INSERT INTO Orders(date, dateTimeFormatter, buyerID, orderID, isConfirmed, itemNumber, totalPrice) VALUES(?,?,?,?,?,?,?)";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, date.toString());
+            pstmt.setString(2, dateTimeFormatter.toString());
+            pstmt.setString(3, buyerID.toString());
+            pstmt.setString(4, orderID.toString());
+            pstmt.setString(5, Boolean.toString(isConfirmed));
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(getItemNumber());
+            pstmt.setString(6, json);
+            pstmt.setDouble(7, getTotalPrice());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public void updateOrderInDatabase() {
         String sql = "UPDATE Orders SET isConfirmed = ?, itemNumber = ?, totalPrice = ? WHERE orderID = ?";
 
@@ -160,7 +158,6 @@ public class Order extends ShoppingCart {
             // loop through the result set
             while (rs.next()) {
                 LocalDate date = LocalDate.parse(rs.getString("date"));
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("E, MMM dd yyyy");
                 UUID buyerID = UUID.fromString(rs.getString("buyerID"));
                 UUID orderID = UUID.fromString(rs.getString("orderID"));
                 boolean isConfirmed = Boolean.parseBoolean(rs.getString("isConfirmed"));

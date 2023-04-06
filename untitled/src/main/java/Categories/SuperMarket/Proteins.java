@@ -1,6 +1,5 @@
 package Categories.SuperMarket;
 
-import Categories.SuperMarket.Enums.DrinkSize;
 import Categories.SuperMarket.Enums.ProteinProductType;
 import Connection.Connect;
 import Shop.Shop;
@@ -37,6 +36,31 @@ public class Proteins extends SuperMarket {
     }
 
     //Getters and Setters
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public double getProtein() {
+        return protein;
+    }
+
+    public ProteinProductType getProductType() {
+        return productType;
+    }
+
+    //Override
+
+    @Override
+    public String toString() {
+        return "Proteins{" +
+                "brand='" + brand + '\'' +
+                ", protein=" + protein +
+                ", productType=" + productType +
+                "} " + super.toString();
+    }
+
+    //Database - Related methods
 
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasBox, weight, salt, calories, fat, sugar, IngredientItems, CountryOfOrigin, brand, protein, productType, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -75,29 +99,6 @@ public class Proteins extends SuperMarket {
         }
     }
 
-    public String getBrand() {
-        return brand;
-    }
-
-    public double getProtein() {
-        return protein;
-    }
-
-    //Override
-
-    public ProteinProductType getProductType() {
-        return productType;
-    }
-
-    @Override
-    public String toString() {
-        return "Proteins{" +
-                "brand='" + brand + '\'' +
-                ", protein=" + protein +
-                ", productType=" + productType +
-                "} " + super.toString();
-    }
-
     public static void loadProteinsFromDatabase(ResultSet rs, Shop shop){
         try {
             // loop through the result set
@@ -119,14 +120,11 @@ public class Proteins extends SuperMarket {
             double calories = rs.getDouble("calories");
             double fat = rs.getDouble("fat");
             double sugar = rs.getDouble("sugar");
-            JSONObject jsonIngredientItems = new JSONObject(rs.getString("IngredientItems"));
-            JSONArray jsonArray2 = jsonComments.getJSONArray("IngredientItems");
             ArrayList<String> IngredientItems = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); i++) {
                 IngredientItems.add(jsonArray.getString(i));
             }
             String CountryOfOrigin = rs.getString("CountryOfOrigin");
-            String taste = rs.getString("taste");
             String brand = rs.getString("brand");
             double protein = rs.getDouble("protein");
             ProteinProductType productType = ProteinProductType.valueOf(rs.getString("productType"));

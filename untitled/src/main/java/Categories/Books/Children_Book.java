@@ -1,7 +1,5 @@
 package Categories.Books;
 
-import Categories.Beauty.Enums.MatterState;
-import Categories.Beauty.Enums.PenType;
 import Connection.Connect;
 import Shop.Shop;
 import org.json.JSONArray;
@@ -20,7 +18,6 @@ public class Children_Book extends Books {
 
     //Constructor
 
-
     public Children_Book(String name, String color, int quantity, double price, UUID sellerID, String ISBN, int pageNumbers, String author, String language, String readingLevel, String theme) {
         super(name, color, quantity, price, sellerID, ISBN, pageNumbers, author, language);
         this.readingLevel = readingLevel;
@@ -34,9 +31,8 @@ public class Children_Book extends Books {
         this.theme = theme;
     }
 
-    //Override
-
     //Getters and Setters
+
     public String getReadingLevel() {
         return readingLevel;
     }
@@ -45,6 +41,8 @@ public class Children_Book extends Books {
         return theme;
     }
 
+    //Override
+
     @Override
     public String toString() {
         return "Children_Book{" +
@@ -52,6 +50,8 @@ public class Children_Book extends Books {
                 ", theme=" + theme +
                 "} " + super.toString();
     }
+
+    //Database - Related methods
 
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ISBN, pageNumbers, author, language, readingLevel, theme, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";

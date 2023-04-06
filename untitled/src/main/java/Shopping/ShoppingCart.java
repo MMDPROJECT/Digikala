@@ -55,30 +55,6 @@ public class ShoppingCart {
 
     //Getters and Setters
 
-    public void insert() {
-        String sql = "INSERT INTO Carts(name, cartID, userID, totalPrice, hasCheckout, itemNumber) VALUES(?,?,?,?,?,?)";
-
-        try {
-            Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, name);
-            pstmt.setString(2, cartID.toString());
-            pstmt.setString(3, userID.toString());
-            pstmt.setDouble(4, totalPrice);
-            pstmt.setString(5, Boolean.toString(hasCheckout));
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                String jsonItemNumber = objectMapper.writeValueAsString(itemNumber);
-                pstmt.setString(6, jsonItemNumber);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     public ArrayList<Product> getProducts() {
         return this.products;
     }
@@ -189,16 +165,7 @@ public class ShoppingCart {
         return null;
     }
 
-    public void viewCart() {
-        if (products.size() == 0) {
-            System.out.println("Cart is empty!\n");
-        } else {
-            for (Product product : products) {
-                System.out.println(product + "Amount has been added to cart=" + itemNumber.get(product.getProductID()));
-            }
-            System.out.println("Total Price=" + totalPrice + "\n");
-        }
-    }
+    //Override
 
     @Override
     public String toString() {
@@ -214,6 +181,30 @@ public class ShoppingCart {
     }
 
     //Database - Related methods
+
+    public void insert() {
+        String sql = "INSERT INTO Carts(name, cartID, userID, totalPrice, hasCheckout, itemNumber) VALUES(?,?,?,?,?,?)";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
+            pstmt.setString(2, cartID.toString());
+            pstmt.setString(3, userID.toString());
+            pstmt.setDouble(4, totalPrice);
+            pstmt.setString(5, Boolean.toString(hasCheckout));
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                String jsonItemNumber = objectMapper.writeValueAsString(itemNumber);
+                pstmt.setString(6, jsonItemNumber);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     public void updateCartInDatabase() {
         String sql = "UPDATE Carts SET totalPrice = ?, hasCheckout = ?, itemNumber = ? WHERE cartID = ?";

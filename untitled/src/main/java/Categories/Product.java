@@ -70,6 +70,7 @@ public abstract class Product {
     }
 
     //Getter and Setters
+
     public String getName() {
         return name;
     }
@@ -161,101 +162,54 @@ public abstract class Product {
             while (rs.next()) {
                 String subCategory = rs.getString("subCategory");
                 //Beauty Category
-                if (subCategory.equals("EyeBrowMakeUp")){
-                    EyeBrowMakeUp.loadEyeBrowMakeUpFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("EyeMakeUp")){
-                    EyeMakeUp.loadEyeMakeUpFromDatabase(rs, shop);
-                }
-                //Books Category
-                else if (subCategory.equals("Children_Book")){
-                    Children_Book.loadChildrenBookFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("Fiction_Book")){
-                    Fiction_Book.loadFictionBookFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("Poetry_Book")){
-                    Poetry_Book.loadPoetryBookFromDatabase(rs, shop);
-                }
-                //Clothes Category
-                else if (subCategory.equals("Coat")){
-                    Coat.loadCoatFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("Jean")){
-                    Jean.loadJeanFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("Sweater")){
-                    Sweater.loadSweaterFromDatabase(rs, shop);
-                }
-                //Electronics Category
-                else if (subCategory.equals("Laptop")){
-                    Laptop.loadLaptopFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("SmartPhone")){
-                    SmartPhone.loadSmartPhoneFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("SmartWatch")){
-                    SmartWatch.loadSmartWatchFromDatabase(rs, shop);
-                }
-                //Home Category
-                else if (subCategory.equals("AirConditioner")){
-                    AirConditioner.loadAirConditionerFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("Refrigerator")){
-                    Refrigerator.loadRefrigeratorFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("TV")){
-                    TV.loadTVFromDatabase(rs, shop);
-                }
-                //Sports Category
-                else if (subCategory.equals("Ball")){
-                    Ball.loadBallFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("Rackets")){
-                    Rackets.loadRacketsFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("Gloves")){
-                    Gloves.loadGlovesFromDatabase(rs, shop);
-                }
-                //SuperMarket Category
-                else if (subCategory.equals("Dairy")){
-                    Dairy.loadDairyFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("Drinks")){
-                    Drinks.loadDairyFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("Proteins")){
-                    Proteins.loadProteinsFromDatabase(rs, shop);
-                }
-                //Tools Category
-                else if (subCategory.equals("Drill")){
-                    Drill.loadDrillFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("SolderingSystem")){
-                    SolderingSystem.loadDrillFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("Spanner")){
-                    Spanner.loadSpannerFromDatabase(rs, shop);
-                }
-                //ToysAndGames Category
-                else if (subCategory.equals("BoardGames")){
-                    BoardGames.loadBoardGamesFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("CardGames")){
-                    CardGames.loadCardGamesFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("Puzzles")){
-                    Puzzles.loadPuzzlesFromDatabase(rs, shop);
-                }
-                //Vehicles Category
-                else if (subCategory.equals("Car")){
-                    Car.loadCarFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("Motorcycle")){
-                    Motorcycle.loadCarFromDatabase(rs, shop);
-                }
-                else if (subCategory.equals("Truck")){
-                    Truck.loadTruckFromDatabase(rs, shop);
+                switch (subCategory) {
+                    case "EyeBrowMakeUp" -> EyeBrowMakeUp.loadEyeBrowMakeUpFromDatabase(rs, shop);
+                    case "EyeMakeUp" -> EyeMakeUp.loadEyeMakeUpFromDatabase(rs, shop);
+
+                    //Books Category
+                    case "Children_Book" -> Children_Book.loadChildrenBookFromDatabase(rs, shop);
+                    case "Fiction_Book" -> Fiction_Book.loadFictionBookFromDatabase(rs, shop);
+                    case "Poetry_Book" -> Poetry_Book.loadPoetryBookFromDatabase(rs, shop);
+
+                    //Clothes Category
+                    case "Coat" -> Coat.loadCoatFromDatabase(rs, shop);
+                    case "Jean" -> Jean.loadJeanFromDatabase(rs, shop);
+                    case "Sweater" -> Sweater.loadSweaterFromDatabase(rs, shop);
+
+                    //Electronics Category
+                    case "Laptop" -> Laptop.loadLaptopFromDatabase(rs, shop);
+                    case "SmartPhone" -> SmartPhone.loadSmartPhoneFromDatabase(rs, shop);
+                    case "SmartWatch" -> SmartWatch.loadSmartWatchFromDatabase(rs, shop);
+
+                    //Home Category
+                    case "AirConditioner" -> AirConditioner.loadAirConditionerFromDatabase(rs, shop);
+                    case "Refrigerator" -> Refrigerator.loadRefrigeratorFromDatabase(rs, shop);
+                    case "TV" -> TV.loadTVFromDatabase(rs, shop);
+
+                    //Sports Category
+                    case "Ball" -> Ball.loadBallFromDatabase(rs, shop);
+                    case "Rackets" -> Rackets.loadRacketsFromDatabase(rs, shop);
+                    case "Gloves" -> Gloves.loadGlovesFromDatabase(rs, shop);
+
+                    //SuperMarket Category
+                    case "Dairy" -> Dairy.loadDairyFromDatabase(rs, shop);
+                    case "Drinks" -> Drinks.loadDairyFromDatabase(rs, shop);
+                    case "Proteins" -> Proteins.loadProteinsFromDatabase(rs, shop);
+
+                    //Tools Category
+                    case "Drill" -> Drill.loadDrillFromDatabase(rs, shop);
+                    case "SolderingSystem" -> SolderingSystem.loadDrillFromDatabase(rs, shop);
+                    case "Spanner" -> Spanner.loadSpannerFromDatabase(rs, shop);
+
+                    //ToysAndGames Category
+                    case "BoardGames" -> BoardGames.loadBoardGamesFromDatabase(rs, shop);
+                    case "CardGames" -> CardGames.loadCardGamesFromDatabase(rs, shop);
+                    case "Puzzles" -> Puzzles.loadPuzzlesFromDatabase(rs, shop);
+
+                    //Vehicles Category
+                    case "Car" -> Car.loadCarFromDatabase(rs, shop);
+                    case "Motorcycle" -> Motorcycle.loadCarFromDatabase(rs, shop);
+                    case "Truck" -> Truck.loadTruckFromDatabase(rs, shop);
                 }
             }
         } catch (SQLException e) {

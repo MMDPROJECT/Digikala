@@ -32,6 +32,7 @@ public class Fiction_Book extends Books {
     }
 
     //Getter and Setters
+
     public ArrayList<String> getCharacters() {
         return characters;
     }
@@ -40,23 +41,7 @@ public class Fiction_Book extends Books {
         return tone;
     }
 
-    //Overrides
-
-    //Fiction-Book - Related Functions
-    public void showCharacters() {
-        if (this.characters.size() == 0) {
-            System.out.println("This book doesn't have any special character!\n");
-        } else {
-            System.out.println("List of characters:\n");
-            for (String character : this.characters) {
-                System.out.println("* " + character);
-            }
-        }
-    }
-
-    public void addCharacter(String character) {
-        this.characters.add(character);
-    }
+    //Override
 
     @Override
     public String toString() {
@@ -65,6 +50,8 @@ public class Fiction_Book extends Books {
                 ", tone=" + tone +
                 "} " + super.toString();
     }
+
+    //Database - Related methods
 
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ISBN, pageNumbers, author, language, tone, characters, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";

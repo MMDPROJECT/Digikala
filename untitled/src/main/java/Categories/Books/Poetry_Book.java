@@ -31,9 +31,8 @@ public class Poetry_Book extends Books {
         this.verseNumber = verseNumber;
     }
 
-    //Overrides
-
     //Getter and Setters
+
     public String getPoeticForm() {
         return poeticForm;
     }
@@ -42,6 +41,8 @@ public class Poetry_Book extends Books {
         return verseNumber;
     }
 
+    //Override
+
     @Override
     public String toString() {
         return "Poetry_Book{" +
@@ -49,6 +50,8 @@ public class Poetry_Book extends Books {
                 ", verseNumber=" + verseNumber +
                 "} " + super.toString();
     }
+
+    //Database - Related methods
 
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ISBN, pageNumbers, author, language, poeticForm, verseNumber, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";

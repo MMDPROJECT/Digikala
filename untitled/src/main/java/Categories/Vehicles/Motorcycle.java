@@ -37,6 +37,32 @@ public class Motorcycle extends Vehicles {
 
     //Getters and Setters
 
+    public int getSeatNumber() {
+        return seatNumber;
+    }
+
+    public boolean isHasWingMirror() {
+        return hasWingMirror;
+    }
+
+    public NoiseLevel getNoiseLevel() {
+        return noiseLevel;
+    }
+
+
+    //Override
+
+    @Override
+    public String toString() {
+        return "Motorcycle{" +
+                "seatNumber=" + seatNumber +
+                ", hasWingMirror=" + hasWingMirror +
+                ", noiseLevel=" + noiseLevel +
+                "} " + super.toString();
+    }
+
+    //Database - Related methods
+
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model, seatNumber, hasWingMirror, noiseLevel, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -71,28 +97,6 @@ public class Motorcycle extends Vehicles {
         }
     }
 
-    public int getSeatNumber() {
-        return seatNumber;
-    }
-
-    public boolean isHasWingMirror() {
-        return hasWingMirror;
-    }
-
-    //Override
-
-    public NoiseLevel getNoiseLevel() {
-        return noiseLevel;
-    }
-
-    @Override
-    public String toString() {
-        return "Motorcycle{" +
-                "seatNumber=" + seatNumber +
-                ", hasWingMirror=" + hasWingMirror +
-                ", noiseLevel=" + noiseLevel +
-                "} " + super.toString();
-    }
 
     public static void loadCarFromDatabase(ResultSet rs, Shop shop){
         try {

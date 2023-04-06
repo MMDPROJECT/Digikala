@@ -47,8 +47,6 @@ public class SmartWatch extends Electronics {
         return hasHeartRateTracker;
     }
 
-    //Override
-
     public boolean isHasStepTracker() {
         return hasStepTracker;
     }
@@ -56,6 +54,8 @@ public class SmartWatch extends Electronics {
     public boolean isHasCaloricTracker() {
         return hasCaloricTracker;
     }
+
+    //Override
 
     @Override
     public String toString() {
@@ -66,6 +66,8 @@ public class SmartWatch extends Electronics {
                 ", hasCaloricTracker=" + hasCaloricTracker +
                 "} " + super.toString();
     }
+
+    //Database - Related methods
 
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, brand, model, OS, screenSize, batteryCapacity, hasHeartRateTracker, hasStepTracker, hasCaloricTracker, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";

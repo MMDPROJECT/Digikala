@@ -64,15 +64,6 @@ public class Main {
     public static void main(String[] args) {
 
         Shop shop = new Shop("Digikala", "Digikala.com", "34250955");
-//        Admin admin1 = new Admin("MMDPROJECT", "1382", "MMDPROJECT@gmail.com");
-//        Seller seller = new Seller("Apple", "1900");
-//        User user1 = new User("Hossein", "1381", "hossein.com", "09170861077", "Bushehr");
-//        Product product = new Ball("Nike Premier League Academy Ball 2023", "white and red-blue combined", 2, 100.5, seller.getAccountID(), 0.5, "Ball", "Nike", BallSize.ADULT, BallMaterial.PU, true);
-//        shop.sellerSignUp(seller);
-//        shop.adminSignUp(admin1);
-//        shop.userSignUp(user1);
-//        shop.setCurrentAccount(seller);
-//        shop.addProductToShop(product);
         Product.loadProductsFromDatabase(shop);
         WalletReq.loadWalletRequestsFromDatabase(shop);
         Admin.loadAdminsFromDatabase(shop);
@@ -667,7 +658,6 @@ public class Main {
             System.out.println("Seller has not been authorized yet!\n");
             runMenu(shop);
         } else {
-            Seller currentSeller = (Seller) shop.getCurrentAccount();
             System.out.println("""
                     1- Product Management
                     \t- Add a new Product

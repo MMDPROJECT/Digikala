@@ -75,8 +75,6 @@ public class Laptop extends Electronics {
         return hasFingerPrint;
     }
 
-    //Override
-
     public String getKeyboardLanguage() {
         return keyboardLanguage;
     }
@@ -84,6 +82,8 @@ public class Laptop extends Electronics {
     public int getPortNumber() {
         return portNumber;
     }
+
+    //Override
 
     @Override
     public String toString() {
@@ -169,5 +169,4 @@ public class Laptop extends Electronics {
             System.out.println(e.getMessage());
         }
     }
-
 }

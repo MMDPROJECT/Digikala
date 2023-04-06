@@ -34,6 +34,26 @@ public class Truck extends Vehicles {
 
     //Getters and Setters
 
+    public TruckType getTruckType() {
+        return truckType;
+    }
+
+    public boolean isHasBed() {
+        return hasBed;
+    }
+
+    //Override
+
+    @Override
+    public String toString() {
+        return "Truck{" +
+                "truckType=" + truckType +
+                ", hasBed=" + hasBed +
+                "} " + super.toString();
+    }
+
+    //Database - Related methods
+
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model, truckType, hasBed, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -65,24 +85,6 @@ public class Truck extends Vehicles {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    public TruckType getTruckType() {
-        return truckType;
-    }
-
-    //Override
-
-    public boolean isHasBed() {
-        return hasBed;
-    }
-
-    @Override
-    public String toString() {
-        return "Truck{" +
-                "truckType=" + truckType +
-                ", hasBed=" + hasBed +
-                "} " + super.toString();
     }
 
     public static void loadTruckFromDatabase(ResultSet rs, Shop shop){

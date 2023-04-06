@@ -35,6 +35,31 @@ public class Ball extends Sports {
 
     //Getters and Setters
 
+    public BallSize getSize() {
+        return size;
+    }
+
+    public BallMaterial getMaterial() {
+        return material;
+    }
+
+    public boolean isRightHandOriented() {
+        return isRightHandOriented;
+    }
+
+    //Override
+
+    @Override
+    public String toString() {
+        return "Ball{" +
+                "size=" + size +
+                ", material=" + material +
+                ", isRightHandOriented=" + isRightHandOriented +
+                "} " + super.toString();
+    }
+
+    //Database - Related methods
+
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, sportType, brand, size, material, isRightHandOriented, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -63,29 +88,6 @@ public class Ball extends Sports {
             System.out.println(e.getMessage());
         }
     }
-
-    public BallSize getSize() {
-        return size;
-    }
-
-    public BallMaterial getMaterial() {
-        return material;
-    }
-
-    public boolean isRightHandOriented() {
-        return isRightHandOriented;
-    }
-
-    @Override
-    public String toString() {
-        return "Ball{" +
-                "size=" + size +
-                ", material=" + material +
-                ", isRightHandOriented=" + isRightHandOriented +
-                "} " + super.toString();
-    }
-
-    //Database - Related methods
 
     public static void loadBallFromDatabase(ResultSet rs, Shop shop){
         try {

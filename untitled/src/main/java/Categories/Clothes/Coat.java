@@ -1,6 +1,5 @@
 package Categories.Clothes;
 
-import Categories.Books.Poetry_Book;
 import Categories.Clothes.Enums.ClothDurability;
 import Categories.Clothes.Enums.ClothGender;
 import Categories.Clothes.Enums.ClothMaterial;
@@ -53,6 +52,8 @@ public class Coat extends Clothes {
                 ", hasCap=" + hasCap +
                 "} " + super.toString();
     }
+
+    //Database - Related methods
 
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ClothSize, ClothGender, ClothMaterial, brand, ClothDurability, buttonNumber, hasCap, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";

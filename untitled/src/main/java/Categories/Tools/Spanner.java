@@ -37,6 +37,33 @@ public class Spanner extends Tools {
 
     //Getters and Setters
 
+    public int getSize() {
+        return size;
+    }
+
+    public String getStyle() {
+        return style;
+    }
+
+    //Override
+
+    public SpannerMaterial getMaterial() {
+        return material;
+    }
+
+    //Override
+
+    @Override
+    public String toString() {
+        return "Spanner{" +
+                "size=" + size +
+                ", style='" + style + '\'' +
+                ", material=" + material +
+                "} " + super.toString();
+    }
+
+    //Database - Related methods
+
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, hasBox, isSilent, isChargeable, brand, size, style, material, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -66,29 +93,6 @@ public class Spanner extends Tools {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public String getStyle() {
-        return style;
-    }
-
-    //Override
-
-    public SpannerMaterial getMaterial() {
-        return material;
-    }
-
-    @Override
-    public String toString() {
-        return "Spanner{" +
-                "size=" + size +
-                ", style='" + style + '\'' +
-                ", material=" + material +
-                "} " + super.toString();
     }
 
     public static void loadSpannerFromDatabase(ResultSet rs, Shop shop){
