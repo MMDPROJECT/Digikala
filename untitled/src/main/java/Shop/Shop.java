@@ -50,6 +50,7 @@ import Shopping.WalletReq;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.UUID;
@@ -81,6 +82,20 @@ public class Shop {
         this.carts = new HashMap<>();
         this.walletRequests = new HashMap<>();
         this.currentAccount = null;
+        insert();
+    }
+
+    public Shop(String name, String webAddress, String supportPhoneNumber, double totalGained) {
+        this.name = name;
+        this.webAddress = webAddress;
+        this.supportPhoneNumber = supportPhoneNumber;
+        this.totalGained = totalGained;
+        this.accounts = new HashMap<>();
+        this.products = new HashMap<>();
+        this.orders = new HashMap<>();
+        this.carts = new HashMap<>();
+        this.walletRequests = new HashMap<>();
+        this.currentAccount = null;
     }
 
     //Getters and Setters
@@ -93,7 +108,7 @@ public class Shop {
         if (products.containsKey(id)) {
             return products.get(id);
         } else {
-            System.out.println("Product has not been found!\n");
+            System.out.println(id + "has not been found!\n");
         }
         return null;
     }
@@ -140,9 +155,9 @@ public class Shop {
 
     public void sellerSignUp(String companyName, String password) {
         if (this.doesAccountExist(companyName)) {
-            System.out.println("This Seller already exist!\n");
+            System.out.println("This account already exists!\n");
         } else {
-            Seller newSeller = new Seller(companyName, password);
+            Seller newSeller = new Seller(companyName, password);       //Will be added to sellers table in the database directly
             this.accounts.put(newSeller.getAccountID(), newSeller);
             System.out.println("Seller has been successfully added!\n");
         }
@@ -169,9 +184,9 @@ public class Shop {
 
     public void userSignUp(String username, String password, String email, String phoneNumber, String address) {
         if (this.doesAccountExist(username)) {
-            System.out.println("This user already exist!\n");
+            System.out.println("This account already exists!\n");
         } else {
-            User newUser = new User(username, password, email, phoneNumber, address);
+            User newUser = new User(username, password, email, phoneNumber, address);       //Will be added to users table in the database directly
             this.accounts.put(newUser.getAccountID(), newUser);
             System.out.println("User has been successfully added!\n");
         }
@@ -192,6 +207,7 @@ public class Shop {
                 }
             }
         }
+        System.out.println("Username or password is wrong!\n");
         return false;
     }
 
@@ -220,6 +236,7 @@ public class Shop {
                 }
             }
         }
+        System.out.println("Username or password is wrong!\n");
         return false;
     }
 
@@ -941,7 +958,7 @@ public class Shop {
                 order.updateStocks();
                 updateUserPurchasedProducts(orderID);
             } else {
-                System.out.println("Order can't be done, due to lack of money\n");
+                System.out.println("Order can't be done, due to lack of money!\n");
             }
         }
     }
@@ -966,11 +983,12 @@ public class Shop {
                 WalletReq walletReq = getWalletRequest(walletID);
                 walletReq.setConfirmed();
                 user.addWallet(walletReq.getValue());
+                System.out.println("Wallet request has been successfully accepted!\n");
             } else {
-                System.out.println("This wallet request has been confirmed earlier");
+                System.out.println("This wallet request has been confirmed earlier!\n");
             }
         } else {
-            System.out.println("Wallet request has not been found");
+            System.out.println("Wallet request has not been found!\n");
         }
     }
 
@@ -987,7 +1005,8 @@ public class Shop {
 
     public void submitAWalletRequest(WalletReq walletReq) {
         this.walletRequests.put(walletReq.getWalletID(), walletReq);
-        ((User) this.getCurrentAccount()).submitAWalletRequest(walletReq);
+        User currentUser = (User) this.getCurrentAccount();
+        currentUser.submitAWalletRequest(walletReq);
         System.out.println("Wallet request has been successfully submitted!\n");
     }
 
@@ -1001,7 +1020,7 @@ public class Shop {
         this.products.put(product.getProductID(), product);
         Seller currentSeller = (Seller) this.getCurrentAccount();
         currentSeller.addProductToSellerProducts(product);
-        currentSeller.updateSellerInDatabase();
+        System.out.println("Product has been successfully added!\n");
     }
 
     public void addProductToShopOnly(Product product){
@@ -1011,12 +1030,12 @@ public class Shop {
     public void removeProduct(UUID productID) {
         Seller currentSeller = (Seller) this.getCurrentAccount();
         if (currentSeller.isProductAvailable(productID)) {
+            Product product = this.getProduct(productID);
             this.products.remove(productID);
-            currentSeller.removeProduct(productID);
-            removeProductFromProductsTable(productID);
+            currentSeller.removeProduct(product);       //Will be removed from products table and available products of the seller automatically
             System.out.println("Product has been successfully removed!\n");
         } else {
-            System.out.println("Product doesn't exists\n");
+            System.out.println("Product doesn't exist among available products\n");
         }
     }
 
@@ -1053,6 +1072,12 @@ public class Shop {
         this.carts.put(cart.getCartID(), cart);
     }
 
+    public void addCart(String cartName){
+        ShoppingCart newShoppingCart = new ShoppingCart(cartName);
+        this.carts.put(newShoppingCart.getCartID(), newShoppingCart);
+        ((User)this.currentAccount).addCart(newShoppingCart);
+    }
+
     //Order - Related Methods
 
     public void updateUserPurchasedProducts(UUID orderID) {
@@ -1063,7 +1088,7 @@ public class Shop {
                 buyer.addPurchasedProduct(product);
             }
         }
-        System.out.println("User purchased product has been successfully updated!\n");
+//        System.out.println("User purchased product has been successfully updated!\n");
     }
 
     public void calcSellerCut(UUID orderID) {
@@ -1072,27 +1097,60 @@ public class Shop {
             Seller seller = (Seller) this.accounts.get(product.getSellerId());
             seller.addSellerCut(0.9 * product.getPrice() * order.getItemNumber().get(product.getProductID()));
         }
-        System.out.println("Sellers cut has been deposited!\n");
+//        System.out.println("Sellers cut has been deposited!\n");
     }
 
     public void addShopCut(double value) {
-        System.out.println("Shop's cut has been deposited!\n");
+//        System.out.println("Shop's cut has been deposited!\n");
         this.totalGained += value;
     }
 
     //Database - Related methods
 
-    public void removeProductFromProductsTable(UUID productID) {
-        String sql = "DELETE FROM Products WHERE ProductID = ?";
-
+    public void insert(){
+        String sql = "INSERT INTO Shop(name, webAddress, supportPhoneNumber, totalGained) VALUES(?,?,?,?)";
         try {
             Connection conn = connect();
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, productID.toString());
+            stmt.setString(1, name);
+            stmt.setString(2, webAddress);
+            stmt.setString(3, supportPhoneNumber);
+            stmt.setDouble(4, totalGained);
             stmt.executeUpdate();
-            System.out.println("Product has been successfully removed from Products table!\n");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
+    }
+
+    public void updateShopInDatabase(){
+        String sql = "UPDATE Shop SET totalGained = ?";
+        try {
+            Connection conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setDouble(1, totalGained);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Shop loadShopFromDatabase(){
+        String sql = "SELECT * FROM Shop";
+        try {
+            Connection conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()){
+                String name = rs.getString("name");
+                String webAddress = rs.getString("webAddress");
+                String supportPhoneNumber = rs.getString("supportPhoneNumber");
+                double totalGained = rs.getDouble("totalGained");
+                return new Shop(name, webAddress, supportPhoneNumber, totalGained);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 }

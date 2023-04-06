@@ -1,22 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/src/main/java/Accounts/Admin.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Accounts/Seller.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Accounts/User.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/Beauty/EyeBrowMakeUp.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/Beauty/EyeMakeUp.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/Books/Children_Book.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/Books/Fiction_Book.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/Books/Poetry_Book.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/Clothes/Coat.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/Clothes/Sweater.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/Electronics/Laptop.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/Electronics/SmartPhone.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/Electronics/SmartWatch.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/Home/AirConditioner.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/Home/Refrigerator.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/Home/TV.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/Product.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/Sports/Ball.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/Sports/Gloves.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/Sports/Rackets.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/Sports/Sports.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/SuperMarket/Dairy.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/SuperMarket/Drinks.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/SuperMarket/Proteins.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/Tools/Drill.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/Tools/SolderingSystem.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/Tools/Spanner.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/ToysAndGames/BoardGames.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/ToysAndGames/CardGames.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/ToysAndGames/Puzzles.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/Vehicles/Car.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Categories/Vehicles/Motorcycle.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Categories/Vehicles/Truck.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Shop/Shop.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/Shopping/Order.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Shopping/ShoppingCart.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/Shopping/WalletReq.java" dialect="GenericSQL" />
   </component>
 </project>

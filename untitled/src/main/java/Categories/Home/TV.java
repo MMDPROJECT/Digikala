@@ -39,6 +39,34 @@ public class TV extends Home {
 
     //Getters and Setters
 
+    public int getRefreshRate() {
+        return refreshRate;
+    }
+
+    public boolean isMountableOnWall() {
+        return mountableOnWall;
+    }
+
+    public boolean isHas3D() {
+        return has3D;
+    }
+
+    public boolean isHasStand() {
+        return hasStand;
+    }
+
+    @Override
+    public String toString() {
+        return "TV{" +
+                "refreshRate=" + refreshRate +
+                ", mountableOnWall=" + mountableOnWall +
+                ", has3D=" + has3D +
+                ", hasStand=" + hasStand +
+                "} " + super.toString();
+    }
+
+    //Database - Related methods
+
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasController, height, width, weight, refreshRate, mountableOnWall, has3D, hasStand, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -68,34 +96,6 @@ public class TV extends Home {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    public int getRefreshRate() {
-        return refreshRate;
-    }
-
-    public boolean isMountableOnWall() {
-        return mountableOnWall;
-    }
-
-    //Override
-
-    public boolean isHas3D() {
-        return has3D;
-    }
-
-    public boolean isHasStand() {
-        return hasStand;
-    }
-
-    @Override
-    public String toString() {
-        return "TV{" +
-                "refreshRate=" + refreshRate +
-                ", mountableOnWall=" + mountableOnWall +
-                ", has3D=" + has3D +
-                ", hasStand=" + hasStand +
-                "} " + super.toString();
     }
 
     public static void loadTVFromDatabase(ResultSet rs, Shop shop){

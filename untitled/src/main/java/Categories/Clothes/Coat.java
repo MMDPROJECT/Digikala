@@ -54,6 +54,8 @@ public class Coat extends Clothes {
                 "} " + super.toString();
     }
 
+    //Database - Related methods
+
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ClothSize, ClothGender, ClothMaterial, brand, ClothDurability, buttonNumber, hasCap, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -99,11 +101,11 @@ public class Coat extends Clothes {
             for (int i = 0; i < jsonArray.length(); i++) {
                 comments.add(jsonArray.getString(i));
             }
-            ClothSize size = ClothSize.valueOf(rs.getString("size").toUpperCase());
-            ClothGender gender = ClothGender.valueOf(rs.getString("gender").toUpperCase());
-            ClothMaterial material = ClothMaterial.valueOf(rs.getString("material").toUpperCase());
+            ClothSize size = ClothSize.valueOf(rs.getString("ClothSize").toUpperCase());
+            ClothGender gender = ClothGender.valueOf(rs.getString("ClothGender").toUpperCase());
+            ClothMaterial material = ClothMaterial.valueOf(rs.getString("ClothMaterial").toUpperCase());
             String brand = rs.getString("brand");
-            ClothDurability durability = ClothDurability.valueOf(rs.getString("durability").toUpperCase());
+            ClothDurability durability = ClothDurability.valueOf(rs.getString("ClothDurability").toUpperCase());
             int buttonNumber = rs.getInt("buttonNumber");
             boolean hasCap = Boolean.parseBoolean(rs.getString("hasCap"));
             Coat newCoat = new Coat(comments, productID, name, color, price, sellerID, quantity, size, gender, material, brand, durability, buttonNumber, hasCap);

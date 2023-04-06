@@ -40,6 +40,28 @@ public class Jean extends Clothes {
 
     //Getter and Setters
 
+    public double getHeight() {
+        return height;
+    }
+
+    public int getPocketNumber() {
+        return pocketNumber;
+    }
+
+    public boolean isHasZipper() {
+        return hasZipper;
+    }
+
+    @Override
+    public String toString() {
+        return "Jean{" +
+                "height=" + height +
+                ", pocketNumber=" + pocketNumber +
+                ", hasZipper=" + hasZipper +
+                "} " + super.toString();
+    }
+
+    //Database - Related methods
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ClothSize, ClothGender, ClothMaterial, brand, ClothDurability, height, pocketNumber, hasZipper, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -71,29 +93,6 @@ public class Jean extends Clothes {
         }
     }
 
-    public double getHeight() {
-        return height;
-    }
-
-    //Override
-
-    public int getPocketNumber() {
-        return pocketNumber;
-    }
-
-    public boolean isHasZipper() {
-        return hasZipper;
-    }
-
-    @Override
-    public String toString() {
-        return "Jean{" +
-                "height=" + height +
-                ", pocketNumber=" + pocketNumber +
-                ", hasZipper=" + hasZipper +
-                "} " + super.toString();
-    }
-
     public static void loadJeanFromDatabase(ResultSet rs, Shop shop){
         try {
             // loop through the result set
@@ -123,5 +122,4 @@ public class Jean extends Clothes {
             System.out.println(e.getMessage());
         }
     }
-
 }

@@ -65,38 +65,6 @@ public class User extends Account {
 
     //Getters and Setters
 
-    public void insert() {
-        String sql = "INSERT INTO Users(AccountID, username, password, email, currentCartID, phoneNumber, address, wallet, carts, orders, walletRequests, purchasedProducts) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
-
-        try {
-            Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, getAccountID().toString());
-            pstmt.setString(2, username);
-            pstmt.setString(3, password);
-            pstmt.setString(4, email);
-            pstmt.setString(5, null);
-            pstmt.setString(6, phoneNumber);
-            pstmt.setString(7, address);
-            pstmt.setDouble(8, wallet);
-            JSONObject cartsJson = new JSONObject();
-            JSONObject ordersJson = new JSONObject();
-            JSONObject walletRequestJson = new JSONObject();
-            JSONObject purchasedProductsJson = new JSONObject();
-            cartsJson.put("carts", carts.keySet());
-            ordersJson.put("orders", orders.keySet());
-            walletRequestJson.put("walletRequests", walletRequests.keySet());
-            purchasedProductsJson.put("purchasedProducts", purchasedProducts.keySet());
-            pstmt.setString(9, cartsJson.toString());
-            pstmt.setString(10, ordersJson.toString());
-            pstmt.setString(11, walletRequestJson.toString());
-            pstmt.setString(12, purchasedProductsJson.toString());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     public String getUsername() {
         return username;
     }
@@ -132,8 +100,8 @@ public class User extends Account {
     public void setCurrentCart(UUID cartID) {
         if (doesCartExist(cartID)) {
             this.currentCartID = cartID;
-            System.out.println("Cart has been successfully switched to " + cartID + "\n");
             updateUserInDatabase();
+            System.out.println("Cart has been successfully switched!\n");
         } else {
             System.out.println("Cart has not been found!\n");
         }
@@ -276,11 +244,10 @@ public class User extends Account {
 
     //Cart - Related methods
 
-    public void addCart(String cartName) {
-        ShoppingCart shoppingCart = new ShoppingCart(cartName);
-        this.carts.put(shoppingCart.getCartID(), shoppingCart);
-        System.out.println("Cart has been successfully added!\n");
+    public void addCart(ShoppingCart cart) {
+        this.carts.put(cart.getCartID(), cart);
         updateUserInDatabase();
+        System.out.println("Cart has been successfully added!\n");
     }
 
     //Existence - Related methods
@@ -314,7 +281,7 @@ public class User extends Account {
     }
 
     public void buyerPayOff(double value) {
-        System.out.println("Money has been successfully paid off!\n");
+//        System.out.println("Money has been successfully paid off!\n");
         this.wallet -= value;
         updateUserInDatabase();
     }
@@ -328,6 +295,7 @@ public class User extends Account {
 
     public void submitAWalletRequest(WalletReq walletReq) {
         this.walletRequests.put(walletReq.getWalletID(), walletReq);
+        updateUserInDatabase();
         System.out.println("Wallet request has been successfully sent!\n");
     }
 
@@ -363,6 +331,38 @@ public class User extends Account {
     }
 
     //Database - Related methods
+
+    public void insert() {
+        String sql = "INSERT INTO Users(AccountID, username, password, email, currentCartID, phoneNumber, address, wallet, carts, orders, walletRequests, purchasedProducts) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, getAccountID().toString());
+            pstmt.setString(2, username);
+            pstmt.setString(3, password);
+            pstmt.setString(4, email);
+            pstmt.setString(5, null);
+            pstmt.setString(6, phoneNumber);
+            pstmt.setString(7, address);
+            pstmt.setDouble(8, wallet);
+            JSONObject cartsJson = new JSONObject();
+            JSONObject ordersJson = new JSONObject();
+            JSONObject walletRequestJson = new JSONObject();
+            JSONObject purchasedProductsJson = new JSONObject();
+            cartsJson.put("carts", carts.keySet());
+            ordersJson.put("orders", orders.keySet());
+            walletRequestJson.put("walletRequests", walletRequests.keySet());
+            purchasedProductsJson.put("purchasedProducts", purchasedProducts.keySet());
+            pstmt.setString(9, cartsJson.toString());
+            pstmt.setString(10, ordersJson.toString());
+            pstmt.setString(11, walletRequestJson.toString());
+            pstmt.setString(12, purchasedProductsJson.toString());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     public void updateUserInDatabase() {
         String sql = "UPDATE Users SET password = ?, email = ?, currentCartID = ?, phoneNumber = ?, address = ?, wallet = ?, carts = ?, orders = ?, walletRequests = ?, purchasedProducts = ? WHERE AccountID = ?";
@@ -416,7 +416,13 @@ public class User extends Account {
                 HashMap<UUID, Product> purchasedProducts = new HashMap<>();
                 String password = rs.getString("password");
                 String email = rs.getString("email");
-                UUID currentCartID = UUID.fromString(rs.getString("currentCartID"));
+                UUID currentCartID;
+                if (rs.getString("currentCartID") != null){
+                    currentCartID = UUID.fromString(rs.getString("currentCartID"));
+                }
+                else {
+                    currentCartID = null;
+                }
                 String phoneNumber = rs.getString("phoneNumber");
                 String address = rs.getString("address");
                 double wallet = rs.getDouble("wallet");

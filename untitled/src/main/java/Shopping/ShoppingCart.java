@@ -3,11 +3,13 @@ package Shopping;
 import Categories.Product;
 import Shop.Shop;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static Connection.Connect.connect;
@@ -161,9 +163,9 @@ public class ShoppingCart {
         if (doesProductExist(id)) {
             this.products.remove(getProduct(id));
             this.itemNumber.remove(id);
-            System.out.println("Product has been successfully removed!\n");
             this.totalPrice = updateTotalPrice();
             updateCartInDatabase();
+            System.out.println("Product has been successfully removed!\n");
         } else {
             System.out.println("Product has not been found!\n");
         }
@@ -187,17 +189,6 @@ public class ShoppingCart {
             }
         }
         return null;
-    }
-
-    public void viewCart() {
-        if (products.size() == 0) {
-            System.out.println("Cart is empty!\n");
-        } else {
-            for (Product product : products) {
-                System.out.println(product + "Amount has been added to cart=" + itemNumber.get(product.getProductID()));
-            }
-            System.out.println("Total Price=" + totalPrice + "\n");
-        }
     }
 
     @Override
@@ -232,7 +223,7 @@ public class ShoppingCart {
                 throw new RuntimeException(e);
             }
             stmt.executeUpdate();
-            System.out.println("Cart has been successfully updated in Database!\n");
+//            System.out.println("Cart has been successfully updated in Database!\n");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -250,15 +241,23 @@ public class ShoppingCart {
                 String name = rs.getString("name");
                 UUID cartID = UUID.fromString(rs.getString("cartID"));
                 UUID userID = UUID.fromString(rs.getString("userID"));
-                ObjectMapper objectMapper = new ObjectMapper();
                 HashMap<UUID, Integer> itemNumber = new HashMap<>();
                 try {
-                    itemNumber = objectMapper.readValue(rs.getString("itemNumber"), HashMap.class) ; //A hashmap to store amount of each product that we have in the cart
-                } catch (JsonProcessingException jsonProcessingException){
+                    String itemNumberStr = rs.getString("itemNumber");
+                    if (itemNumberStr != null && !itemNumberStr.isEmpty()) {
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        Map<String, Integer> itemNumberMap = objectMapper.readValue(itemNumberStr, new TypeReference<Map<String, Integer>>() {});
+                        for (String key : itemNumberMap.keySet()) {
+                            UUID uuidKey = UUID.fromString(key);
+                            Integer value = itemNumberMap.get(key);
+                            itemNumber.put(uuidKey, value);
+                        }
+                    }
+                } catch (JsonProcessingException jsonProcessingException) {
                     jsonProcessingException.getMessage();
                 }
                 ArrayList<Product> products = new ArrayList<>();
-                for (UUID productID : itemNumber.keySet()){
+                for (UUID productID : itemNumber.keySet()) {
                     Product product = shop.getProduct(productID);
                     products.add(product);
                 }

@@ -132,6 +132,20 @@ public abstract class Product {
 
     //Database - Related methods
 
+    public void removeProductFromDatabase(){
+        String sql = "DELETE FROM Products WHERE ProductID = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, productID.toString());
+            stmt.executeUpdate();
+//            System.out.println("Product has been successfully removed from Products table!\n");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public void updateProductInDatabase() {
         String sql = "UPDATE Products SET quantity = ?, comments = ? WHERE ProductID = ?";
         try {

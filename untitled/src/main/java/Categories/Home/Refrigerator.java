@@ -52,8 +52,6 @@ public class Refrigerator extends Home {
         return refrigeratorType;
     }
 
-    //Override
-
     public boolean isHasDigitalControllingSystem() {
         return hasDigitalControllingSystem;
     }
@@ -68,6 +66,7 @@ public class Refrigerator extends Home {
                 "} " + super.toString();
     }
 
+    //Database - Related methods
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasController, height, width, weight, floorNumber, hasFridge, refrigeratorType, hasDigitalControllingSystem, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 

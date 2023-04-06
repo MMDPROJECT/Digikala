@@ -37,6 +37,24 @@ public class Sweater extends Clothes {
 
     //Getter and Setters
 
+    public int getButtonNumber() {
+        return buttonNumber;
+    }
+
+    public String getDesign() {
+        return design;
+    }
+
+    @Override
+    public String toString() {
+        return "Sweater{" +
+                "buttonNumber=" + buttonNumber +
+                ", design='" + design + '\'' +
+                "} " + super.toString();
+    }
+
+    //Database - Related methods
+
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ClothSize, ClothGender, ClothMaterial, brand, ClothDurability, buttonNumber, design, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -66,23 +84,7 @@ public class Sweater extends Clothes {
             System.out.println(e.getMessage());
         }
     }
-    //Override
 
-    public int getButtonNumber() {
-        return buttonNumber;
-    }
-
-    public String getDesign() {
-        return design;
-    }
-
-    @Override
-    public String toString() {
-        return "Sweater{" +
-                "buttonNumber=" + buttonNumber +
-                ", design='" + design + '\'' +
-                "} " + super.toString();
-    }
     public static void loadSweaterFromDatabase(ResultSet rs, Shop shop){
         try {
             // loop through the result set
@@ -111,5 +113,4 @@ public class Sweater extends Clothes {
             System.out.println(e.getMessage());
         }
     }
-
 }

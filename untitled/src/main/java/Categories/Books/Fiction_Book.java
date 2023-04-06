@@ -40,8 +40,6 @@ public class Fiction_Book extends Books {
         return tone;
     }
 
-    //Overrides
-
     //Fiction-Book - Related Functions
     public void showCharacters() {
         if (this.characters.size() == 0) {
@@ -65,6 +63,8 @@ public class Fiction_Book extends Books {
                 ", tone=" + tone +
                 "} " + super.toString();
     }
+
+    //Database - Related methods
 
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, ISBN, pageNumbers, author, language, tone, characters, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";

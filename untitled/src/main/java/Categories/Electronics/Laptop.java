@@ -99,8 +99,20 @@ public class Laptop extends Electronics {
                 "} " + super.toString();
     }
 
+    //Database - Related methods
+
+    /*
+    private final String webcamModel;
+    private final String CPU;
+    private final String GPU;
+    private final int fanNumber;
+    private final boolean hasKeyboardLight;
+    private final boolean hasFingerPrint;
+    private final String keyboardLanguage;
+    private final int portNumber;
+     */
     public void insert() {
-        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, brand, model, OS, screenSize, batteryCapacity, hasHeartRateTracker, hasStepTracker, hasCaloricTracker, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, brand, model, OS, screenSize, batteryCapacity, webcamModel, CPU, GPU, fanNumber, hasKeyboardLight, hasFingerPrint, keyboardLanguage, portNumber, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             Connection conn = Connect.connect();
@@ -128,7 +140,7 @@ public class Laptop extends Electronics {
             pstmt.setString(18, Boolean.toString(hasFingerPrint));
             pstmt.setString(19, keyboardLanguage);
             pstmt.setInt(20, portNumber);
-            pstmt.setString(21, "SmartPhone");
+            pstmt.setString(21, "Laptop");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -169,5 +181,4 @@ public class Laptop extends Electronics {
             System.out.println(e.getMessage());
         }
     }
-
 }

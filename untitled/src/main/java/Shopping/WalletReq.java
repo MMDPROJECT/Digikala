@@ -1,40 +1,8 @@
 package Shopping;
 
-import Categories.Beauty.EyeBrowMakeUp;
-import Categories.Beauty.EyeMakeUp;
-import Categories.Books.Children_Book;
-import Categories.Books.Fiction_Book;
-import Categories.Books.Poetry_Book;
-import Categories.Clothes.Coat;
-import Categories.Clothes.Jean;
-import Categories.Clothes.Sweater;
-import Categories.Electronics.Laptop;
-import Categories.Electronics.SmartPhone;
-import Categories.Electronics.SmartWatch;
-import Categories.Home.AirConditioner;
-import Categories.Home.Refrigerator;
-import Categories.Home.TV;
-import Categories.Sports.Ball;
-import Categories.Sports.Gloves;
-import Categories.Sports.Rackets;
-import Categories.SuperMarket.Dairy;
-import Categories.SuperMarket.Drinks;
-import Categories.SuperMarket.Proteins;
-import Categories.Tools.Drill;
-import Categories.Tools.SolderingSystem;
-import Categories.Tools.Spanner;
-import Categories.ToysAndGames.BoardGames;
-import Categories.ToysAndGames.CardGames;
-import Categories.ToysAndGames.Puzzles;
-import Categories.Vehicles.Car;
-import Categories.Vehicles.Motorcycle;
-import Categories.Vehicles.Truck;
 import Shop.Shop;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.UUID;
 
 import static Connection.Connect.connect;
@@ -122,7 +90,7 @@ public class WalletReq {
             stmt.setString(1, Boolean.toString(true));
             stmt.setString(2, walletID.toString());
             stmt.executeUpdate();
-            System.out.println("Wallet has been confirmed in the database!\n");
+//            System.out.println("Wallet has been confirmed in the database!\n");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

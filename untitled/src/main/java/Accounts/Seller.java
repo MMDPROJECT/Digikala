@@ -44,27 +44,6 @@ public class Seller extends Account {
 
     //Getters and Setters
 
-    public void insert() {
-        String sql = "INSERT INTO Sellers(AccountID, companyName, password, availableProducts, wallet, isAuthorized) VALUES(?,?,?,?,?,?)";
-
-        try {
-            Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, getAccountID().toString());
-            pstmt.setString(2, companyName);
-            pstmt.setString(3, password);
-            JSONObject jsonProducts = new JSONObject();
-            jsonProducts.put("availableProducts", new JSONArray(this.availableProducts.keySet()));
-            String availableProducts = jsonProducts.toString();
-            pstmt.setString(4, availableProducts);
-            pstmt.setDouble(5, wallet);
-            pstmt.setString(6, Boolean.toString(isAuthorized));
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     @Override
     public String getUsername() {
         return this.companyName;
@@ -105,20 +84,21 @@ public class Seller extends Account {
 
     public void addProductToSellerProducts(Product product) {
         this.availableProducts.put(product.getProductID(), product);
-        System.out.println("Product has been successfully added!\n");
+        updateSellerInDatabase();
     }
 
-    public void removeProduct(UUID id) {
-        this.availableProducts.remove(id);
+    public void removeProduct(Product product) {
+        this.availableProducts.remove(product.getProductID());
+        product.removeProductFromDatabase();
         updateSellerInDatabase();
     }
 
     public void viewAvailableProducts() {
-        if (availableProducts.size() == 0) {
+        if (this.availableProducts.size() == 0) {
             System.out.println("No product has been added yet!\n");
         } else {
-            for (UUID id : availableProducts.keySet()) {
-                System.out.println(availableProducts.get(id));
+            for (UUID id : this.availableProducts.keySet()) {
+                System.out.println(this.availableProducts.get(id));
             }
         }
     }
@@ -138,6 +118,27 @@ public class Seller extends Account {
     }
 
     //Database - Related methods
+
+    public void insert() {
+        String sql = "INSERT INTO Sellers(AccountID, companyName, password, availableProducts, wallet, isAuthorized) VALUES(?,?,?,?,?,?)";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, getAccountID().toString());
+            pstmt.setString(2, companyName);
+            pstmt.setString(3, password);
+            JSONObject jsonProducts = new JSONObject();
+            jsonProducts.put("availableProducts", new JSONArray(this.availableProducts.keySet()));
+            String availableProducts = jsonProducts.toString();
+            pstmt.setString(4, availableProducts);
+            pstmt.setDouble(5, wallet);
+            pstmt.setString(6, Boolean.toString(isAuthorized));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     public void updateSellerInDatabase() {
         String sql = "UPDATE Sellers SET availableProducts = ?, wallet = ?, isAuthorized = ? WHERE AccountID = ?";

@@ -34,6 +34,24 @@ public class Dairy extends SuperMarket {
 
     //Getters and Setters
 
+    public boolean isDomestic() {
+        return isDomestic;
+    }
+
+    public DairyGroups getDairyGroup() {
+        return dairyGroup;
+    }
+
+    @Override
+    public String toString() {
+        return "Dairy{" +
+                "isDomestic=" + isDomestic +
+                ", dairyGroup=" + dairyGroup +
+                "} " + super.toString();
+    }
+
+    //Database - Related methods
+
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasBox, weight, salt, calories, fat, sugar, IngredientItems, CountryOfOrigin, isDomestic, dairyGroup, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -70,24 +88,6 @@ public class Dairy extends SuperMarket {
         }
     }
 
-    public boolean isDomestic() {
-        return isDomestic;
-    }
-
-    //Override
-
-    public DairyGroups getDairyGroup() {
-        return dairyGroup;
-    }
-
-    @Override
-    public String toString() {
-        return "Dairy{" +
-                "isDomestic=" + isDomestic +
-                ", dairyGroup=" + dairyGroup +
-                "} " + super.toString();
-    }
-
     public static void loadDairyFromDatabase(ResultSet rs, Shop shop){
         try {
             // loop through the result set
@@ -110,10 +110,10 @@ public class Dairy extends SuperMarket {
             double fat = rs.getDouble("fat");
             double sugar = rs.getDouble("sugar");
             JSONObject jsonIngredientItems = new JSONObject(rs.getString("IngredientItems"));
-            JSONArray jsonArray2 = jsonComments.getJSONArray("IngredientItems");
+            JSONArray jsonArray2 = jsonIngredientItems.getJSONArray("IngredientItems");
             ArrayList<String> IngredientItems = new ArrayList<>();
-            for (int i = 0; i < jsonArray.length(); i++) {
-                IngredientItems.add(jsonArray.getString(i));
+            for (int i = 0; i < jsonArray2.length(); i++) {
+                IngredientItems.add(jsonArray2.getString(i));
             }
             String CountryOfOrigin = rs.getString("CountryOfOrigin");
             boolean isDomestic = Boolean.parseBoolean(rs.getString("isDomestic"));

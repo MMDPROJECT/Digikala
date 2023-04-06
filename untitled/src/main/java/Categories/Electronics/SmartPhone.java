@@ -75,8 +75,6 @@ public class SmartPhone extends Electronics {
         return displayResolution;
     }
 
-    //Override
-
     public String getRingTone() {
         return ringTone;
     }
@@ -98,6 +96,8 @@ public class SmartPhone extends Electronics {
                 ", CPU='" + CPU + '\'' +
                 "} " + super.toString();
     }
+
+    //Database - Related methods
 
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, brand, model, OS, screenSize, batteryCapacity, hasHeartRateTracker, hasStepTracker, hasCaloricTracker, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";

@@ -3,6 +3,7 @@ package Shopping;
 import Categories.Product;
 import Shop.Shop;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.sql.*;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static Connection.Connect.connect;
@@ -43,29 +45,6 @@ public class Order extends ShoppingCart {
 
     //Getters and Setters
 
-    public void insert() {
-        String sql = "INSERT INTO Orders(date, dateTimeFormatter, buyerID, orderID, isConfirmed, itemNumber, totalPrice) VALUES(?,?,?,?,?,?,?)";
-
-        try {
-            Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, date.toString());
-            pstmt.setString(2, dateTimeFormatter.toString());
-            pstmt.setString(3, buyerID.toString());
-            pstmt.setString(4, orderID.toString());
-            pstmt.setString(5, Boolean.toString(isConfirmed));
-            ObjectMapper objectMapper = new ObjectMapper();
-            String json = objectMapper.writeValueAsString(getItemNumber());
-            pstmt.setString(6, json);
-            pstmt.setDouble(7, getTotalPrice());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public UUID getBuyer() {
         return buyerID;
     }
@@ -77,8 +56,6 @@ public class Order extends ShoppingCart {
     public boolean isConfirmed() {
         return isConfirmed;
     }
-
-    //Override
 
     public UUID getBuyerID() {
         return buyerID;
@@ -96,7 +73,6 @@ public class Order extends ShoppingCart {
                 ", isConfirmed=" + isConfirmed +
                 "} " + super.toString();
     }
-
 
     //Order - Related methods
 
@@ -129,6 +105,29 @@ public class Order extends ShoppingCart {
 
     //Database - Related methods
 
+    public void insert() {
+        String sql = "INSERT INTO Orders(date, dateTimeFormatter, buyerID, orderID, isConfirmed, itemNumber, totalPrice) VALUES(?,?,?,?,?,?,?)";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, date.toString());
+            pstmt.setString(2, dateTimeFormatter.toString());
+            pstmt.setString(3, buyerID.toString());
+            pstmt.setString(4, orderID.toString());
+            pstmt.setString(5, Boolean.toString(isConfirmed));
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(getItemNumber());
+            pstmt.setString(6, json);
+            pstmt.setDouble(7, getTotalPrice());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void updateOrderInDatabase() {
         String sql = "UPDATE Orders SET isConfirmed = ?, itemNumber = ?, totalPrice = ? WHERE orderID = ?";
 
@@ -142,7 +141,7 @@ public class Order extends ShoppingCart {
             stmt.setDouble(3, getTotalPrice());
             stmt.setString(4, orderID.toString());
             stmt.executeUpdate();
-            System.out.println("Order has been successfully updated in Database!\n");
+//            System.out.println("Order has been successfully updated in Database!\n");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } catch (JsonProcessingException e) {
@@ -167,12 +166,21 @@ public class Order extends ShoppingCart {
                 ObjectMapper objectMapper = new ObjectMapper();
                 HashMap<UUID, Integer> itemNumber = new HashMap<>();
                 try {
-                    itemNumber = objectMapper.readValue(rs.getString("itemNumber"), HashMap.class) ; //A hashmap to store amount of each product that we have in the cart
-                } catch (JsonProcessingException jsonProcessingException){
+                    String itemNumberStr = rs.getString("itemNumber");
+                    if (itemNumberStr != null && !itemNumberStr.isEmpty()) {
+                        ObjectMapper objectMapper1 = new ObjectMapper();
+                        Map<String, Integer> itemNumberMap = objectMapper1.readValue(itemNumberStr, new TypeReference<Map<String, Integer>>() {});
+                        for (String key : itemNumberMap.keySet()) {
+                            UUID uuidKey = UUID.fromString(key);
+                            Integer value = itemNumberMap.get(key);
+                            itemNumber.put(uuidKey, value);
+                        }
+                    }
+                } catch (JsonProcessingException jsonProcessingException) {
                     jsonProcessingException.getMessage();
                 }
                 ArrayList<Product> products = new ArrayList<>();
-                for (UUID productID : itemNumber.keySet()){
+                for (UUID productID : itemNumber.keySet()) {
                     products.add(shop.getProduct(productID));
                 }
                 double totalPrice = rs.getDouble("totalPrice");

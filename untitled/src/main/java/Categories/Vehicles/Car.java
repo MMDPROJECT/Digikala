@@ -36,6 +36,29 @@ public class Car extends Vehicles {
 
     //Getters and Setters
 
+    public boolean isRightSteering() {
+        return isRightSteering;
+    }
+
+    public String getSpeakerModel() {
+        return speakerModel;
+    }
+
+    public int getSeatNumber() {
+        return seatNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "isRightSteering=" + isRightSteering +
+                ", speakerModel='" + speakerModel + '\'' +
+                ", seatNumber=" + seatNumber +
+                "} " + super.toString();
+    }
+
+    //Database - Related methods
+
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, horsePower, engineModel, wheelNumber, isAutomatic, maxSpeed, brand, model, isRightSteering, speakerModel, seatNumber, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -68,29 +91,6 @@ public class Car extends Vehicles {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    public boolean isRightSteering() {
-        return isRightSteering;
-    }
-
-    public String getSpeakerModel() {
-        return speakerModel;
-    }
-
-    //Override
-
-    public int getSeatNumber() {
-        return seatNumber;
-    }
-
-    @Override
-    public String toString() {
-        return "Car{" +
-                "isRightSteering=" + isRightSteering +
-                ", speakerModel='" + speakerModel + '\'' +
-                ", seatNumber=" + seatNumber +
-                "} " + super.toString();
     }
 
     public static void loadCarFromDatabase(ResultSet rs, Shop shop){

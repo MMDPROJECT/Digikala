@@ -70,6 +70,8 @@ public class Rackets extends Sports {
                 "} " + super.toString();
     }
 
+    //Database - Related methods
+
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, sportType, brand, length, width, durability, Shape, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 

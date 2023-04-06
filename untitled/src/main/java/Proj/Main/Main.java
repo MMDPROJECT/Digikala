@@ -62,17 +62,8 @@ public class Main {
     public static final Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
-
-        Shop shop = new Shop("Digikala", "Digikala.com", "34250955");
-//        Admin admin1 = new Admin("MMDPROJECT", "1382", "MMDPROJECT@gmail.com");
-//        Seller seller = new Seller("Apple", "1900");
-//        User user1 = new User("Hossein", "1381", "hossein.com", "09170861077", "Bushehr");
-//        Product product = new Ball("Nike Premier League Academy Ball 2023", "white and red-blue combined", 2, 100.5, seller.getAccountID(), 0.5, "Ball", "Nike", BallSize.ADULT, BallMaterial.PU, true);
-//        shop.sellerSignUp(seller);
-//        shop.adminSignUp(admin1);
-//        shop.userSignUp(user1);
-//        shop.setCurrentAccount(seller);
-//        shop.addProductToShop(product);
+        System.out.println("Loading Database");
+        Shop shop = Shop.loadShopFromDatabase();
         Product.loadProductsFromDatabase(shop);
         WalletReq.loadWalletRequestsFromDatabase(shop);
         Admin.loadAdminsFromDatabase(shop);
@@ -80,6 +71,7 @@ public class Main {
         ShoppingCart.loadShoppingCartsFromDatabase(shop);
         Order.loadOrdersFromDatabase(shop);
         User.loadUsersFromDatabase(shop);
+        //Opening main menu...
         runMenu(shop);
     }
 
@@ -91,8 +83,7 @@ public class Main {
                 3- Login as a Seller
                 4- Login as a User
                 5- Login as an Admin
-                6- Logout
-                7- Exit
+                6- Exit the program
                 """);
         int optionMenu = input.nextInt();
         input.nextLine();
@@ -135,7 +126,6 @@ public class Main {
                 if (shop.userLogin(username, password)) {
                     userPage(shop);
                 } else {
-                    System.out.println("Username or password is wrong!\n");
                     runMenu(shop);
                 }
             }
@@ -147,17 +137,12 @@ public class Main {
                 if (shop.adminLogin(username, password)) {
                     adminPage(shop);
                 } else {
-                    System.out.println("Username or password is wrong!\n");
                     runMenu(shop);
                 }
             }
             case 6 -> {
-                //Logout
-                shop.logOut();
-                runMenu(shop);
-            }
-            case 7 -> {
-                //Exit
+                //Exit the program
+                return;
             }
             default -> throw new IllegalStateException("Unexpected value: " + optionMenu);
         }
@@ -189,8 +174,10 @@ public class Main {
                 \t- Update Email
                 \t- Update Phone number
                 \t- Update Address
+                
+                6- Logout
                                 
-                6- Back to Main Menu
+                7- Back to Main Menu
                 """);
         int optionMenu = input.nextInt();
         input.nextLine();
@@ -465,7 +452,7 @@ public class Main {
                     case 1 -> {
                         System.out.println("Enter : - Name of the cart\n");
                         String cartName = input.nextLine();
-                        currentUser.addCart(cartName);
+                        shop.addCart(cartName);
                     }
                     case 2 -> {
                         System.out.println("Enter : - The ID of the cart you want to switch to\n");
@@ -560,9 +547,8 @@ public class Main {
                         ShoppingCart cart = shop.getCart(UUID.fromString(cartID));
                         if (!cart.hasCheckout()) {
                             cart.checkoutCart();
-                            Order newOrder = new Order(cart.getName(), cart.getProducts(), cart.getItemNumber(), cart.getTotalPrice(), shop.getCurrentAccount().getAccountID());
-                            currentUser.updateUserInDatabase();
-                            shop.addOrder(newOrder);
+                            Order newOrder = new Order(cart.getName(), cart.getProducts(), cart.getItemNumber(), cart.getTotalPrice(), shop.getCurrentAccount().getAccountID());        //Will be added to the Orders table in the database automatically
+                            shop.addOrder(newOrder);        //Will be added to User orders column in the database automatically
                         } else {
                             System.out.println("Cart has been checkout earlier!\n");
                         }
@@ -589,9 +575,8 @@ public class Main {
                         System.out.println("Enter : - Wallet value\n");
                         double value = input.nextDouble();
                         input.nextLine();
-                        WalletReq newWalletReq = new WalletReq(value, shop.getCurrentAccount().getAccountID());
-                        shop.submitAWalletRequest(newWalletReq);
-                        currentUser.updateUserInDatabase();
+                        WalletReq newWalletReq = new WalletReq(value, currentUser.getAccountID());      //Will be added to the WalletRequest table in the database automatically
+                        shop.submitAWalletRequest(newWalletReq);        //Will be added to the WalletRequests column of the user automatically
                     }
                     case 2 -> {
                         System.out.println("""
@@ -601,12 +586,12 @@ public class Main {
                         optionMenu = input.nextInt();
                         input.nextLine();
                         switch (optionMenu) {
-                            case 1 -> ((User) shop.getCurrentAccount()).showConfirmedWalletRequests();
-                            case 2 -> ((User) shop.getCurrentAccount()).showUnconfirmedWalletRequests();
+                            case 1 -> currentUser.showConfirmedWalletRequests();
+                            case 2 -> currentUser.showUnconfirmedWalletRequests();
                             default -> throw new IllegalStateException("Unexpected value: " + optionMenu);
                         }
                     }
-                    case 3 -> ((User) shop.getCurrentAccount()).viewWallet();
+                    case 3 -> currentUser.viewWallet();
                     default -> throw new IllegalStateException("Unexpected value: " + optionMenu);
                 }
             }
@@ -652,6 +637,11 @@ public class Main {
                 }
             }
             case 6 -> {
+                //Logout
+                shop.logOut();
+                runMenu(shop);
+            }
+            case 7 -> {
                 //Back to Main Menu
                 runMenu(shop);
                 return;
@@ -664,7 +654,7 @@ public class Main {
     public static void sellerPage(Shop shop) {
         System.out.println("------------------------------ " + shop.getCurrentAccount().getUsername().toUpperCase() + " ------------------------------");
         if (!((Seller) shop.getCurrentAccount()).isAuthorized()) {
-            System.out.println("Seller has not been authorized yet!\n");
+            System.out.println("\n\tSeller has not been authorized yet!\n");
             runMenu(shop);
         } else {
             Seller currentSeller = (Seller) shop.getCurrentAccount();
@@ -675,8 +665,10 @@ public class Main {
                     \t- Show all Available Products
                                                
                     2- View Wallet
+                    
+                    3- Logout
                                                
-                    3- Back to Main Menu
+                    4- Back to Main Menu
                     """);
             int optionMenu = input.nextInt();
             input.nextLine();
@@ -756,8 +748,8 @@ public class Main {
                                             String brand = input.nextLine();
                                             int longevity = input.nextInt();
                                             input.nextLine();
-                                            EyeBrowMakeUp eyeBrowMakeUp = new EyeBrowMakeUp(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), MatterState.valueOf(matterState.toUpperCase()), Boolean.parseBoolean(hasBox), PenType.valueOf(penType.toUpperCase()), Boolean.parseBoolean(hasWaterResistance), brand, longevity);
-                                            shop.addProductToShop(eyeBrowMakeUp);
+                                            EyeBrowMakeUp eyeBrowMakeUp = new EyeBrowMakeUp(name, color, quantity, price, currentSeller.getAccountID(), MatterState.valueOf(matterState.toUpperCase()), Boolean.parseBoolean(hasBox), PenType.valueOf(penType.toUpperCase()), Boolean.parseBoolean(hasWaterResistance), brand, longevity);       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(eyeBrowMakeUp);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -774,8 +766,8 @@ public class Main {
                                             String brand = input.nextLine();
                                             int longevity = input.nextInt();
                                             input.nextLine();
-                                            EyeBrowMakeUp eyeMakeUp = new EyeBrowMakeUp(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), MatterState.valueOf(matterState.toUpperCase()), Boolean.parseBoolean(hasBox), PenType.valueOf(penType.toUpperCase()), Boolean.parseBoolean(hasWaterResistance), brand, longevity);
-                                            shop.addProductToShop(eyeMakeUp);
+                                            EyeBrowMakeUp eyeMakeUp = new EyeBrowMakeUp(name, color, quantity, price, currentSeller.getAccountID(), MatterState.valueOf(matterState.toUpperCase()), Boolean.parseBoolean(hasBox), PenType.valueOf(penType.toUpperCase()), Boolean.parseBoolean(hasWaterResistance), brand, longevity);       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(eyeMakeUp);       //Will be added to seller available products column in the database automatically
                                         }
                                     }
                                 }
@@ -818,8 +810,8 @@ public class Main {
                                                     break;
                                                 }
                                             }
-                                            Fiction_Book fiction_book = new Fiction_Book(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), ISBN, pageNumber, author, language, characters, tone);
-                                            shop.addProductToShop(fiction_book);
+                                            Fiction_Book fiction_book = new Fiction_Book(name, color, quantity, price, currentSeller.getAccountID(), ISBN, pageNumber, author, language, characters, tone);       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(fiction_book);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -828,8 +820,8 @@ public class Main {
                                                     """);
                                             String readingLevel = input.nextLine();
                                             String theme = input.nextLine();
-                                            Children_Book children_book = new Children_Book(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), ISBN, pageNumber, author, language, readingLevel, theme);
-                                            shop.addProductToShop(children_book);
+                                            Children_Book children_book = new Children_Book(name, color, quantity, price, currentSeller.getAccountID(), ISBN, pageNumber, author, language, readingLevel, theme);       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(children_book);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 3 -> {
                                             System.out.println("""
@@ -839,8 +831,8 @@ public class Main {
                                             String poeticForm = input.nextLine();
                                             int verseNumber = input.nextInt();
                                             input.nextLine();
-                                            Poetry_Book poetry_book = new Poetry_Book(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), ISBN, pageNumber, author, language, poeticForm, verseNumber);
-                                            shop.addProductToShop(poetry_book);
+                                            Poetry_Book poetry_book = new Poetry_Book(name, color, quantity, price, currentSeller.getAccountID(), ISBN, pageNumber, author, language, poeticForm, verseNumber);       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(poetry_book);       //Will be added to seller available products column in the database automatically
                                         }
                                     }
                                 }
@@ -883,8 +875,8 @@ public class Main {
                                             int buttonNumber = input.nextInt();
                                             input.nextLine();
                                             String hasCap = input.nextLine();
-                                            Coat coat = new Coat(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), ClothSize.valueOf(size.toUpperCase()), ClothGender.valueOf(clothGender.toUpperCase()), ClothMaterial.valueOf(clothMaterial.toUpperCase()), brand, ClothDurability.valueOf(durability.toUpperCase()), buttonNumber, Boolean.parseBoolean(hasCap));
-                                            shop.addProductToShop(coat);
+                                            Coat coat = new Coat(name, color, quantity, price, currentSeller.getAccountID(), ClothSize.valueOf(size.toUpperCase()), ClothGender.valueOf(clothGender.toUpperCase()), ClothMaterial.valueOf(clothMaterial.toUpperCase()), brand, ClothDurability.valueOf(durability.toUpperCase()), buttonNumber, Boolean.parseBoolean(hasCap));       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(coat);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -899,8 +891,8 @@ public class Main {
                                             int pocketNumber = input.nextInt();
                                             input.nextLine();
                                             String hasZipper = input.nextLine();
-                                            Jean jean = new Jean(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), ClothSize.valueOf(size.toUpperCase()), ClothGender.valueOf(clothGender.toUpperCase()), ClothMaterial.valueOf(clothMaterial.toUpperCase()), brand, ClothDurability.valueOf(durability.toUpperCase()), height, pocketNumber, Boolean.parseBoolean(hasZipper));
-                                            shop.addProductToShop(jean);
+                                            Jean jean = new Jean(name, color, quantity, price, currentSeller.getAccountID(), ClothSize.valueOf(size.toUpperCase()), ClothGender.valueOf(clothGender.toUpperCase()), ClothMaterial.valueOf(clothMaterial.toUpperCase()), brand, ClothDurability.valueOf(durability.toUpperCase()), height, pocketNumber, Boolean.parseBoolean(hasZipper));       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(jean);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 3 -> {
                                             System.out.println("""
@@ -911,8 +903,8 @@ public class Main {
                                             int buttonNumber = input.nextInt();
                                             input.nextLine();
                                             String design = input.nextLine();
-                                            Sweater sweater = new Sweater(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), ClothSize.valueOf(size.toUpperCase()), ClothGender.valueOf(clothGender.toUpperCase()), ClothMaterial.valueOf(clothMaterial.toUpperCase()), brand, ClothDurability.valueOf(durability.toUpperCase()), buttonNumber, design);
-                                            shop.addProductToShop(sweater);
+                                            Sweater sweater = new Sweater(name, color, quantity, price, currentSeller.getAccountID(), ClothSize.valueOf(size.toUpperCase()), ClothGender.valueOf(clothGender.toUpperCase()), ClothMaterial.valueOf(clothMaterial.toUpperCase()), brand, ClothDurability.valueOf(durability.toUpperCase()), buttonNumber, design);       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(sweater);       //Will be added to seller available products column in the database automatically
                                         }
                                     }
                                 }
@@ -965,8 +957,8 @@ public class Main {
                                             String keyboardLanguage = input.nextLine();
                                             int portNumber = input.nextInt();
                                             input.nextLine();
-                                            Laptop laptop = new Laptop(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), brand, model, OS, screenSize, batteryCapacity, webcamModel, CPU, GPU, fanNumber, Boolean.parseBoolean(hasKeyboardLight), Boolean.parseBoolean(hasFingerPrint), keyboardLanguage, portNumber);
-                                            shop.addProductToShop(laptop);
+                                            Laptop laptop = new Laptop(name, color, quantity, price, currentSeller.getAccountID(), brand, model, OS, screenSize, batteryCapacity, webcamModel, CPU, GPU, fanNumber, Boolean.parseBoolean(hasKeyboardLight), Boolean.parseBoolean(hasFingerPrint), keyboardLanguage, portNumber);       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(laptop);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -993,8 +985,8 @@ public class Main {
                                             String displayResolution = input.nextLine();
                                             String ringTone = input.nextLine();
                                             String CPU = input.nextLine();
-                                            SmartPhone smartPhone = new SmartPhone(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), brand, model, OS, screenSize, batteryCapacity, rearCameraQuality, selfieCameraQuality, cameraNumber, storage, OSVersion, displayResolution, ringTone, CPU);
-                                            shop.addProductToShop(smartPhone);
+                                            SmartPhone smartPhone = new SmartPhone(name, color, quantity, price, currentSeller.getAccountID(), brand, model, OS, screenSize, batteryCapacity, rearCameraQuality, selfieCameraQuality, cameraNumber, storage, OSVersion, displayResolution, ringTone, CPU);       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(smartPhone);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 3 -> {
                                             System.out.println("""
@@ -1011,8 +1003,8 @@ public class Main {
                                             String hasHeartRateTracker = input.nextLine();
                                             String hasStepTracker = input.nextLine();
                                             String hasCaloricTracker = input.nextLine();
-                                            SmartWatch smartWatch = new SmartWatch(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), brand, model, OS, screenSize, batteryCapacity, processor, Boolean.parseBoolean(hasHeartRateTracker), Boolean.parseBoolean(hasStepTracker), Boolean.parseBoolean(hasCaloricTracker));
-                                            shop.addProductToShop(smartWatch);
+                                            SmartWatch smartWatch = new SmartWatch(name, color, quantity, price, currentSeller.getAccountID(), brand, model, OS, screenSize, batteryCapacity, processor, Boolean.parseBoolean(hasHeartRateTracker), Boolean.parseBoolean(hasStepTracker), Boolean.parseBoolean(hasCaloricTracker));       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(smartWatch);       //Will be added to seller available products column in the database automatically
                                         }
                                     }
                                 }
@@ -1063,8 +1055,8 @@ public class Main {
                                             input.nextLine();
                                             String hasRemoteControl = input.nextLine();
                                             String hasTimer = input.nextLine();
-                                            AirConditioner airConditioner = new AirConditioner(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasController), height, width, weight, coolingCapacity, energyEfficiency, airFilter, fanNumber, Boolean.parseBoolean(hasRemoteControl), Boolean.parseBoolean(hasTimer));
-                                            shop.addProductToShop(airConditioner);
+                                            AirConditioner airConditioner = new AirConditioner(name, color, quantity, price, currentSeller.getAccountID(), Boolean.parseBoolean(hasController), height, width, weight, coolingCapacity, energyEfficiency, airFilter, fanNumber, Boolean.parseBoolean(hasRemoteControl), Boolean.parseBoolean(hasTimer));       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(airConditioner);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -1073,7 +1065,7 @@ public class Main {
                                                     10- Does it have Fridge?
                                                     \t- true, false
                                                     11- Refrigerator Type
-                                                    \t- Side By Side, French Door, Compact, Wine
+                                                    \t- SideBySide, FrenchDoor, Compact, Wine
                                                     12- Does it have Digital Controlling System?
                                                     \t- true, false
                                                     """);
@@ -1082,8 +1074,8 @@ public class Main {
                                             String hasFridge = input.nextLine();
                                             String Refrigerator_type = input.nextLine();
                                             String hasDigitalController = input.nextLine();
-                                            Refrigerator refrigerator = new Refrigerator(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasController), height, width, height, floorNumber, Boolean.parseBoolean(hasFridge), RefrigeratorType.valueOf(Refrigerator_type.toUpperCase()), Boolean.parseBoolean(hasDigitalController));
-                                            shop.addProductToShop(refrigerator);
+                                            Refrigerator refrigerator = new Refrigerator(name, color, quantity, price, currentSeller.getAccountID(), Boolean.parseBoolean(hasController), height, width, height, floorNumber, Boolean.parseBoolean(hasFridge), RefrigeratorType.valueOf(Refrigerator_type.toUpperCase()), Boolean.parseBoolean(hasDigitalController));       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(refrigerator);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 3 -> {
                                             System.out.println("""
@@ -1101,8 +1093,8 @@ public class Main {
                                             String mountableOnWall = input.nextLine();
                                             String has3D = input.nextLine();
                                             String hasStand = input.nextLine();
-                                            TV tv = new TV(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasController), height, width, weight, refreshRate, Boolean.parseBoolean(mountableOnWall), Boolean.parseBoolean(has3D), Boolean.parseBoolean(hasStand));
-                                            shop.addProductToShop(tv);
+                                            TV tv = new TV(name, color, quantity, price, currentSeller.getAccountID(), Boolean.parseBoolean(hasController), height, width, weight, refreshRate, Boolean.parseBoolean(mountableOnWall), Boolean.parseBoolean(has3D), Boolean.parseBoolean(hasStand));       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(tv);       //Will be added to seller available products column in the database automatically
                                         }
                                     }
                                 }
@@ -1140,8 +1132,8 @@ public class Main {
                                             String ball_size = input.nextLine();
                                             String ball_material = input.nextLine();
                                             String isRightHandOriented = input.nextLine();
-                                            Ball ball = new Ball(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, sportType, brand, BallSize.valueOf(ball_size.toUpperCase()), BallMaterial.valueOf(ball_material.toUpperCase()), Boolean.parseBoolean(isRightHandOriented));
-                                            shop.addProductToShop(ball);
+                                            Ball ball = new Ball(name, color, quantity, price, currentSeller.getAccountID(), weight, sportType, brand, BallSize.valueOf(ball_size.toUpperCase()), BallMaterial.valueOf(ball_material.toUpperCase()), Boolean.parseBoolean(isRightHandOriented));       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(ball);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -1159,8 +1151,8 @@ public class Main {
                                             String gloveSize = input.nextLine();
                                             String gloveUser = input.nextLine();
                                             String gloveStyle = input.nextLine();
-                                            Gloves glove = new Gloves(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, sportType, brand, GloveMaterial.valueOf(gloveMaterial.toUpperCase()), GloveSize.valueOf(gloveSize.toUpperCase()), GloveUser.valueOf(gloveUser.toUpperCase()), GloveStyle.valueOf(gloveStyle.toUpperCase()));
-                                            shop.addProductToShop(glove);
+                                            Gloves glove = new Gloves(name, color, quantity, price, currentSeller.getAccountID(), weight, sportType, brand, GloveMaterial.valueOf(gloveMaterial.toUpperCase()), GloveSize.valueOf(gloveSize.toUpperCase()), GloveUser.valueOf(gloveUser.toUpperCase()), GloveStyle.valueOf(gloveStyle.toUpperCase()));       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(glove);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 3 -> {
                                             System.out.println("""
@@ -1177,8 +1169,8 @@ public class Main {
                                             input.nextLine();
                                             String racketDurability = input.nextLine();
                                             String shape = input.nextLine();
-                                            Rackets racket = new Rackets(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, sportType, brand, length, width, RacketDurability.valueOf(racketDurability.toUpperCase()), shape);
-                                            shop.addProductToShop(racket);
+                                            Rackets racket = new Rackets(name, color, quantity, price, currentSeller.getAccountID(), weight, sportType, brand, length, width, RacketDurability.valueOf(racketDurability.toUpperCase()), shape);       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(racket);       //Will be added to seller available products column in the database automatically
                                         }
                                     }
                                 }
@@ -1236,8 +1228,8 @@ public class Main {
                                                     """);
                                             String isDomestic = input.nextLine();
                                             String dairyGroup = input.nextLine();
-                                            Dairy dairyProduct = new Dairy(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, Boolean.parseBoolean(isDomestic), DairyGroups.valueOf(dairyGroup.toUpperCase()));
-                                            shop.addProductToShop(dairyProduct);
+                                            Dairy dairyProduct = new Dairy(name, color, quantity, price, currentSeller.getAccountID(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, Boolean.parseBoolean(isDomestic), DairyGroups.valueOf(dairyGroup.toUpperCase()));       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(dairyProduct);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -1254,8 +1246,8 @@ public class Main {
                                             double litters = input.nextDouble();
                                             input.nextLine();
                                             String size = input.nextLine();
-                                            Drinks drink = new Drinks(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, taste, Boolean.parseBoolean(isSoftDrink), litters, DrinkSize.valueOf(size.toUpperCase()));
-                                            shop.addProductToShop(drink);
+                                            Drinks drink = new Drinks(name, color, quantity, price, currentSeller.getAccountID(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, taste, Boolean.parseBoolean(isSoftDrink), litters, DrinkSize.valueOf(size.toUpperCase()));       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(drink);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 3 -> {
                                             System.out.println("""
@@ -1269,8 +1261,8 @@ public class Main {
                                             double proteinAmount = input.nextDouble();
                                             input.nextLine();
                                             String productType = input.nextLine();
-                                            Proteins protein = new Proteins(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, brand, proteinAmount, ProteinProductType.valueOf(productType.toUpperCase()));
-                                            shop.addProductToShop(protein);
+                                            Proteins protein = new Proteins(name, color, quantity, price, currentSeller.getAccountID(), Boolean.parseBoolean(hasBox), weight, salt, calories, fat, sugar, ingredientItems, countryOfOrigin, brand, proteinAmount, ProteinProductType.valueOf(productType.toUpperCase()));       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(protein);       //Will be added to seller available products column in the database automatically
                                         }
                                     }
                                 }
@@ -1318,8 +1310,8 @@ public class Main {
                                             input.nextLine();
                                             int maxSpinSpeed = input.nextInt();
                                             input.nextLine();
-                                            Drill drill = new Drill(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, voltage, PowerSource.valueOf(powerSource.toUpperCase()), minSpinSpeed, maxSpinSpeed);
-                                            shop.addProductToShop(drill);
+                                            Drill drill = new Drill(name, color, quantity, price, currentSeller.getAccountID(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, voltage, PowerSource.valueOf(powerSource.toUpperCase()), minSpinSpeed, maxSpinSpeed);       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(drill);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -1334,13 +1326,13 @@ public class Main {
                                             input.nextLine();
                                             String powerSource = input.nextLine();
                                             String usageLevel = input.nextLine();
-                                            SolderingSystem solderingSystem = new SolderingSystem(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, voltage, PowerSource.valueOf(powerSource.toUpperCase()), UsageLevel.valueOf(usageLevel.toUpperCase()));
-                                            shop.addProductToShop(solderingSystem);
+                                            SolderingSystem solderingSystem = new SolderingSystem(name, color, quantity, price, currentSeller.getAccountID(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, voltage, PowerSource.valueOf(powerSource.toUpperCase()), UsageLevel.valueOf(usageLevel.toUpperCase()));       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(solderingSystem);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 3 -> {
                                             System.out.println("""
                                                     Enter :
-                                                    10- Size (Thickness in millimeter)
+                                                    10- Size (Thickness in millimeter, don't enter floats)
                                                     11- Style (for example : Combination open end / 12 point / 15° / Offset ring end)
                                                     12- Material
                                                     \t- Steel, Aluminium, Titanium, Plastic, Composite
@@ -1349,8 +1341,8 @@ public class Main {
                                             input.nextLine();
                                             String style = input.nextLine();
                                             String material = input.nextLine();
-                                            Spanner spanner = new Spanner(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, size, style, SpannerMaterial.valueOf(material.toUpperCase()));
-                                            shop.addProductToShop(spanner);
+                                            Spanner spanner = new Spanner(name, color, quantity, price, currentSeller.getAccountID(), weight, Boolean.parseBoolean(hasBox), Boolean.parseBoolean(isSilent), Boolean.parseBoolean(isChargeable), brand, size, style, SpannerMaterial.valueOf(material.toUpperCase()));       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(spanner);       //Will be added to seller available products column in the database automatically
                                         }
                                     }
                                 }
@@ -1389,8 +1381,8 @@ public class Main {
                                             input.nextLine();
                                             int timeToFinish = input.nextInt();
                                             input.nextLine();
-                                            BoardGames boardGame = new BoardGames(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer), size, playerNumber, timeToFinish);
-                                            shop.addProductToShop(boardGame);
+                                            BoardGames boardGame = new BoardGames(name, color, quantity, price, currentSeller.getAccountID(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer), size, playerNumber, timeToFinish);       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(boardGame);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -1405,8 +1397,8 @@ public class Main {
                                             input.nextLine();
                                             int gangNumber = input.nextInt();
                                             input.nextLine();
-                                            CardGames cardGame = new CardGames(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer), cardNumber, playerNumber, gangNumber);
-                                            shop.addProductToShop(cardGame);
+                                            CardGames cardGame = new CardGames(name, color, quantity, price, currentSeller.getAccountID(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer), cardNumber, playerNumber, gangNumber);       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(cardGame);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 3 -> {
                                             System.out.println("""
@@ -1417,8 +1409,8 @@ public class Main {
                                             int partNumber = input.nextInt();
                                             input.nextLine();
                                             String finalPicture = input.nextLine();
-                                            Puzzles puzzle = new Puzzles(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer.toUpperCase()), partNumber, finalPicture);
-                                            shop.addProductToShop(puzzle);
+                                            Puzzles puzzle = new Puzzles(name, color, quantity, price, currentSeller.getAccountID(), Boolean.parseBoolean(hasBox), DifficultyLevel.valueOf(difficultyLevel.toUpperCase()), Boolean.parseBoolean(isMultiplayer.toUpperCase()), partNumber, finalPicture);       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(puzzle);       //Will be added to seller available products column in the database automatically
                                         }
                                     }
                                 }
@@ -1469,8 +1461,8 @@ public class Main {
                                             String speakerModel = input.nextLine();
                                             int seatNumber = input.nextInt();
                                             input.nextLine();
-                                            Car car = new Car(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic.toUpperCase()), maxSpeed, brand, model, Boolean.parseBoolean(isRightSteering), speakerModel, seatNumber);
-                                            shop.addProductToShop(car);
+                                            Car car = new Car(name, color, quantity, price, currentSeller.getAccountID(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic.toUpperCase()), maxSpeed, brand, model, Boolean.parseBoolean(isRightSteering), speakerModel, seatNumber);       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(car);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 2 -> {
                                             System.out.println("""
@@ -1485,8 +1477,8 @@ public class Main {
                                             input.nextLine();
                                             String hasWingMirror = input.nextLine();
                                             String noiseLevel = input.nextLine();
-                                            Motorcycle motorcycle = new Motorcycle(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic), maxSpeed, brand, model, seatNumber, Boolean.parseBoolean(hasWingMirror), NoiseLevel.valueOf(noiseLevel.toUpperCase()));
-                                            shop.addProductToShop(motorcycle);
+                                            Motorcycle motorcycle = new Motorcycle(name, color, quantity, price, currentSeller.getAccountID(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic), maxSpeed, brand, model, seatNumber, Boolean.parseBoolean(hasWingMirror), NoiseLevel.valueOf(noiseLevel.toUpperCase()));       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(motorcycle);       //Will be added to seller available products column in the database automatically
                                         }
                                         case 3 -> {
                                             System.out.println("""
@@ -1498,8 +1490,8 @@ public class Main {
                                                     """);
                                             String truckType = input.nextLine();
                                             String hasBed = input.nextLine();
-                                            Truck truck = new Truck(name, color, quantity, price, shop.getCurrentAccount().getAccountID(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic), maxSpeed, brand, model, TruckType.valueOf(truckType.toUpperCase()), Boolean.parseBoolean(hasBed));
-                                            shop.addProductToShop(truck);
+                                            Truck truck = new Truck(name, color, quantity, price, currentSeller.getAccountID(), weight, horsePower, engineModel, wheelNumber, Boolean.parseBoolean(isAutomatic), maxSpeed, brand, model, TruckType.valueOf(truckType.toUpperCase()), Boolean.parseBoolean(hasBed));       //Will be added to products table in the database automatically
+                                            shop.addProductToShop(truck);       //Will be added to seller available products column in the database automatically
                                         }
                                     }
                                 }
@@ -1515,10 +1507,19 @@ public class Main {
                         default -> throw new IllegalStateException("Unexpected value: " + optionMenu);
                     }
                 }
-                case 2 -> //View Wallet
-                        ((Seller) shop.getCurrentAccount()).viewWallet();
-                case 3 -> //Back to Main Menu
-                        runMenu(shop);
+                case 2 -> {
+                    //View Wallet
+                    ((Seller) shop.getCurrentAccount()).viewWallet();
+                }
+                case 3 -> {
+                    //Logout
+                    shop.logOut();
+                    runMenu(shop);
+                }
+                case 4 -> {
+                    //Back to Main Menu
+                    runMenu(shop);
+                }
                 default -> throw new IllegalStateException("Unexpected value: " + optionMenu);
             }
             sellerPage(shop);
@@ -1556,8 +1557,10 @@ public class Main {
                 5- Sellers Management
                 \t- Show all unauthorized sellers
                 \t- Authorize a seller by sellerID
+                
+                6- Logout
                                 
-                6- Back to main menu
+                7- Back to main menu
                 """);
         int optionMenu = input.nextInt();
         input.nextLine();
@@ -1599,7 +1602,7 @@ public class Main {
                     case 4 -> {
                         System.out.println("Enter : - Order ID\n");
                         String productID = input.nextLine();
-                        shop.orderConfirm(UUID.fromString(productID));
+                        shop.orderConfirm(UUID.fromString(productID));      //All the associated updates will be automatically get done in the database
                     }
                     default -> throw new IllegalStateException("Unexpected value: " + optionMenu);
                 }
@@ -1609,7 +1612,7 @@ public class Main {
                 String username = input.nextLine();
                 String password = input.nextLine();
                 String email = input.nextLine();
-                shop.adminSignUp(username, password, email);
+                shop.adminSignUp(username, password, email);        //Will be automatically added to the Admins table in the database
             }
             case 4 -> {
                 System.out.println("""
@@ -1681,7 +1684,12 @@ public class Main {
                     default -> throw new IllegalStateException("Unexpected value: " + optionMenu);
                 }
             }
-            case 6 -> runMenu(shop);
+            case 6 -> {
+                //Logout
+                shop.logOut();
+                runMenu(shop);
+            }
+            case 7 -> runMenu(shop);
             default -> throw new IllegalStateException("Unexpected value: " + optionMenu);
         }
         adminPage(shop);

@@ -32,22 +32,6 @@ public class Admin extends Account {
 
     //Getters and Setters
 
-    public void insert() {
-        String sql = "INSERT INTO Admins(AccountID, username, password, email) VALUES(?,?,?,?)";
-
-        try {
-            Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, getAccountID().toString());
-            pstmt.setString(2, username);
-            pstmt.setString(3, password);
-            pstmt.setString(4, email);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     public String getUsername() {
         return username;
     }
@@ -55,8 +39,6 @@ public class Admin extends Account {
     public String getPassword() {
         return password;
     }
-
-    //Override
 
     public String getEmail() {
         return email;
@@ -81,6 +63,25 @@ public class Admin extends Account {
         return this.username.equalsIgnoreCase(username);
     }
 
+
+    //Database - Related methods
+
+    public void insert() {
+        String sql = "INSERT INTO Admins(AccountID, username, password, email) VALUES(?,?,?,?)";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, getAccountID().toString());
+            pstmt.setString(2, username);
+            pstmt.setString(3, password);
+            pstmt.setString(4, email);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public static void loadAdminsFromDatabase(Shop shop){
         String sql = "SELECT * FROM Admins";
 
@@ -101,5 +102,4 @@ public class Admin extends Account {
             System.out.println(e.getMessage());
         }
     }
-
 }

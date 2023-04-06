@@ -40,6 +40,34 @@ public class Drinks extends SuperMarket {
 
     //Getters and Setters
 
+    public String getTaste() {
+        return taste;
+    }
+
+    public boolean isSoftDrink() {
+        return isSoftDrink;
+    }
+
+    public double getLitters() {
+        return litters;
+    }
+
+    public DrinkSize getSize() {
+        return size;
+    }
+
+    @Override
+    public String toString() {
+        return "Drinks{" +
+                "taste='" + taste + '\'' +
+                ", isSoftDrink=" + isSoftDrink +
+                ", litters=" + litters +
+                ", size=" + size +
+                "} " + super.toString();
+    }
+
+    //Database - Related methods
+
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasBox, weight, salt, calories, fat, sugar, IngredientItems, CountryOfOrigin, isSoftDrink, litters, size, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -75,34 +103,6 @@ public class Drinks extends SuperMarket {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    public String getTaste() {
-        return taste;
-    }
-
-    public boolean isSoftDrink() {
-        return isSoftDrink;
-    }
-
-    public double getLitters() {
-        return litters;
-    }
-
-    //Override
-
-    public DrinkSize getSize() {
-        return size;
-    }
-
-    @Override
-    public String toString() {
-        return "Drinks{" +
-                "taste='" + taste + '\'' +
-                ", isSoftDrink=" + isSoftDrink +
-                ", litters=" + litters +
-                ", size=" + size +
-                "} " + super.toString();
     }
 
     public static void loadDairyFromDatabase(ResultSet rs, Shop shop){

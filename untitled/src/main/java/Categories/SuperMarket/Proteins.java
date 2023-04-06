@@ -38,6 +38,29 @@ public class Proteins extends SuperMarket {
 
     //Getters and Setters
 
+    public String getBrand() {
+        return brand;
+    }
+
+    public double getProtein() {
+        return protein;
+    }
+
+    public ProteinProductType getProductType() {
+        return productType;
+    }
+
+    @Override
+    public String toString() {
+        return "Proteins{" +
+                "brand='" + brand + '\'' +
+                ", protein=" + protein +
+                ", productType=" + productType +
+                "} " + super.toString();
+    }
+
+    //Database - Related methods
+
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, hasBox, weight, salt, calories, fat, sugar, IngredientItems, CountryOfOrigin, brand, protein, productType, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -73,29 +96,6 @@ public class Proteins extends SuperMarket {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public double getProtein() {
-        return protein;
-    }
-
-    //Override
-
-    public ProteinProductType getProductType() {
-        return productType;
-    }
-
-    @Override
-    public String toString() {
-        return "Proteins{" +
-                "brand='" + brand + '\'' +
-                ", protein=" + protein +
-                ", productType=" + productType +
-                "} " + super.toString();
     }
 
     public static void loadProteinsFromDatabase(ResultSet rs, Shop shop){

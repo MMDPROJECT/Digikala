@@ -38,6 +38,30 @@ public class SolderingSystem extends Tools {
 
     //Getters and Setters
 
+    public int getVoltage() {
+        return voltage;
+    }
+
+    public PowerSource getPowerSource() {
+        return powerSource;
+    }
+
+
+    public UsageLevel getUsageLevel() {
+        return usageLevel;
+    }
+
+    @Override
+    public String toString() {
+        return "SolderingSystem{" +
+                "voltage=" + voltage +
+                ", powerSource=" + powerSource +
+                ", usageLevel=" + usageLevel +
+                "} " + super.toString();
+    }
+
+    //Database - Related methods
+
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, weight, hasBox, isSilent, isChargeable, brand, voltage, powerSource, usageLevel, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -69,29 +93,6 @@ public class SolderingSystem extends Tools {
         }
     }
 
-    public int getVoltage() {
-        return voltage;
-    }
-
-    public PowerSource getPowerSource() {
-        return powerSource;
-    }
-
-    //Override
-
-    public UsageLevel getUsageLevel() {
-        return usageLevel;
-    }
-
-    @Override
-    public String toString() {
-        return "SolderingSystem{" +
-                "voltage=" + voltage +
-                ", powerSource=" + powerSource +
-                ", usageLevel=" + usageLevel +
-                "} " + super.toString();
-    }
-
     public static void loadDrillFromDatabase(ResultSet rs, Shop shop){
         try {
             // loop through the result set
@@ -121,5 +122,4 @@ public class SolderingSystem extends Tools {
             System.out.println(e.getMessage());
         }
     }
-
 }

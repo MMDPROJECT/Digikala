@@ -54,11 +54,9 @@ public class EyeMakeUp extends Beauty {
         return brand;
     }
 
-    //Override
     public int getLongevity() {
         return longevity;
     }
-
 
     @Override
     public String toString() {
@@ -69,6 +67,8 @@ public class EyeMakeUp extends Beauty {
                 ", longevity=" + longevity +
                 "} " + super.toString();
     }
+
+    //Database - Related methods
 
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, MatterState, hasBox, penType, hasWaterResistance, brand, longevity, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
