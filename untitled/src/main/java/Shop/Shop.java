@@ -956,6 +956,7 @@ public class Shop {
                 addShopCut(order.calcShopCut());
                 calcSellerCut(orderID);
                 order.updateStocks();
+                updateShopInDatabase();
                 updateUserPurchasedProducts(orderID);
             } else {
                 System.out.println("Order can't be done, due to lack of money!\n");
