@@ -101,16 +101,6 @@ public class Laptop extends Electronics {
 
     //Database - Related methods
 
-    /*
-    private final String webcamModel;
-    private final String CPU;
-    private final String GPU;
-    private final int fanNumber;
-    private final boolean hasKeyboardLight;
-    private final boolean hasFingerPrint;
-    private final String keyboardLanguage;
-    private final int portNumber;
-     */
     public void insert() {
         String sql = "INSERT INTO Products(ProductID, name, color, price, sellerID, quantity, comments, brand, model, OS, screenSize, batteryCapacity, webcamModel, CPU, GPU, fanNumber, hasKeyboardLight, hasFingerPrint, keyboardLanguage, portNumber, subCategory) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 

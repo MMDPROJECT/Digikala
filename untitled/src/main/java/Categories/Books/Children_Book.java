@@ -1,7 +1,5 @@
 package Categories.Books;
 
-import Categories.Beauty.Enums.MatterState;
-import Categories.Beauty.Enums.PenType;
 import Connection.Connect;
 import Shop.Shop;
 import org.json.JSONArray;

@@ -1,7 +1,5 @@
 package Categories.Sports;
 
-import Categories.Sports.Enums.BallMaterial;
-import Categories.Sports.Enums.BallSize;
 import Categories.Sports.Enums.RacketDurability;
 import Connection.Connect;
 import Shop.Shop;

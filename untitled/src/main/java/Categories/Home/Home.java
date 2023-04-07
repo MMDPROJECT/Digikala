@@ -5,7 +5,7 @@ import Categories.Product;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Home extends Product {
+public abstract class Home extends Product {
     private final boolean hasController;
     private final double height;
     private final double width;

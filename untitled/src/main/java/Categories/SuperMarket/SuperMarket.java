@@ -5,7 +5,7 @@ import Categories.Product;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class SuperMarket extends Product {
+public abstract class SuperMarket extends Product {
     private final boolean hasBox;
     private final double weight;
     private final double salt;

@@ -6,7 +6,7 @@ import Categories.Product;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Beauty extends Product {
+public abstract class Beauty extends Product {
     private final MatterState materialState;
     private final boolean hasBox;
 

@@ -116,5 +116,4 @@ public class WalletReq {
             System.out.println(e.getMessage());
         }
     }
-
 }

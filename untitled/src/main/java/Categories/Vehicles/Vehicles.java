@@ -5,7 +5,7 @@ import Categories.Product;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Vehicles extends Product {
+public abstract class Vehicles extends Product {
     private final double weight;
     private final int horsePower;
     private final String engineModel;

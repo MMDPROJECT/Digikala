@@ -5,7 +5,7 @@ import Categories.Product;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Sports extends Product {
+public abstract class Sports extends Product {
     private final double weight;
     private final String sportType;
     private final String brand;
