@@ -112,6 +112,7 @@ public class WalletReq {
                 WalletReq newWalletReq = new WalletReq(value, userID, walletID, isConfirmed);
                 shop.submitAWalletRequestInShopOnly(newWalletReq);
             }
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

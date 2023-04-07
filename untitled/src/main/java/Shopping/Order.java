@@ -187,6 +187,7 @@ public class Order extends ShoppingCart {
                 Order newOrder = new Order(products, itemNumber, orderID, buyerID, "order", totalPrice, false, date, buyerID, orderID, isConfirmed);
                 shop.addOrderToShopOnly(newOrder);
             }
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

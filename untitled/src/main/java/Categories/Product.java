@@ -268,7 +268,7 @@ public abstract class Product {
                 else if (subCategory.equals("Motorcycle")){
                     Motorcycle.loadCarFromDatabase(rs, shop);
                 }
-                else if (subCategory.equals("Truck")){
+                else if (subCategory.equals("Truck")) {
                     Truck.loadTruckFromDatabase(rs, shop);
                 }
             }

@@ -184,6 +184,7 @@ public class Seller extends Account {
                 Seller newSeller = new Seller(accountID, companyName, password, availableProducts, wallet, isAuthorized);
                 shop.sellerSignUp(newSeller);
             }
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
