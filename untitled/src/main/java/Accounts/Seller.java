@@ -154,7 +154,7 @@ public class Seller extends Account {
             stmt.setString(3, Boolean.toString(isAuthorized));
             stmt.setString(4, getAccountID().toString());
             stmt.executeUpdate();
-            System.out.println("Seller's wallet has been successfully updated in Database!\n");
+//            System.out.println("Seller's wallet has been successfully updated in Database!\n");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

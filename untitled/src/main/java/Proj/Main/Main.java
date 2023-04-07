@@ -63,7 +63,6 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Loading Database");
-//        Shop shop = new Shop("digikala", "digikala.com", "34250955");
         Shop shop = Shop.loadShopFromDatabase();
         Product.loadProductsFromDatabase(shop);
         WalletReq.loadWalletRequestsFromDatabase(shop);
