@@ -98,6 +98,7 @@ public class Admin extends Account {
                 Admin newAdmin = new Admin(accountID, username, password, email);
                 shop.adminSignUp(newAdmin);
             }
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

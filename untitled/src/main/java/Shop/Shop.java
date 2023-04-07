@@ -1146,8 +1146,11 @@ public class Shop {
                 String webAddress = rs.getString("webAddress");
                 String supportPhoneNumber = rs.getString("supportPhoneNumber");
                 double totalGained = rs.getDouble("totalGained");
-                return new Shop(name, webAddress, supportPhoneNumber, totalGained);
+                Shop shop = new Shop(name, webAddress, supportPhoneNumber, totalGained);
+                conn.close();
+                return shop;
             }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

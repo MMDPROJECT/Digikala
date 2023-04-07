@@ -266,6 +266,7 @@ public class ShoppingCart {
                 ShoppingCart newShoppingCart = new ShoppingCart(products, itemNumber, cartID, userID, name, totalPrice, hasCheckout);
                 shop.addCart(newShoppingCart);
             }
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
