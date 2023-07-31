@@ -90,7 +90,6 @@ public class WalletReq {
             stmt.setString(1, Boolean.toString(true));
             stmt.setString(2, walletID.toString());
             stmt.executeUpdate();
-//            System.out.println("Wallet has been confirmed in the database!\n");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

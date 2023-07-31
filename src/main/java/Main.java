@@ -60,7 +60,6 @@ public class Main {
     public static final Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
-        System.out.println("Loading Database");
         Shop shop = Shop.loadShopFromDatabase();
         Product.loadProductsFromDatabase(shop);
         WalletReq.loadWalletRequestsFromDatabase(shop);

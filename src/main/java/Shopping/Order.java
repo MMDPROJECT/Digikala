@@ -141,7 +141,6 @@ public class Order extends ShoppingCart {
             stmt.setDouble(3, getTotalPrice());
             stmt.setString(4, orderID.toString());
             stmt.executeUpdate();
-//            System.out.println("Order has been successfully updated in Database!\n");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } catch (JsonProcessingException e) {
