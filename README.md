@@ -1,6 +1,6 @@
 # 											  The God We Trust
 
-​																					![img](./Images/SBU.png) 
+![img](./Images/SBU.png) 
 
 
 
@@ -30,7 +30,7 @@
 
   - The project is about building a **CLI app**, that simulates some functionalities of **Digikala** (A very popular **e-commerce** website).
 
-- ### State the objectives of the assignment:
+- ### objectives of the program:
 
   1. This program should provide an easy a user-friendly interface for all three objects (**Sellers, Buyers & Admins**), that are using **Digikala**.
   2. The program should be able to handle all the shopping processes like **Wallet Charging, Managing Shopping Cart** and so much more...
@@ -222,4 +222,4 @@
 
 # Testing and Evaluation:
 
-### 
+### ![Registering a new user and shopping](./Images/test.gif)
