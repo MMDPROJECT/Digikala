@@ -222,4 +222,6 @@
 
 # Testing and Evaluation:
 
-### ![Registering a new user and shopping](./Images/test.gif)
+**Please Wait a While for .gif to get loaded**
+
+### ![Registering a new user and shopping](./Images/input.gif)
